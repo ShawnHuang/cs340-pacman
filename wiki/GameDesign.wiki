@@ -73,12 +73,13 @@
 	
   _KILL_
     * Put all enemies in a list / array 
-    * http://cs340-pacman.googlecode.com/files/table1.jpg
+      http://cs340-pacman.googlecode.com/files/table1.jpg
     * Pacman navigation speed increases 
     * Enemy currentstate = ENEMY FSM.VULNERABLE 
-    * http://cs340-pacman.googlecode.com/files/table2.jpg
+      http://cs340-pacman.googlecode.com/files/table2.jpg
     * If (Pacman kill enemy), currentstate of tht enemy = ENEMY FSM.DYING and remove that enemy from the list. Increment player point
-    * http://cs340-pacman.googlecode.com/files/table3.jpg
+    * For Example: EN1 was killed. The current list would be :
+      http://cs340-pacman.googlecode.com/files/table3.jpg
     * After some time (say x =sec), currentstate of pacman = PLAY and currentstate of remaining enemies = ENEMY FSM.PLAY
 
   _DYING_
