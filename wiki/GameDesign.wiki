@@ -116,4 +116,4 @@
     * currentstate of enemy = INIT 
 
 *BULLET FSM*
-    *Pending 
+    * Pending 
