@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     {
          wallblock[i].setPos(mp->list.at(i).xcoord*WIDTH,mp->list.at(i).ycoord*HEIGHT);
          scene.addItem(&wallblock[i]);
-    }
+     }
 
     QGraphicsView view(&scene);
     view.setRenderHint(QPainter::Antialiasing);
