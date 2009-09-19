@@ -20,13 +20,13 @@ MapLoader::~MapLoader() //destructor
 void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its co ordinates in a list.
 {
 
-     QFile file("in.txt");
+     QFile file("in.txt"); // Qfile file = new QFile("in.txt");
      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
          return;
 
      CoordChar cc;
 
-     QTextStream in(&file);
+     QTextStream in(&file); //QTextStream in = new QTextStream(&file);
      while (!in.atEnd()) {
          QString line = in.readLine();
          for (int i = 0; i < line.size(); ++i)

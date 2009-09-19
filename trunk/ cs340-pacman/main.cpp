@@ -24,7 +24,13 @@ int main(int argc, char **argv)
     MapLoader *mp = new MapLoader;
     mp->FileRead();
 
-    Wall *wallblock = new Wall[mp->list.size()];
+    if (mp->list.size() == 0) {
+        QErrorMessage *msg = new QErrorMessage();
+        msg->setModal(true);
+        msg->showMessage("List size zero in map. Please check the file.");
+    }
+
+    Wall *wallblock = new Wall[mp->list.size()]; //Wall w = new Wall[10]
 
     //Creating block of walls using coordinated from list
     for(int i =0; i < mp->list.size(); i++)
