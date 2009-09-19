@@ -24,7 +24,7 @@ public:
     MapLoader();
     ~MapLoader();
     void FileRead();
-    void AddWall();
+
     QList<CoordChar> list;
     QList<CoordChar>::iterator it;
     void ListRead();
