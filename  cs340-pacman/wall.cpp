@@ -2,7 +2,7 @@
   File Name: wall.cpp
   Description: Creates, loads the scene and add items
   Created by: Riddhi Kapasi
-  Modifed by :
+  Modified by :
 ******************************************************/
 
 #include "wall.h"
