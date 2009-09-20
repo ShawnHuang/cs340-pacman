@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player(int x,int y) : Character::Character(x,y)
+Player::Player(int x,int y, int dir) : Character::Character(x,y,dir)
 {
 
 }

@@ -5,7 +5,7 @@
 class Player : public Character {
 
 public:
-    Player(int ,int);
+    Player(int ,int, int);
 public:
     int getTYpe();
 };

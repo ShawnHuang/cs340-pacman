@@ -1,6 +1,6 @@
 #include "enemy.h"
 
-Enemy::Enemy(int x,int y) : Character::Character(x,y)
+Enemy::Enemy(int x,int y, int dir) : Character::Character(x,y,dir)
 {
 
 }
