@@ -1,3 +1,10 @@
+/*****************************
+  Fiel Name : enemy.cpp
+  Created By : Usha Sanaga
+  Description : Created a garphical representation of enemy
+  ****************************/
+
+
 #include "enemy.h"
 
 Enemy::Enemy(int x,int y, int dir) : Character::Character(x,y,dir)

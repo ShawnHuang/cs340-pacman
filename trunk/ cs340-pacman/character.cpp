@@ -1,3 +1,11 @@
+/**************************
+File Name : Character.cpp
+Created By : Usha Sanaga
+Description : Abstarct Class from which the player and the enemy classes derived
+***************************/
+
+
+
 #include "character.h"
 
 
