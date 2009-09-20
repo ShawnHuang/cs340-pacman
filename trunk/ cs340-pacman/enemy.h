@@ -5,7 +5,7 @@
 
 class Enemy : public Character {
     public:
-        Enemy(int, int);
+        Enemy(int, int,int);
     public:
     int getType();
 };

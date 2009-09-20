@@ -33,11 +33,20 @@ int main(int argc, char **argv)
     Wall *wallblock = new Wall[mp->list.size()]; //Wall w = new Wall[10]
 
     //Creating block of walls using coordinated from list
-    for(int i =0; i < mp->list.size(); i++)
+//    for(int i =0; i < mp->list.size(); i++)
+//    {
+//         wallblock[i].setPos(mp->list.at(i).xcoord*WIDTH,mp->list.at(i).ycoord*HEIGHT);
+//         scene.addItem(&wallblock[i]);
+//     }
+
+    int i =0;
+    for(QList<CoordChar>::iterator it = mp->list.begin(); it != mp->list.end(); it++)
     {
-         wallblock[i].setPos(mp->list.at(i).xcoord*WIDTH,mp->list.at(i).ycoord*HEIGHT);
+         wallblock[i].setPos(it->xcoord*WIDTH,it->ycoord*HEIGHT);
          scene.addItem(&wallblock[i]);
-     }
+         i++;
+    }
+
 
     QGraphicsView view(&scene);
     view.setRenderHint(QPainter::Antialiasing);
