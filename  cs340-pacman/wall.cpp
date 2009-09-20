@@ -2,7 +2,7 @@
   File Name: main.cpp
   Description: Creates, loads the scene and add items
   Created by: Riddhi Kapasi
-  Modified by:
+  Modified by: Usha Sanaga
 ******************************************************/
 
 #include "wall.h"

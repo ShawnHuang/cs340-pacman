@@ -7,6 +7,7 @@
 
 #include "wall.h"
 #include "maploader.h"
+#include "enemy.h"
 #include <QtGui>
 
 int main(int argc, char **argv)
@@ -15,7 +16,7 @@ int main(int argc, char **argv)
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
     QGraphicsScene scene;
-    scene.setSceneRect(0,0,560,500);
+    scene.setSceneRect(0,0,550,470);
 
     scene.setItemIndexMethod(QGraphicsScene::NoIndex);
 
@@ -46,6 +47,14 @@ int main(int argc, char **argv)
          scene.addItem(&wallblock[i]);
          i++;
     }
+
+//    // create an enemy
+//    Enemy *e = new Enemy(1, 1, Character::DIR_DOWN);
+//    scene.addItem(e);
+//
+//    e->moveForward();
+//    e->moveForward();
+//    e->moveForward();
 
 
     QGraphicsView view(&scene);
