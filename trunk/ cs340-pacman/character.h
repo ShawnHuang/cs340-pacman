@@ -1,12 +1,22 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-class Character
+#include <QGraphicsItem>
+#include <QPainter>
+#include <QRectF>
+#include <Qt>
+
+class Character : public QGraphicsItem
 {
 private:
     int xCoor;
     int yCoor;
     int direction;
+protected:
+    static const int CHARACTER_WIDTH = 10;
+    static const int CHARACTER_HEIGHT = 10;
+    static const int X_WIDTH = 3;
+    static const int Y_HEIGHT = 3;
 public:
     Character(int,int,int);
     static const int TYPE_PLAYER =  1;
@@ -19,6 +29,7 @@ public:
     int getY();
     virtual int getType() const = 0;
     void moveForward();
+    QRectF boundingRect() const;
 };
 
 
