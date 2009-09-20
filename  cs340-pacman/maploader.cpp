@@ -35,7 +35,7 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
             {
                 cc.xcoord = xcoord;
                 cc.ycoord = ycoord;
-                cc.symbol = line.at(i).toAscii();
+                cc.symbol = '+';
                 list.push_back(cc);
             }
             xcoord++;
