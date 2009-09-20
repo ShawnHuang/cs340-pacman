@@ -46,6 +46,7 @@
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <value key="QtVersionId" type="int" >0</value>
    <value key="addQDumper" type="" ></value>
+   <value key="buildDirectory" type="QString" >/home/usha/cs340-pacman/ cs340-pacman</value>
   </valuemap>
  </data>
  <data>
@@ -61,51 +62,46 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\ProgramData</value>
-    <value type="QString" >APPDATA=C:\Users\Riddhi\AppData\Roaming</value>
-    <value type="QString" >CLASSPATH=.;C:\Program Files\Java\jre1.6.0_02\lib\ext\QTJava.zip</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=RIDDHI-PC</value>
-    <value type="QString" >COMSPEC=C:\Windows\system32\cmd.exe</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Users\Riddhi</value>
-    <value type="QString" >LOCALAPPDATA=C:\Users\Riddhi\AppData\Local</value>
-    <value type="QString" >LOGONSERVER=\\RIDDHI-PC</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\90\Tools\binn\;C:\Program Files\proeWildfire 4.0\bin;C:\Program Files\proeWildfire 4.0\mech\bin;C:\Program Files\ptc_distributed_services\bin;C:\Program Files\QuickTime\QTSystem\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\SSH Communications Security\SSH Secure Shell</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0f0d</value>
-    <value type="QString" >PROGRAMDATA=C:\ProgramData</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >PSMODULEPATH=C:\Windows\system32\WindowsPowerShell\v1.0\Modules\</value>
-    <value type="QString" >PUBLIC=C:\Users\Public</value>
-    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
-    <value type="QString" >QTJAVA=C:\Program Files\Java\jre1.6.0_02\lib\ext\QTJava.zip</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\Windows</value>
-    <value type="QString" >TEMP=C:\Users\Riddhi\AppData\Local\Temp</value>
-    <value type="QString" >TMP=C:\Users\Riddhi\AppData\Local\Temp</value>
-    <value type="QString" >USERDOMAIN=Riddhi-PC</value>
-    <value type="QString" >USERNAME=Riddhi</value>
-    <value type="QString" >USERPROFILE=C:\Users\Riddhi</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\Windows</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-8VO17YFsCX,guid=c3e313e45b617f407d873f4b4ab32dbc</value>
+    <value type="QString" >DESKTOP_SESSION=default</value>
+    <value type="QString" >DESKTOP_STARTUP_ID=</value>
+    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >GDMSESSION=default</value>
+    <value type="QString" >GDM_LANG=en_US.UTF-8</value>
+    <value type="QString" >GDM_XSERVER_LOCATION=local</value>
+    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
+    <value type="QString" >GNOME_KEYRING_PID=5182</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-LVNiyh/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-eIF3RX/S.gpg-agent:5298:1</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/usha/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >HOME=/home/usha</value>
+    <value type="QString" >LANG=en_US.UTF-8</value>
+    <value type="QString" >LD_LIBRARY_PATH=/home/usha/qtsdk-2009.03/lib/qtcreator:</value>
+    <value type="QString" >LOGNAME=usha</value>
+    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-usha</value>
+    <value type="QString" >PATH=/home/usha/qtsdk-2009.03/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString" >PWD=/home/usha/qtsdk-2009.03/bin</value>
+    <value type="QString" >QTDIR=/home/usha/qtsdk-2009.03/qt</value>
+    <value type="QString" >SESSION_MANAGER=local/usha-pc:/tmp/.ICE-unix/5195</value>
+    <value type="QString" >SHELL=/bin/bash</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-LVNiyh/ssh</value>
+    <value type="QString" >USER=usha</value>
+    <value type="QString" >USERNAME=usha</value>
+    <value type="QString" >WINDOWPATH=7</value>
+    <value type="QString" >XAUTHORITY=/home/usha/.Xauthority</value>
+    <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
+    <value type="QString" >XDG_SESSION_COOKIE=1695c3f48f4db0cdb06ef94c4aa55057-1253256635.290457-171577460</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >D:/Pacman/pacman/Wall.pro</value>
+    <value type="QString" >/home/usha/cs340-pacman/ cs340-pacman/Wall.pro</value>
     <value type="QString" >-spec</value>
-    <value type="QString" >win32-g++</value>
+    <value type="QString" >linux-g++</value>
     <value type="QString" >-r</value>
+    <value type="QString" >CONFIG+=debug</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/qt/bin/qmake.exe</value>
+   <value key="abstractProcess.command" type="QString" >/home/usha/qtsdk-2009.03/qt/bin/qmake</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >D:/Pacman/pacman</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/usha/cs340-pacman/ cs340-pacman</value>
    <value key="buildConfiguration" type="int" >2</value>
   </valuemap>
  </data>
@@ -114,48 +110,42 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\ProgramData</value>
-    <value type="QString" >APPDATA=C:\Users\Riddhi\AppData\Roaming</value>
-    <value type="QString" >CLASSPATH=.;C:\Program Files\Java\jre1.6.0_02\lib\ext\QTJava.zip</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=RIDDHI-PC</value>
-    <value type="QString" >COMSPEC=C:\Windows\system32\cmd.exe</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Users\Riddhi</value>
-    <value type="QString" >LOCALAPPDATA=C:\Users\Riddhi\AppData\Local</value>
-    <value type="QString" >LOGONSERVER=\\RIDDHI-PC</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Microsoft SQL Server\90\Tools\binn\;C:\Program Files\proeWildfire 4.0\bin;C:\Program Files\proeWildfire 4.0\mech\bin;C:\Program Files\ptc_distributed_services\bin;C:\Program Files\QuickTime\QTSystem\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\SSH Communications Security\SSH Secure Shell</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 13, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0f0d</value>
-    <value type="QString" >PROGRAMDATA=C:\ProgramData</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >PSMODULEPATH=C:\Windows\system32\WindowsPowerShell\v1.0\Modules\</value>
-    <value type="QString" >PUBLIC=C:\Users\Public</value>
-    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
-    <value type="QString" >QTJAVA=C:\Program Files\Java\jre1.6.0_02\lib\ext\QTJava.zip</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\Windows</value>
-    <value type="QString" >TEMP=C:\Users\Riddhi\AppData\Local\Temp</value>
-    <value type="QString" >TMP=C:\Users\Riddhi\AppData\Local\Temp</value>
-    <value type="QString" >USERDOMAIN=Riddhi-PC</value>
-    <value type="QString" >USERNAME=Riddhi</value>
-    <value type="QString" >USERPROFILE=C:\Users\Riddhi</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\Windows</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-8VO17YFsCX,guid=c3e313e45b617f407d873f4b4ab32dbc</value>
+    <value type="QString" >DESKTOP_SESSION=default</value>
+    <value type="QString" >DESKTOP_STARTUP_ID=</value>
+    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >GDMSESSION=default</value>
+    <value type="QString" >GDM_LANG=en_US.UTF-8</value>
+    <value type="QString" >GDM_XSERVER_LOCATION=local</value>
+    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
+    <value type="QString" >GNOME_KEYRING_PID=5182</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-LVNiyh/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-eIF3RX/S.gpg-agent:5298:1</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/usha/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >HOME=/home/usha</value>
+    <value type="QString" >LANG=en_US.UTF-8</value>
+    <value type="QString" >LD_LIBRARY_PATH=/home/usha/qtsdk-2009.03/lib/qtcreator:</value>
+    <value type="QString" >LOGNAME=usha</value>
+    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-usha</value>
+    <value type="QString" >PATH=/home/usha/qtsdk-2009.03/qt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString" >PWD=/home/usha/qtsdk-2009.03/bin</value>
+    <value type="QString" >QTDIR=/home/usha/qtsdk-2009.03/qt</value>
+    <value type="QString" >SESSION_MANAGER=local/usha-pc:/tmp/.ICE-unix/5195</value>
+    <value type="QString" >SHELL=/bin/bash</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-LVNiyh/ssh</value>
+    <value type="QString" >USER=usha</value>
+    <value type="QString" >USERNAME=usha</value>
+    <value type="QString" >WINDOWPATH=7</value>
+    <value type="QString" >XAUTHORITY=/home/usha/.Xauthority</value>
+    <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
+    <value type="QString" >XDG_SESSION_COOKIE=1695c3f48f4db0cdb06ef94c4aa55057-1253256635.290457-171577460</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >-w</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.command" type="QString" >/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >D:/Pacman/pacman</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/usha/cs340-pacman/ cs340-pacman</value>
   </valuemap>
  </data>
  <data>
