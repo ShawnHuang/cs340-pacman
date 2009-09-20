@@ -8,8 +8,8 @@
 
 #include <QGraphicsItem>
 
-#define WIDTH  20
-#define HEIGHT 20
+#define WIDTH  10
+#define HEIGHT 10
 
 class Wall : public QGraphicsItem //Class Wall
 {
