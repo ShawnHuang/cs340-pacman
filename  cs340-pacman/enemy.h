@@ -7,7 +7,10 @@ class Enemy : public Character {
     public:
         Enemy(int, int,int);
     public:
-    int getType();
+    int getType() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+               QWidget *widget);
+
 };
 
 #endif // ENEMY_H
