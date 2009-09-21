@@ -9,7 +9,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QString>
-#include <QList>
+#include <QMap>
 
 struct CoordChar //structure used in a list to store coordinates.
 {
@@ -25,8 +25,8 @@ public:
     ~MapLoader();
     void FileRead();
 
-    QList<CoordChar> list;
-    QList<CoordChar>::iterator it;
+    QMap<QString, CoordChar> map;
+    QMap<QString, CoordChar>::iterator it;
     void ListRead();
 
 private:

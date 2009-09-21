@@ -25,25 +25,18 @@ int main(int argc, char **argv)
     MapLoader *mp = new MapLoader;
     mp->FileRead();
 
-    if (mp->list.size() == 0) {
+    if (mp->map.isEmpty()) {
         QErrorMessage *msg = new QErrorMessage();
         msg->setModal(true);
         msg->showMessage("List size zero in map. Please check the file.");
     }
 
-    Wall *wallblock = new Wall[mp->list.size()]; //Wall w = new Wall[10]
-
-    //Creating block of walls using coordinated from list
-//    for(int i =0; i < mp->list.size(); i++)
-//    {
-//         wallblock[i].setPos(mp->list.at(i).xcoord*WIDTH,mp->list.at(i).ycoord*HEIGHT);
-//         scene.addItem(&wallblock[i]);
-//     }
+    Wall *wallblock = new Wall[mp->map.size()]; //Wall w = new Wall[10]
 
     int i =0;
-    for(QList<CoordChar>::iterator it = mp->list.begin(); it != mp->list.end(); it++)
+    for(QMap<QString, CoordChar>::const_iterator it = mp->map.constBegin(); it != mp->map.constEnd(); it++)
     {
-         wallblock[i].setPos(it->xcoord*WIDTH,it->ycoord*HEIGHT);
+         wallblock[i].setPos(it.value().xcoord*WIDTH,it.value().ycoord*HEIGHT);
          scene.addItem(&wallblock[i]);
          i++;
     }

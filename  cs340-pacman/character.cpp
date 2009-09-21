@@ -47,3 +47,6 @@ QRectF Character::boundingRect() const
     return QRectF(-X_WIDTH*CHARACTER_WIDTH,-Y_HEIGHT*CHARACTER_HEIGHT,
                   X_WIDTH*CHARACTER_WIDTH, Y_HEIGHT*CHARACTER_HEIGHT);
 }
+
+
+
