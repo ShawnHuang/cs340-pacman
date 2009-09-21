@@ -36,14 +36,15 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
                 cc.xcoord = xcoord;
                 cc.ycoord = ycoord;
                 cc.symbol = '+';
-                list.push_back(cc);
+                QString *key = new QString(QChar(xcoord + 48));
+                key->append(QChar('_')).append(QChar(ycoord + 48));
+                map.insert(*key, cc);
             }
             xcoord++;
          }
          ycoord++;
          xcoord = 0;
      }
-
 }
 
 void MapLoader::ListRead()  // Testing function to print the list value
@@ -51,7 +52,7 @@ void MapLoader::ListRead()  // Testing function to print the list value
     int a;
     int b;
 
-    for(it = list.begin(); it != list.end(); it++)
+    for(it = map.begin(); it != map.end(); it++)
     {
         a = it->xcoord;
         b = it->ycoord;
