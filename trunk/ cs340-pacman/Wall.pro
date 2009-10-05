@@ -3,10 +3,12 @@ HEADERS += wall.h \
     maploader.h \
     character.h \
     enemy.h \
-    player.h
+    player.h \
+    dot.h
 SOURCES += wall.cpp \
     main.cpp \
     maploader.cpp \
     character.cpp \
     enemy.cpp \
-    player.cpp
+    player.cpp \
+    dot.cpp
