@@ -24,8 +24,6 @@ public:
     MapLoader();
     ~MapLoader();
     void FileRead();
-    void FileReadDot();
-    void FileReadBigDot();
 
     QMap<QString, CoordChar> map;
     QMap<QString, CoordChar>::iterator it;
