@@ -20,7 +20,7 @@ MapLoader::~MapLoader() //destructor
 void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its co ordinates in a list.
 {
 
-     QFile file("in(with dots).txt"); // Qfile file = new QFile("in.txt");
+     QFile file("in.txt"); // Qfile file = new QFile("in.txt");
      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
          return;
 
@@ -36,79 +36,6 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
                 cc.xcoord = xcoord;
                 cc.ycoord = ycoord;
                 cc.symbol = '+';
-                QString *key = new QString(QChar(xcoord + 48));
-                key->append(QChar('_')).append(QChar(ycoord + 48));
-                map.insert(*key, cc);
-            }
-
-            /**
-            if (line.at(i) == QChar('.'))
-            {
-                cc.xcoord = xcoord;
-                cc.ycoord = ycoord;
-                cc.symbol = '+';
-                QString *key = new QString(QChar(xcoord + 48));
-                key->append(QChar('_')).append(QChar(ycoord + 48));
-                map.insert(*key, cc);
-            }
-            **/
-
-            xcoord++;
-         }
-         ycoord++;
-         xcoord = 0;
-     }
-}
-
-void MapLoader::FileReadDot() //reads the text file, looks for '+' char, stores its co ordinates in a list.
-{
-
-     QFile file("in(with dots).txt"); // Qfile file = new QFile("in.txt");
-     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-         return;
-
-     CoordChar cc;
-
-     QTextStream in(&file); //QTextStream in = new QTextStream(&file);
-     while (!in.atEnd()) {
-         QString line = in.readLine();
-         for (int i = 0; i < line.size(); ++i)
-         {
-            if (line.at(i) == QChar('.'))
-            {
-                cc.xcoord = xcoord;
-                cc.ycoord = ycoord;
-                cc.symbol = '.';
-                QString *key = new QString(QChar(xcoord + 48));
-                key->append(QChar('_')).append(QChar(ycoord + 48));
-                map.insert(*key, cc);
-            }
-            xcoord++;
-         }
-         ycoord++;
-         xcoord = 0;
-     }
-}
-
-void MapLoader::FileReadBigDot() //reads the text file, looks for '+' char, stores its co ordinates in a list.
-{
-
-     QFile file("in(with dots).txt"); // Qfile file = new QFile("in.txt");
-     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-         return;
-
-     CoordChar cc;
-
-     QTextStream in(&file); //QTextStream in = new QTextStream(&file);
-     while (!in.atEnd()) {
-         QString line = in.readLine();
-         for (int i = 0; i < line.size(); ++i)
-         {
-            if (line.at(i) == QChar('O'))
-            {
-                cc.xcoord = xcoord;
-                cc.ycoord = ycoord;
-                cc.symbol = '.';
                 QString *key = new QString(QChar(xcoord + 48));
                 key->append(QChar('_')).append(QChar(ycoord + 48));
                 map.insert(*key, cc);
