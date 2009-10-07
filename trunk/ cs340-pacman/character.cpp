@@ -26,6 +26,10 @@ int Character::getY() {
     return yCoor;
 }
 
+int Character::getDirection() {
+    return direction;
+}
+
 void Character::moveForward() {
     switch (direction) {
         case DIR_UP : yCoor -= Y_HEIGHT;
@@ -40,6 +44,38 @@ void Character::moveForward() {
 
     // update the graphics item position
     this->setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+}
+
+void Character::makeTurn(long turnDir) {
+
+    switch (direction) {
+        case DIR_UP :
+            if (turnDir = RIGHT) {
+                direction = DIR_RIGHT;
+            } else {
+                    direction = DIR_LEFT;
+            }
+            break;
+        case DIR_DOWN : 
+            if (turnDir = RIGHT) {
+                direction = DIR_LEFT;
+            } else {
+                    direction = DIR_RIGHT;
+                }
+            break;
+        case DIR_RIGHT : if (turnDir = RIGHT) {
+                direction = DIR_DOWN;
+            }
+                else
+                    direction = DIR_UP;
+            break;
+        case DIR_LEFT : if (turnDir = RIGHT) {
+                direction = DIR_UP;
+            }
+                else
+                    direction = DIR_DOWN;
+                break;
+    }
 }
 
 QRectF Character::boundingRect() const
