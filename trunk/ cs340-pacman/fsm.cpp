@@ -1,3 +1,9 @@
+/*****************************************************
+  File Name: fsm.cpp
+  Description: Generic class for saving different states for any individual entity
+  Created by: Riddhi Kapasi
+  Modified by :
+******************************************************/
 #include "fsm.h"
 
 FSM::FSM()

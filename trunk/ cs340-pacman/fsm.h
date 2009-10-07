@@ -1,4 +1,9 @@
-// Class to hold all states for individual characters
+/*****************************************************
+  File Name: fsm.h
+  Description: This class is a collection of states.
+  Created by: Riddhi Kapasi
+  Modified by :
+******************************************************/
 
 #ifndef FSM_H
 #define FSM_H
