@@ -41,7 +41,7 @@ int main(int argc, char **argv)
          i++;
     }
 
-//    // create an enemy
+   //create an enemy
 //    Enemy *e = new Enemy(1, 1, Character::DIR_DOWN);
 //    scene.addItem(e);
 //

@@ -26,8 +26,3 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
                      Qt::darkYellow);
 
 }
-
-
-
-
-

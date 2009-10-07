@@ -17,23 +17,31 @@ private:
     int xCoor;
     int yCoor;
     int direction;
-protected:
+    int turnDir;
+
+
+public:
+    Character(int,int,int);
     static const int CHARACTER_WIDTH = 10;
     static const int CHARACTER_HEIGHT = 10;
     static const int X_WIDTH = 3;
     static const int Y_HEIGHT = 3;
-public:
-    Character(int,int,int);
+
     static const int TYPE_PLAYER =  1;
     static const int TYPE_ENEMY = 2;
     static const int DIR_UP = 1;
     static const int DIR_DOWN = 2;
     static const int DIR_RIGHT = 3;
     static const int DIR_LEFT = 4;
+
+    static const int RIGHT = 1;
+
     int getX();
     int getY();
+    int getDirection();
     virtual int getType() const = 0;
     void moveForward();
+    void makeTurn(long);
     QRectF boundingRect() const;
 };
 
