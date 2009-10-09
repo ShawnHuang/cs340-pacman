@@ -8,14 +8,19 @@
 #define ENEMY_H
 
 #include "character.h"
+#include "maploader.h"
+#include <math.h>
+#include <iostream>
 
 class Enemy : public Character {
+    private:
+        MapLoader* ml;
     public:
-        Enemy(int, int,int);
-    public:
-    int getType() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-               QWidget *widget);
+        Enemy(int, int, int, MapLoader*);
+        int getType() const;
+        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                   QWidget *widget);
+        void advance(int);
 
 };
 

@@ -14,7 +14,7 @@
 //Constructor defining wall color as blue
 Wall::Wall()
 {
-    color = QColor(0,50,155,255);
+    color = QColor(150,100,200,255);
     pencolor = QColor(0,0,0,0);
 }
 
