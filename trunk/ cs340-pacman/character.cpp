@@ -4,12 +4,14 @@ Created By : Usha Sanaga
 Description : Abstarct Class from which the player and the enemy classes derived
 ***************************/
 
-
-
 #include "character.h"
 
+Character::Character()
+{
+}
 
-Character::Character(int x, int y, int dir) {
+Character::Character(int x, int y, int dir)
+{
     this->xCoor = x;
     this->yCoor = y;
     this->direction = dir;
@@ -18,20 +20,24 @@ Character::Character(int x, int y, int dir) {
     this->setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
 }
 
-int Character::getX() {
+int Character::getX()
+{
     return xCoor;
 }
 
-int Character::getY() {
+int Character::getY()
+{
     return yCoor;
 }
 
-int Character::getDirection() {
+int Character::getDirection()
+{
     return direction;
 }
 
 void Character::moveForward() {
     switch (direction) {
+
         case DIR_UP : yCoor -= Y_HEIGHT;
             break;
         case DIR_DOWN : yCoor += Y_HEIGHT;
@@ -80,8 +86,7 @@ void Character::makeTurn(long turnDir) {
 
 QRectF Character::boundingRect() const
 {
-    return QRectF(-X_WIDTH*CHARACTER_WIDTH,-Y_HEIGHT*CHARACTER_HEIGHT,
-                  X_WIDTH*CHARACTER_WIDTH, Y_HEIGHT*CHARACTER_HEIGHT);
+    return QRectFWI(0,0,X_WIDTH*CHARACTER_WIDTH, Y_HEIGHT*CHARACTER_HEIGHT);
 }
 
 
