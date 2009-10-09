@@ -13,7 +13,7 @@ Cretaed by : Usha Sanaga
 
 class Character : public QGraphicsItem
 {
-private:
+protected:
     int xCoor;
     int yCoor;
     int direction;
@@ -34,7 +34,8 @@ public:
     static const int DIR_RIGHT = 3;
     static const int DIR_LEFT = 4;
 
-    static const int RIGHT = 1;
+    static const int RIGHT = 0;
+    static const int LEFT = 1;
 
     int getX();
     int getY();

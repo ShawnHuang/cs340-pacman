@@ -1,3 +1,10 @@
+//********************************
+//File Name: enemythread.cpp
+//Created by: Usha Sanaga
+//Description :
+//********************************
+
+
 #include "enemythread.h"
 #include <math.h>
 #include "character.h"
@@ -6,11 +13,10 @@
 
 using namespace std;
 
-EnemyThread::EnemyThread(MapLoader *ml)
+EnemyThread::EnemyThread(MapLoader *ml, int x, int y)
 {
     this->ml = ml;
-    this->e = new Enemy(0,0,Character::DIR_UP);
-
+    this->e = new Enemy(x,y,Character::DIR_UP, ml);
 }
 
 void EnemyThread ::run() {
@@ -45,4 +51,3 @@ void EnemyThread ::run() {
         e->makeTurn(range);
         }
     }
-

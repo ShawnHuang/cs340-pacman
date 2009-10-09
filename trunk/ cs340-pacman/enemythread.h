@@ -1,3 +1,8 @@
+//****************************
+//   File Name:enemythread.h
+//   Created by:Usha Sanaga
+//   ***************************
+
 #ifndef ENEMYTHREAD_H
 #define ENEMYTHREAD_H
 
@@ -13,7 +18,7 @@ private:
     MapLoader *ml;
     Enemy *e;
 public:
-    EnemyThread(MapLoader*);
+    EnemyThread(MapLoader*,int,int);
     void run();
 };
 
