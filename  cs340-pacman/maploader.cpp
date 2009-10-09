@@ -20,7 +20,7 @@ MapLoader::~MapLoader() //destructor
 void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its co ordinates in a list.
 {
 
-     QFile file("in.txt"); // Qfile file = new QFile("in.txt");
+     QFile file("in(with dots).txt"); // Qfile file = new QFile("in.txt");
      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
          return;
 
@@ -31,14 +31,35 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
          QString line = in.readLine();
          for (int i = 0; i < line.size(); ++i)
          {
-            if (line.at(i) == QChar('+'))
+            QString *key;
+            switch(line.at(i).toAscii())
             {
-                cc.xcoord = xcoord;
-                cc.ycoord = ycoord;
-                cc.symbol = '+';
-                QString *key = new QString(QChar(xcoord + 48));
-                key->append(QChar('_')).append(QChar(ycoord + 48));
-                map.insert(*key, cc);
+                                case '+':
+					cc.xcoord = xcoord;
+					cc.ycoord = ycoord;
+					cc.symbol = '+';
+                                        key = new QString(QChar(xcoord + 48));
+					key->append(QChar('_')).append(QChar(ycoord + 48));
+					map.insert(*key, cc);
+					break;
+
+                                case '.':
+					cc.xcoord = xcoord;
+					cc.ycoord = ycoord;
+					cc.symbol = '.';
+                                        key = new QString(QChar(xcoord + 48));
+					key->append(QChar('_')).append(QChar(ycoord + 48));
+					dotmap.insert(*key, cc);
+					break;
+
+                                case 'O':
+					cc.xcoord = xcoord;
+					cc.ycoord = ycoord;
+					cc.symbol = 'O';
+                                        key = new QString(QChar(xcoord + 48));
+					key->append(QChar('_')).append(QChar(ycoord + 48));
+					powerdotmap.insert(*key, cc);
+					break;
             }
             xcoord++;
          }
@@ -47,14 +68,6 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
      }
 }
 
-void MapLoader::ListRead()  // Testing function to print the list value
-{
-    int a;
-    int b;
 
-    for(it = map.begin(); it != map.end(); it++)
-    {
-        a = it->xcoord;
-        b = it->ycoord;
-    }
-}
+
+

@@ -21,6 +21,7 @@ public:
 
 private:
     QColor color;
+    QColor pencolor;
 };
 
 #endif // WALL_H
