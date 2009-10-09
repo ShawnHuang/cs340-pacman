@@ -25,9 +25,13 @@ public:
     ~MapLoader();
     void FileRead();
 
+
     QMap<QString, CoordChar> map;
-    QMap<QString, CoordChar>::iterator it;
-    void ListRead();
+	QMap<QString, CoordChar> dotmap;
+	QMap<QString, CoordChar> powerdotmap;
+    QMap<QString, CoordChar>::iterator itmap;
+	QMap<QString, CoordChar>::iterator itdot;
+	QMap<QString, CoordChar>::iterator itpowerdot;
 
 private:
     QString filename;

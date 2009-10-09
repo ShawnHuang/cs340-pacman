@@ -24,5 +24,4 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
                      Character::X_WIDTH*Character::CHARACTER_WIDTH,
                      Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
                      Qt::darkYellow);
-
 }
