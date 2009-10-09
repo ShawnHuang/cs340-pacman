@@ -27,7 +27,7 @@ public:
     static const int X_WIDTH = 3;
     static const int Y_HEIGHT = 3;
 
-    static const int TYPE_PLAYER =  1;
+    static const int TYPE_PLAYER = 1;
     static const int TYPE_ENEMY = 2;
     static const int DIR_UP = 1;
     static const int DIR_DOWN = 2;
@@ -38,11 +38,15 @@ public:
 
     int getX();
     int getY();
+
+    //virtual int getType() const = 0;
+
     int getDirection();
     virtual int getType() const = 0;
     void moveForward();
+    virtual QRectF boundingRect() const;
     void makeTurn(long);
-    QRectF boundingRect() const;
+
 };
 
 
