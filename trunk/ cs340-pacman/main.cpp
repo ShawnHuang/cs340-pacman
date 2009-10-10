@@ -1,17 +1,32 @@
+
+#include <QGraphicsScene>/*****************************************************
+  File Name: main.cpp
+  Description: Creates, loads the scene and add items
+  Created by: Riddhi Kapasi
+  Modified by:
+******************************************************/
+
 #include <QApplication>
 //#include "MyButtons.h"
 #include <QSplashScreen>
 #include <QtGui>
 
+
 #include "dot.h"
 #include "maploader.h"
 #include "wall.h"
+#include "character.h"
+#include "enemy.h"
 
-#include <windows.h>
+
+static const int EnemyCount = 4;
+
+//#include <windows.h>
 #include <vector>
 
 
 int main(int argc, char *argv[])
+
 {
         QApplication app(argc, argv);
 
@@ -70,10 +85,12 @@ int main(int argc, char *argv[])
          i++;
     }
    //create an enemy
-//    Enemy *e = new Enemy(1, 1, Character::DIR_DOWN);
-//    scene.addItem(e);
-//
+
+      Enemy *e = new Enemy(1,1,Character::DIR_DOWN, mp);
+
+      scene.addItem(e);
 //    e->moveForward();
+//    e->makeTurn(1);
 //    e->moveForward();
 //    e->moveForward();
 
@@ -89,8 +106,14 @@ int main(int argc, char *argv[])
     view.setWindowTitle(QT_TRANSLATE_NOOP(QGraphicsView, "Pac-Man"));
     //view.resize(400, 300);
     view.show();
+//    EnemyThread *enemyThread = new EnemyThread(mp, 0, 0);
 
-//======
+
+    QTimer timer;
+    QObject::connect(&timer, SIGNAL(timeout()), &scene, SLOT(advance()));
+    timer.start(1000);
+
+
     /**
         //scene->setSceneRect(-300,-300,600,600);
         MyButtons buttons;
@@ -110,5 +133,7 @@ int main(int argc, char *argv[])
    //menu->show();
 //>>>>>>> .r51
         **/
+
     return app.exec();
+
 }

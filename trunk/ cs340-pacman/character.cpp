@@ -17,7 +17,7 @@ Character::Character(int x, int y, int dir)
     this->direction = dir;
 
     // set the graphics item position
-    this->setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+     setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
 }
 
 int Character::getX()
@@ -38,56 +38,59 @@ int Character::getDirection()
 void Character::moveForward() {
     switch (direction) {
 
+        case DIR_UP : yCoor -= 1;
+            break;
         case DIR_UP : yCoor -= Y_HEIGHT;
             break;
-        case DIR_DOWN : yCoor += Y_HEIGHT;
+        case DIR_DOWN : yCoor += 1;
             break;
-        case DIR_RIGHT : xCoor += X_WIDTH;
+        case DIR_RIGHT : xCoor += 1;
             break;
-        case DIR_LEFT : xCoor -= X_WIDTH;
+        case DIR_LEFT : xCoor -= 1;
             break;
     }
 
     // update the graphics item position
-    this->setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
-}
+    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+  }
 
 void Character::makeTurn(long turnDir) {
 
     switch (direction) {
         case DIR_UP :
-            if (turnDir = RIGHT) {
+            if (turnDir == RIGHT) {
                 direction = DIR_RIGHT;
-            } else {
+            } else if (turnDir == LEFT) {
                     direction = DIR_LEFT;
             }
             break;
         case DIR_DOWN : 
-            if (turnDir = RIGHT) {
+            if (turnDir == RIGHT) {
                 direction = DIR_LEFT;
-            } else {
+            } else if (turnDir == LEFT){
                     direction = DIR_RIGHT;
                 }
             break;
-        case DIR_RIGHT : if (turnDir = RIGHT) {
+        case DIR_RIGHT :
+            if (turnDir == RIGHT) {
                 direction = DIR_DOWN;
-            }
-                else
+            } else if (turnDir == LEFT){
                     direction = DIR_UP;
-            break;
-        case DIR_LEFT : if (turnDir = RIGHT) {
-                direction = DIR_UP;
             }
-                else
+            break;
+        case DIR_LEFT : if (turnDir == RIGHT) {
+                direction = DIR_UP;
+            } else if (turnDir == LEFT) {
                     direction = DIR_DOWN;
-                break;
+            }
+            break;
     }
+    // update the graphics item position
+    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
 }
 
 QRectF Character::boundingRect() const
 {
+
     return QRectFWI(0,0,X_WIDTH*CHARACTER_WIDTH, Y_HEIGHT*CHARACTER_HEIGHT);
 }
-
-
-
