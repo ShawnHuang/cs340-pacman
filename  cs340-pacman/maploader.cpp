@@ -34,6 +34,13 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
             QString *key;
             switch(line.at(i).toAscii())
             {
+
+                cc.xcoord = xcoord;
+                cc.ycoord = ycoord;
+                cc.symbol = '+';
+                QString *key = new QString(QChar(xcoord+48));
+                key->append(QChar('_')).append(QChar(ycoord+48));
+                map.insert(*key, cc);
                                 case '+':
 					cc.xcoord = xcoord;
 					cc.ycoord = ycoord;
@@ -60,6 +67,7 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
 					key->append(QChar('_')).append(QChar(ycoord + 48));
 					powerdotmap.insert(*key, cc);
 					break;
+
             }
             xcoord++;
          }
