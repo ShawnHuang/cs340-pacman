@@ -10,7 +10,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <Qstring>
+#include <QString>
 #include <QMap>
 #include <QSet>
 
