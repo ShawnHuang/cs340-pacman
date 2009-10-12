@@ -7,10 +7,7 @@ HEADERS += wall.h \
     fsm.h \
     state.h \
     dot.h \
-    enemythread.h\
-    topbar.h \
-    bigdot.h \
-    paccy.h
+    enemythread.h
 SOURCES += wall.cpp \
     main.cpp \
     maploader.cpp \
@@ -19,8 +16,4 @@ SOURCES += wall.cpp \
     player.cpp \
     fsm.cpp \
     state.cpp \
-    dot.cpp \
-    topbar.cpp \
-    bigdot.cpp \
-    enemythread.cpp\
-    paccy.cpp
+    dot.cpp

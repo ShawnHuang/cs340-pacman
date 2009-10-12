@@ -21,6 +21,7 @@ protected:
 
 
 public:
+    Character();
     Character(int,int,int);
     static const int CHARACTER_WIDTH = 10;
     static const int CHARACTER_HEIGHT = 10;

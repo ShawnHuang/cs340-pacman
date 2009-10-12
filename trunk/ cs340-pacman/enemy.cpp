@@ -35,11 +35,11 @@ void Enemy::advance(int step) {
     int x = this->xCoor;
     int y = this->yCoor;
     switch (this->direction) {
-        case Character::DIR_UP : y -= 1;
+        case Character::DIR_UP : y -=1;
             break;
-        case Character::DIR_DOWN : y += 1;
+        case Character::DIR_DOWN : y += Y_HEIGHT;
             break;
-        case Character::DIR_RIGHT : x += 1;
+        case Character::DIR_RIGHT : x +=X_WIDTH;
             break;
         case Character::DIR_LEFT : x -= 1;
             break;
@@ -58,7 +58,8 @@ void Enemy::advance(int step) {
 
      } else {
         //make a random turn
-        long turnDir = lround((qrand()/RAND_MAX)*2);
+         float rand_max = RAND_MAX + 1.0;
+        long turnDir = lround((qrand()/rand_max)*2);
          this->makeTurn(turnDir);
 
     }
