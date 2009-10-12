@@ -35,38 +35,32 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
             switch(line.at(i).toAscii())
             {
 
-                cc.xcoord = xcoord;
-                cc.ycoord = ycoord;
-                cc.symbol = '+';
-                QString *key = new QString(QChar(xcoord+48));
-                key->append(QChar('_')).append(QChar(ycoord+48));
-                map.insert(*key, cc);
-                                case '+':
-					cc.xcoord = xcoord;
-					cc.ycoord = ycoord;
-					cc.symbol = '+';
-                                        key = new QString(QChar(xcoord + 48));
-					key->append(QChar('_')).append(QChar(ycoord + 48));
-					map.insert(*key, cc);
-					break;
+                case '+':
+                        cc.xcoord = xcoord;
+                        cc.ycoord = ycoord;
+                        cc.symbol = '+';
+                        key = new QString(QChar(xcoord + 48));
+                        key->append(QChar('_')).append(QChar(ycoord + 48));
+                        map.insert(*key, cc);
+                        break;
 
-                                case '.':
-					cc.xcoord = xcoord;
-					cc.ycoord = ycoord;
-					cc.symbol = '.';
-                                        key = new QString(QChar(xcoord + 48));
-					key->append(QChar('_')).append(QChar(ycoord + 48));
-					dotmap.insert(*key, cc);
-					break;
+                case '.':
+                        cc.xcoord = xcoord;
+                        cc.ycoord = ycoord;
+                        cc.symbol = '.';
+                        key = new QString(QChar(xcoord + 48));
+                        key->append(QChar('_')).append(QChar(ycoord + 48));
+                        dotmap.insert(*key, cc);
+                        break;
 
-                                case 'O':
-					cc.xcoord = xcoord;
-					cc.ycoord = ycoord;
-					cc.symbol = 'O';
-                                        key = new QString(QChar(xcoord + 48));
-					key->append(QChar('_')).append(QChar(ycoord + 48));
-					powerdotmap.insert(*key, cc);
-					break;
+                case 'O':
+                        cc.xcoord = xcoord;
+                        cc.ycoord = ycoord;
+                        cc.symbol = 'O';
+                        key = new QString(QChar(xcoord + 48));
+                        key->append(QChar('_')).append(QChar(ycoord + 48));
+                        powerdotmap.insert(*key, cc);
+                        break;
 
             }
             xcoord++;

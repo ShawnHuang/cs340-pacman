@@ -40,8 +40,6 @@ void Character::moveForward() {
 
         case DIR_UP : yCoor -= 1;
             break;
-        case DIR_UP : yCoor -= Y_HEIGHT;
-            break;
         case DIR_DOWN : yCoor += 1;
             break;
         case DIR_RIGHT : xCoor += 1;
@@ -92,5 +90,5 @@ void Character::makeTurn(long turnDir) {
 QRectF Character::boundingRect() const
 {
 
-    return QRectFWI(0,0,X_WIDTH*CHARACTER_WIDTH, Y_HEIGHT*CHARACTER_HEIGHT);
+    return QRectF(0,0,X_WIDTH*CHARACTER_WIDTH, Y_HEIGHT*CHARACTER_HEIGHT);
 }
