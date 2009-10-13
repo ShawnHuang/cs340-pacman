@@ -1,5 +1,4 @@
 HEADERS += wall.h \
-    maploaader.h \
     maploader.h \
     character.h \
     enemy.h \
@@ -7,7 +6,14 @@ HEADERS += wall.h \
     fsm.h \
     state.h \
     dot.h \
-    enemythread.h
+    enemythread.h \
+    topbar.h \
+    bigdot.h \
+    game.h \
+    toplevel.h \
+
+
+
 SOURCES += wall.cpp \
     main.cpp \
     maploader.cpp \
@@ -16,4 +22,10 @@ SOURCES += wall.cpp \
     player.cpp \
     fsm.cpp \
     state.cpp \
-    dot.cpp
+    dot.cpp \
+    topbar.cpp \
+    bigdot.cpp \
+    enemythread.cpp \
+    game.cpp \   
+    toplevel.cpp \
+
