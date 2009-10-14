@@ -21,8 +21,11 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    TopLevel display;
+    QGraphicsScene *scene = new QGraphicsScene();
+    TopLevel display(scene);
     display.show();
+    display.start(100);
+
     return app.exec();
 
 }
