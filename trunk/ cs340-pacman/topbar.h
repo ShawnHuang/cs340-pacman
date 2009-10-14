@@ -8,7 +8,6 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QLCDNumber>
-#include <QApplication.h>
 #include <QLabel>
 #include <QPushButton>
 #include <QLCDNumber>
