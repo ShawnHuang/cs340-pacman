@@ -67,6 +67,9 @@ TopLevel :: TopLevel(QGraphicsScene *scene) : QGraphicsView(scene)
      Enemy *e = new Enemy(1,1,Character::DIR_DOWN,mp);
      scene->addItem(e);
 
+     Player *pacman = new Player(0, 0, scene);
+     scene->addItem(pacman);
+
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), scene, SLOT(advance()));
 }
