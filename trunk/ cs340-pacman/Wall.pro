@@ -21,7 +21,11 @@ HEADERS += wall.h \
     scenes.h \
     helpbutton.h \
     quitbutton.h \
-    displayMap.h
+    displayMap.h \
+    displayMenu.h \
+    msgBox.h \
+    test.h \
+    test.h
 SOURCES += wall.cpp \
     main.cpp \
     maploader.cpp \
@@ -40,4 +44,7 @@ SOURCES += wall.cpp \
     scenes.cpp \
     helpbutton.cpp \
     quitbutton.cpp \
-    displayMap.cpp
+    displayMap.cpp \
+    displayMenu.cpp \
+    msgBox.cpp \
+    test.cpp
