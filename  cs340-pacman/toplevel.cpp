@@ -10,7 +10,7 @@ TopLevel :: TopLevel(QGraphicsScene *scene) : QGraphicsView(scene)
     setWindowTitle(QT_TRANSLATE_NOOP(QGraphicsView, "Pac-Man"));
 
     // set the scene properties
-    scene->setSceneRect(0,-5,550,505);
+    scene->setSceneRect(0,-35,550,505);
     scene->setFocus();
 
 
@@ -20,7 +20,7 @@ TopLevel :: TopLevel(QGraphicsScene *scene) : QGraphicsView(scene)
 
     TopBar *stat= new TopBar();
     stat->setPalette(p);
-    stat->setGeometry(0,-5,500,30);
+    stat->setGeometry(0,-35,500,30);
 
     scene->addWidget(stat);
 
