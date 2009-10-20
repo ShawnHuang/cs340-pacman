@@ -6,7 +6,6 @@ HEADERS += wall.h \
     fsm.h \
     state.h \
     dot.h \
-    enemythread.h \
     topbar.h \
     bigdot.h \
     game.h \
@@ -37,7 +36,6 @@ SOURCES += wall.cpp \
     dot.cpp \
     topbar.cpp \
     bigdot.cpp \
-    enemythread.cpp \
     game.cpp \
     toplevel.cpp \
     playbutton.cpp \

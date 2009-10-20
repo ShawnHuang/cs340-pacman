@@ -10,8 +10,8 @@
 #include "toplevel.h"
 //#include <windows.h>
 #include <vector>
-#include "scenes.h"
-#include "displayMap.h"
+//#include "scenes.h"
+//#include "displayMap.h"
 #include "displayMenu.h"
 #include "msgBox.h"
 #include "playbutton.h"
@@ -25,7 +25,13 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     QGraphicsScene *scene = new QGraphicsScene();
-    displayMap *map = new displayMap;
+
+    TopLevel display(scene);
+    display.show();
+    display.start(100);
+
+
+//    displayMap *map = new displayMap;
     //map->hide();
     //map->show();
 
@@ -35,6 +41,12 @@ int main(int argc, char *argv[])
 
     //msgBox *yoyo = new msgBox;
 
+    //DISPLAYING SCREEN(will be transfered to the other class)
+//    QGraphicsScene *scene1 = new QGraphicsScene();
+//    scenes display1(scene1);
+//    display1.setBackgroundBrush(QPixmap("C:/Users/Sohaib/Desktop/images/display.gif"));
+//    display1.resize(640,480);
+//    display1.show();
     //playbutton *button = new playbutton;
     //button->show();
 
