@@ -89,6 +89,5 @@ void Character::makeTurn(long turnDir) {
 
 QRectF Character::boundingRect() const
 {
-
     return QRectF(0,0,X_WIDTH*CHARACTER_WIDTH, Y_HEIGHT*CHARACTER_HEIGHT);
 }

@@ -19,6 +19,10 @@ BigDot::BigDot(int width, int height)
    HEIGHT_OF_BIG_DOT=height;
 }
 
+int BigDot::type() const
+{
+    return ID_BIGDOT;
+}
 
 //Making bouding rect arnd wall which will aid in collision detection
 QRectF BigDot::boundingRect() const

@@ -3,31 +3,60 @@
 
 #include "state.h"
 #include "fsm.h"
+#include "maploader.h"
 
 #include<QGraphicsItem>
 #include <QPainter>
 #include <QRectF>
 #include <QKeyEvent>
 
+#define ID_PLAYER 4
 
 class Player: public QGraphicsItem
 {
 private:
     int xCoord;
     int yCoord;
+    int initXCoord;
+    int initYCoord;
+    int xdir;
+    int ydir;
+    int xPrev;
+    int yPrev;
+    int xNext;
+    int yNext;
+
     FSM pacmanfsm;
     void setAndAddStates();
+    MapLoader* ml;
+    int dir;
+    int prevDir;
+    int nextDir;
+    int mode;
+
+    QString *key;
+    QString *key1;
+    QString *key2;
+    QString *key3;
+
+    int keyGeneration(int);
 
 public:
+    virtual int type() const;
     Player();
-    Player(int ,int, QGraphicsScene *scene = 0);
-    void update();
+    Player(int ,int, MapLoader*, QGraphicsScene *scene = 0);
+    void advance(int phase);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     int getTYpe();
     QRectF boundingRect() const;
     void keyPressEvent(QKeyEvent * event );
+    void enterTunnel();
+    bool eatDots();
+    bool checkCollWithPrevDir();
+    void checkCollWithNextDir(bool);
 
-    enum Action {Up, Down, Left, Right};
+
+    enum Action {Up = 1, Down, Left, Right};
     QMap< int, Action > actionmap;
 
 };

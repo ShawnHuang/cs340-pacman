@@ -19,6 +19,10 @@ Dot::Dot(int width, int height)
    HEIGHT_OF_DOT=height;
 }
 
+int Dot::type() const
+{
+    return ID_DOT;
+}
 
 //Making bouding rect arnd wall which will aid in collision detection
 QRectF Dot::boundingRect() const
@@ -29,7 +33,7 @@ QRectF Dot::boundingRect() const
 //Drawing a rectangle of dimensions (WIDTH, HEIGHT)
 void Dot::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-   QColor pencolor(0,0,0,255);
+   QColor pencolor(0,0,0,0);
    painter->setBrush(colorOfDot);
    painter->setPen (pencolor);
    painter->drawEllipse(0,0,WIDTH_OF_DOT,HEIGHT_OF_DOT);

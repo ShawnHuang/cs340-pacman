@@ -2,11 +2,12 @@
 #define BIGDOT_H
 #include <QGraphicsItem>
 
-
+#define ID_BIGDOT 2
 
 class BigDot : public QGraphicsItem //Class Wall
 {
 public:
+    virtual int type() const;
     BigDot();
     BigDot(int width, int height);
     QRectF boundingRect() const;

@@ -23,15 +23,15 @@ class MapLoader : public QFile //Maploader class
 public:
     MapLoader();
     ~MapLoader();
-    void FileRead();
-
+    void fileRead();
 
     QMap<QString, CoordChar> map;
-	QMap<QString, CoordChar> dotmap;
-	QMap<QString, CoordChar> powerdotmap;
-    QMap<QString, CoordChar>::iterator itmap;
-	QMap<QString, CoordChar>::iterator itdot;
-	QMap<QString, CoordChar>::iterator itpowerdot;
+    QMap<QString, CoordChar> dotmap;
+    QMap<QString, CoordChar> powerdotmap;
+    //QMap<QString, CoordChar>::iterator itmap;
+    //QMap<QString, CoordChar>::iterator itdot;
+    //QMap<QString, CoordChar>::iterator itpowerdot;
+    QMap<QString, CoordChar> sceneItemsMap;
 
 private:
     QString filename;

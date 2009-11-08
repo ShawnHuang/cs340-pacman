@@ -14,8 +14,13 @@
 //Constructor defining wall color as blue
 Wall::Wall()
 {
-    color = QColor(150,100,200,255);
+    color = QColor(0,0,255,255);
     pencolor = QColor(0,0,0,0);
+}
+
+int Wall::type() const
+{
+    return ID_WALL;
 }
 
 //Making bouding rect arnd wall which will aid in collision detection
@@ -27,6 +32,7 @@ QRectF Wall::boundingRect() const
 //Drawing a rectangle of dimensions (WIDTH, HEIGHT)
 void Wall::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {   
+   //painter->setBrush(scene()->collidingItems(this).isEmpty() ? color : Qt::red);
    painter->setBrush(color);
    painter->setPen (pencolor);
    painter->drawRect(0,0, WIDTH, HEIGHT);

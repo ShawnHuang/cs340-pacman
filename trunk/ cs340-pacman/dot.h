@@ -3,13 +3,12 @@
 
 
 #include <QGraphicsItem>
-
-//#define WIDTH_OF_DOT 5
-//#define HEIGHT_OF_DOT 5
+#define ID_DOT 1
 
 class Dot : public QGraphicsItem //Class Wall
 {
 public:
+    virtual int type() const;
     Dot();
     Dot(int width, int height);
     QRectF boundingRect() const;
