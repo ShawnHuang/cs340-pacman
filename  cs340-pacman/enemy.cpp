@@ -4,7 +4,6 @@
   Description : Created a garphical representation of enemy
   ****************************/
 
-
 #include "enemy.h"
 
 
@@ -24,7 +23,7 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
    painter->fillRect(0,0,
                      Character::X_WIDTH*Character::CHARACTER_WIDTH,
                      Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
-                     Qt::yellow);
+                     Qt::red);
 }
 void Enemy::advance(int step) {
 
@@ -34,6 +33,7 @@ void Enemy::advance(int step) {
     //get the position of the block infront of the enemy
     int x = this->xCoor;
     int y = this->yCoor;
+
     switch (this->direction) {
         case Character::DIR_UP : y -=1;
             break;
@@ -56,7 +56,7 @@ void Enemy::advance(int step) {
     if(i == ml->map.end()) { //thr is no wall in front of the enemy
         moveForward();
 
-     } else {
+    }else {
         //make a random turn
          float rand_max = RAND_MAX + 1.0;
         long turnDir = lround((qrand()/rand_max)*2);

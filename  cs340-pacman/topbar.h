@@ -1,5 +1,3 @@
-
-
 #ifndef TOPBAR_H
 #define TOPBAR_H
 
@@ -11,7 +9,6 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QLCDNumber>
-
 
 
 class TopBar : public QWidget

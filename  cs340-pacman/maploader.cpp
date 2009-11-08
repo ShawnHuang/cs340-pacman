@@ -6,6 +6,7 @@
 ******************************************************/
 
 #include "maploader.h"
+#include<QDebug>
 
 MapLoader::MapLoader() //constructor
 {
@@ -17,7 +18,7 @@ MapLoader::~MapLoader() //destructor
 {
 }
 
-void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its co ordinates in a list.
+void MapLoader::fileRead() //reads the text file, looks for '+' char, stores its co ordinates in a list.
 {
 
      QFile file("in(with dots).txt"); // Qfile file = new QFile("in.txt");
@@ -32,6 +33,7 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
          for (int i = 0; i < line.size(); ++i)
          {
             QString *key;
+            QString *playerKey;
             switch(line.at(i).toAscii())
             {
 
@@ -39,29 +41,49 @@ void MapLoader::FileRead() //reads the text file, looks for '+' char, stores its
                         cc.xcoord = xcoord;
                         cc.ycoord = ycoord;
                         cc.symbol = '+';
-                        key = new QString(QChar(xcoord + 48));
-                        key->append(QChar('_')).append(QChar(ycoord + 48));
+                        key = new QString(QChar(xcoord+48));
+                        key->append(QChar('_')).append(QChar(ycoord+48));
                         map.insert(*key, cc);
+
+                        //Map for player movement
+                        cc.xcoord = xcoord*10;
+                        cc.ycoord = ycoord*10;
+                        playerKey = new QString(QChar(xcoord*10));
+                        playerKey->append(QChar('_')).append(QChar(ycoord*10));
+                        sceneItemsMap.insert(*playerKey,cc);
                         break;
 
                 case '.':
                         cc.xcoord = xcoord;
                         cc.ycoord = ycoord;
                         cc.symbol = '.';
-                        key = new QString(QChar(xcoord + 48));
-                        key->append(QChar('_')).append(QChar(ycoord + 48));
+                        key = new QString(QChar(xcoord+48));
+                        key->append(QChar('_')).append(QChar(ycoord+48));
                         dotmap.insert(*key, cc);
+
+                        //Map for player movement
+                        cc.xcoord = xcoord*10;
+                        cc.ycoord = ycoord*10;
+                        playerKey = new QString(QChar(xcoord*10));
+                        playerKey->append(QChar('_')).append(QChar(ycoord*10));
+                        sceneItemsMap.insert(*playerKey,cc);
                         break;
 
                 case 'O':
                         cc.xcoord = xcoord;
                         cc.ycoord = ycoord;
                         cc.symbol = 'O';
-                        key = new QString(QChar(xcoord + 48));
-                        key->append(QChar('_')).append(QChar(ycoord + 48));
+                        key = new QString(QChar(xcoord+48));
+                        key->append(QChar('_')).append(QChar(ycoord+48));
                         powerdotmap.insert(*key, cc);
-                        break;
 
+                        //Map for player movement
+                        cc.xcoord = xcoord*10;
+                        cc.ycoord = ycoord*10;
+                        playerKey = new QString(QChar(xcoord*10));
+                        playerKey->append(QChar('_')).append(QChar(ycoord*10));
+                        sceneItemsMap.insert(*playerKey,cc);
+                        break;
             }
             xcoord++;
          }

@@ -12,6 +12,7 @@
 #include <math.h>
 #include <iostream>
 
+
 class Enemy : public Character {
     private:
         MapLoader* ml;

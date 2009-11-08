@@ -1,7 +1,7 @@
 /*****************************************************
   File Name: state.h
-  Description:  The state class is responsible for setting transitions, specifying actions, and pointing
-                to the right function that represents the action.
+  Description: The state class is responsible for setting transitions, specifying actions, and pointing
+               to the right function that represents the action.
   Created by: Riddhi Kapasi
   Modified by :
 ******************************************************/
