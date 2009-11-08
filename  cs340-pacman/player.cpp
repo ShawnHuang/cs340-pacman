@@ -29,6 +29,9 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
     prevDir = 4;
     dir = 4;
     this->ml = ml;
+
+    whichDot = 0;
+
     setFlag(ItemIsFocusable);
 
     actionmap.insert(Qt::Key_Up, Up);
@@ -39,12 +42,16 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
 
     setAndAddStates();
     pacmanfsm.setInitialState("INIT");
-    //this->setPos(xCoord, yCoord);
 }
 
 int Player::type() const
 {
     return ID_PLAYER;
+}
+
+int Player::getDotType()
+{
+    return whichDot;
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -84,7 +91,7 @@ void Player::advance(int phase)
         this->setPos(xCoord, yCoord);
         pacmanfsm.handleEvent("init_timeout");
         QString a = pacmanfsm.getState();
-        qDebug() << a;
+        //qDebug() << a;
     }
 
     if(pacmanfsm.getState() == "PLAY")
@@ -100,7 +107,7 @@ void Player::advance(int phase)
         checkCollWithNextDir(prevDirCol);
         eatDots();
         QString a = pacmanfsm.getState();
-        qDebug() << a;
+        //qDebug() << a;
 
         xCoord += xdir;
         yCoord += ydir;
@@ -124,10 +131,9 @@ void Player::enterTunnel()
     }
 }
 
-// Checking Dot collision
-bool Player::eatDots()
+// Checking Dot/BigDot collision
+void Player::eatDots()
 {
-    bool ateDot = false;
     QMap<QString, CoordChar>::const_iterator it;
     switch(dir)
     {
@@ -149,23 +155,41 @@ bool Player::eatDots()
             break;
     }
     it = ml->sceneItemsMap.find(*key);//checking for dots
-    if(it.value().symbol == 46)
+    QList<QGraphicsItem *> list;
+    switch(it.value().symbol)
     {
-        //QPointF point = QPointF(it.value().xcoord , it.value().ycoord);
-        QList<QGraphicsItem *> list = scene()->items(it.value().xcoord , it.value().ycoord, 5, 5);
-        for(int i = 0; i < list.size(); i++)
-        {
-            if(list.at(i)->type() == 1)
-            {
-                scene()->removeItem(list.at(i));
-                ateDot = true;
-                break;
-            }
-        }
-        ml->sceneItemsMap.remove(*key);
-    }
-}
+        case 46:
 
+            list = scene()->items(it.value().xcoord , it.value().ycoord, 5, 5);
+            for(int i = 0; i < list.size(); i++)
+            {
+                if(list.at(i)->type() == ID_DOT)
+                {
+                    scene()->removeItem(list.at(i));
+                    whichDot = ID_DOT;
+                    break;
+                }
+            }
+            qDebug() << whichDot;
+            ml->sceneItemsMap.remove(*key);
+            break;
+
+        case 79:
+            list = scene()->items(it.value().xcoord , it.value().ycoord,15,15);
+            for(int i = 0; i < list.size(); i++)
+            {
+                if(list.at(i)->type() == ID_BIGDOT)
+                {
+                    scene()->removeItem(list.at(i));
+                    whichDot = ID_BIGDOT;
+                    break;
+                }
+            }
+            qDebug() << whichDot;
+            ml->sceneItemsMap.remove(*key);
+            break;
+        }
+}
 //Handling key press event
 void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
 {
