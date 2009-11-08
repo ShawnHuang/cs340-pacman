@@ -10,23 +10,23 @@ TopLevel :: TopLevel(QGraphicsScene *scene) : QGraphicsView(scene)
     setWindowTitle(QT_TRANSLATE_NOOP(QGraphicsView, "Pac-Man"));
 
     // set the scene properties
-    scene->setSceneRect(0,-35,550,505);
-    scene->setFocus();
 
+    scene->setSceneRect(0,-35,570,525);
+    scene->setFocus();
 
     // create the scene elements
     QPalette p;
-    p.setColor(QPalette::Background,Qt::magenta);
+    p.setColor(QPalette::Background,Qt::yellow);
 
     TopBar *stat= new TopBar();
     stat->setPalette(p);
-    stat->setGeometry(0,-35,500,30);
-
+    stat->setGeometry(0,-35,570,30);
     scene->addWidget(stat);
 
     //Maploader entry point
     MapLoader *mp = new MapLoader;
-    mp->FileRead();
+    mp->fileRead();
+
 
     //If there are no characters in the map, send an error message.
     if ((mp->map.isEmpty())) {
@@ -35,7 +35,7 @@ TopLevel :: TopLevel(QGraphicsScene *scene) : QGraphicsView(scene)
         msg->showMessage("List size zero in map. Please check the file.");
     }
 
-    Dot *allDots = new Dot[mp->dotmap.size()];
+    Dot *allDots = new Dot[mp->dotmap.size()];//try n catch memory allocation exception
     Wall *wallblock = new Wall[mp->map.size()];
     BigDot *powerDots = new BigDot[mp->powerdotmap.size()];
 
@@ -67,7 +67,8 @@ TopLevel :: TopLevel(QGraphicsScene *scene) : QGraphicsView(scene)
      Enemy *e = new Enemy(1,1,Character::DIR_DOWN,mp);
      scene->addItem(e);
 
-     Player *pacman = new Player(0, 0, scene);
+     //create a pacman object and add it to scene.
+     Player *pacman = new Player(270, 290, mp, scene);
      scene->addItem(pacman);
 
     timer = new QTimer(this);
