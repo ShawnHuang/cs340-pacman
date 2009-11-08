@@ -4,6 +4,8 @@
 #include "state.h"
 #include "fsm.h"
 #include "maploader.h"
+#include "dot.h"
+#include "bigdot.h"
 
 #include<QGraphicsItem>
 #include <QPainter>
@@ -33,6 +35,7 @@ private:
     int prevDir;
     int nextDir;
     int mode;
+    int whichDot;
 
     QString *key;
     QString *key1;
@@ -42,19 +45,19 @@ private:
     int keyGeneration(int);
 
 public:
-    virtual int type() const;
     Player();
     Player(int ,int, MapLoader*, QGraphicsScene *scene = 0);
+    virtual int type() const;
+    int getDotType();
     void advance(int phase);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     int getTYpe();
     QRectF boundingRect() const;
     void keyPressEvent(QKeyEvent * event );
     void enterTunnel();
-    bool eatDots();
+    void eatDots();
     bool checkCollWithPrevDir();
     void checkCollWithNextDir(bool);
-
 
     enum Action {Up = 1, Down, Left, Right};
     QMap< int, Action > actionmap;
