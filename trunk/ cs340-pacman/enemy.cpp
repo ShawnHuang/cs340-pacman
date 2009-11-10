@@ -10,6 +10,12 @@
 Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character::Character(x,y,dir)
 {
     this->ml = ml;
+
+    // set the graphics item position
+    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+
+    setAndAddStates();
+    fsm.setInitialState("INIT");
 }
 
  int Enemy::getType() const {
@@ -25,10 +31,19 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
                      Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
                      Qt::red);
 }
+
 void Enemy::advance(int step) {
 
     if (!step)
     return;
+
+//    switch (fsm.getState()) {
+//
+//        case "INIT": fsm.handleEvent("init_timeout");
+//                     fsm.update();
+//                     break;
+//
+//    }
 
     //get the position of the block infront of the enemy
     int x = this->xCoor;
@@ -65,5 +80,25 @@ void Enemy::advance(int step) {
     }
  }
 
+void Enemy::setAndAddStates()
+{
+    State initState("INIT", 0); // creating init state
+    State randomState("RANDOM", 1); // creating random play state
+    State followState("FOLLOW", 2); // creating follow play state
+    State dyingState("DYING", 3); // creating a dying state
 
+    initState.addEventAndNextState("init_timeout", "RANDOM_PLAY");
 
+    randomState.addEventAndNextState("follow_pacman","FOLLOW_PLAY");
+    randomState.addEventAndNextState("super_player","DYING");
+
+    followState.addEventAndNextState("randomize","RANDOM");
+    followState.addEventAndNextState("super_player","DYING");
+
+    dyingState.addEventAndNextState("dead" , "INIT");
+
+    fsm.addState(initState);
+    fsm.addState(randomState);
+    fsm.addState(followState);
+    fsm.addState(dyingState);
+}
