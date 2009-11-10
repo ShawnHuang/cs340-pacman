@@ -15,9 +15,6 @@ Character::Character(int x, int y, int dir)
     this->xCoor = x;
     this->yCoor = y;
     this->direction = dir;
-
-    // set the graphics item position
-     setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
 }
 
 int Character::getX()

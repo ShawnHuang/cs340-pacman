@@ -17,6 +17,13 @@ State::State(QString statename)
     name = statename;
 }
 
+State::State(QString name, int index)
+{
+    this->name = name;
+    this->index = index;
+}
+
+
 State::~State()
 {
 }
@@ -24,6 +31,11 @@ State::~State()
 QString State::getName()
 {
     return name;
+}
+
+int State::getIndex()
+{
+    return index;
 }
 
 void State::setProperty(QString propertyName)
