@@ -9,8 +9,7 @@
 Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character(x, y, dir)
 {
     INIT = "INIT";
-    RANDOM = "RANDOM_PLAY";
-    FOLLOW = "FOLLOW_PLAY";
+    PLAY = "PLAY";
     DYING = "DYING";
 
     this->ml = ml;
@@ -54,24 +53,26 @@ void Enemy::advance(int step) {
                          fsm.handleEvent("init_timeout");
                          fsm.update();
                          break;
-        case RANDOM_STATE:
+        case PLAY_STATE:
 
                          // appending hard coded values to the options list
                          // TODO: Remove hardcoding if possible
-                         if (!isWallPresent(Character::FRONT)) {
+                         if (!isWallPresent(TURN_FRONT)) {
 //                             qDebug("No Front Wall");
                              optionsList.append(0);
                          }
 
-                         if (!isWallPresent(Character::LEFT)) {
+                         if (!isWallPresent(TURN_LEFT)) {
 //                             qDebug("No Left Wall");
                              optionsList.append(-1);
                          }
 
-                         if (!isWallPresent(Character::RIGHT)) {
+                         if (!isWallPresent(TURN_RIGHT)) {
 //                             qDebug("No Right Wall");
                              optionsList.append(1);
                          }
+
+                        removeOddOption(&optionsList);
 
                          // if no options present that means there are walls on
                          // all three sides and we might need to turn back
@@ -82,39 +83,22 @@ void Enemy::advance(int step) {
                             optionsList.append(-1);
                          }
 
-                         if (isPlayerInVicinity()) {
-                             // remove odd option
-                         }
-
-
                          selectedOption = optionsList.at(lround((qrand()/rand_max)*(optionsList.size()-1)));
 
                          qDebug() << "Selected Turn: " << selectedOption;
 
-                         if (selectedOption == Character::FRONT) {
+                         if (selectedOption == TURN_FRONT) {
                              moveForward();
                          } else {
                              makeTurn(selectedOption);
                          }
 
                          break;
-        case FOLLOW_STATE:
-                         break;
+//        case FOLLOW_STATE:
+//                         break;
         case DYING_STATE:
                          break;
     }
-
-//    if(i == ml->map.end()) { //thr is no wall in front of the enemy
-//        moveForward();
-//
-//    } else {
-//        //make a random turn
-//         float rand_max = RAND_MAX + 1.0;
-//        long turnDir = lround((qrand()/rand_max)*2);
-//         this->makeTurn(turnDir);
-//
-//    }
-
  }
 
 bool Enemy::isWallPresent(int direction)
@@ -128,7 +112,7 @@ bool Enemy::isWallPresent(int direction)
 
     switch (direction)
     {
-        case Character::FRONT:
+        case TURN_FRONT:
                             switch (this->direction) {
                                 case Character::DIR_UP : y -=1;
                                     break;
@@ -145,7 +129,7 @@ bool Enemy::isWallPresent(int direction)
 
                                 wallPositions.append(wallCoord);
                                 break;
-        case Character::RIGHT:
+        case TURN_RIGHT:
                             switch (this->direction) {
                                 case Character::DIR_UP : x += X_WIDTH;
                                     wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
@@ -178,7 +162,7 @@ bool Enemy::isWallPresent(int direction)
                                 wallPositions.append(wallCoord3);
 
                                 break;
-        case Character::LEFT:
+        case TURN_LEFT:
                             switch (this->direction) {
                                 case Character::DIR_UP : x -=1;
                                     wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
@@ -226,7 +210,7 @@ bool Enemy::isWallPresent(int direction)
      return ret;
 }
 
-void Enemy::removeOddOption(QList<CoordChar> *options)
+void Enemy::removeOddOption(QList<int> *options)
 {
    int vicinity = 3;
     QList<QGraphicsItem *> list = scene()->items(
@@ -239,38 +223,90 @@ void Enemy::removeOddOption(QList<CoordChar> *options)
    for (it = list.begin(); it != list.end(); it++ )
    {
        if ((*it)->type() == Player::ID_PLAYER) {
-
-           if () {
-           }
-
            qDebug() << "Found Player in Vicinity at " << (*it)->pos();
-           return true;
+           int playerX = (*it)->x()/CHARACTER_WIDTH;
+           int playerY = (*it)->y()/CHARACTER_HEIGHT;
 
+           switch(getDirection())
+           {
+               case DIR_UP :
+                    if (options->contains(0) && playerY > yCoor) {
+                        options->removeOne(0);
+                    }
+
+                    if (options->contains(1) && playerX < xCoor) {
+                        options->removeOne(1);
+                    }
+
+                    if (options->contains(-1) && playerX > xCoor) {
+                        options->removeOne(-1);
+                    }
+
+                    break;
+                case DIR_DOWN :
+                    if (options->contains(0) && playerY < yCoor) {
+                        options->removeOne(0);
+                    }
+
+                    if (options->contains(1) && playerX > xCoor) {
+                        options->removeOne(1);
+                    }
+
+                    if (options->contains(-1) && playerX < xCoor) {
+                        options->removeOne(-1);
+                    }
+                    break;
+                case DIR_RIGHT :
+                    if (options->contains(0) && playerX < xCoor) {
+                        options->removeOne(0);
+                    }
+
+                    if (options->contains(1) && playerY < yCoor) {
+                        options->removeOne(1);
+                    }
+
+                    if (options->contains(-1) && playerY > yCoor) {
+                        options->removeOne(-1);
+                    }
+
+                    break;
+                case DIR_LEFT :
+                    if (options->contains(0) && playerX > xCoor) {
+                        options->removeOne(0);
+                    }
+
+                    if (options->contains(1) && playerY > yCoor) {
+                        options->removeOne(1);
+                    }
+
+                    if (options->contains(-1) && playerY < yCoor) {
+                        options->removeOne(-1);
+                    }
+                    break;
+           }
        }
    }
-
-    return false;
 }
 
 void Enemy::setAndAddStates()
 {
     State initState(INIT, INIT_STATE); // creating init state
-    State randomState(RANDOM, RANDOM_STATE); // creating random play state
-    State followState(FOLLOW, FOLLOW_STATE); // creating follow play state
+    State randomState(PLAY, PLAY_STATE); // creating random play state
+//    State followState(FOLLOW, FOLLOW_STATE); // creating follow play state
     State dyingState(DYING, DYING_STATE); // creating a dying state
 
-    initState.addEventAndNextState("init_timeout", RANDOM);
+    initState.addEventAndNextState("init_timeout", PLAY);
 
-    randomState.addEventAndNextState("follow_pacman", FOLLOW);
+//    randomState.addEventAndNextState("follow_pacman", FOLLOW);
     randomState.addEventAndNextState("super_player", DYING);
 
-    followState.addEventAndNextState("randomize", RANDOM);
-    followState.addEventAndNextState("super_player", DYING);
+//    followState.addEventAndNextState("randomize", RANDOM);
+//    followState.addEventAndNextState("super_player", DYING);
 
     dyingState.addEventAndNextState("dead" , INIT);
 
     fsm.addState(initState);
     fsm.addState(randomState);
-    fsm.addState(followState);
+//    fsm.addState(followState);
     fsm.addState(dyingState);
 }

@@ -22,17 +22,17 @@ class Enemy : public Character {
         MapLoader* ml;
 
         static const int INIT_STATE = 0;
-        static const int RANDOM_STATE = 1;
+        static const int PLAY_STATE = 1;
         static const int FOLLOW_STATE = 2;
         static const int DYING_STATE = 3;
 
         QString INIT; //= "INIT";
-        QString RANDOM; //= "RANDOM_PLAY";
+        QString PLAY; //= "RANDOM_PLAY";
         QString FOLLOW; //= "FOLLOW_PLAYER";
         QString DYING; //= "DYING";
 
         bool isWallPresent(int);
-        void removeOddOption(QList<CoordChar> *);
+        void removeOddOption(QList<int> *);
 
     public:
         Enemy(int, int, int, MapLoader*);
