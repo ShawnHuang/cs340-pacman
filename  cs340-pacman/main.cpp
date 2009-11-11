@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     QGraphicsScene *scene = new QGraphicsScene();
     TopLevel display(scene);
     display.show();
-    display.start(15);
+    display.start(50);
 
     return app.exec();
 }

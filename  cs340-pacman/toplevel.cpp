@@ -67,6 +67,18 @@ TopLevel :: TopLevel(QGraphicsScene *scene) : QGraphicsView(scene)
      Enemy *e = new Enemy(1, 4, Character::DIR_DOWN, mp);
      scene->addItem(e);
 
+     Enemy *e1 = new Enemy(4, 4, Character::DIR_DOWN, mp);
+     scene->addItem(e1);
+
+     Enemy *e2 = new Enemy(10, 10, Character::DIR_DOWN, mp);
+     scene->addItem(e2);
+
+     Enemy *e3 = new Enemy(20, 20, Character::DIR_DOWN, mp);
+     scene->addItem(e3);
+
+     Enemy *e4 = new Enemy(40, 40, Character::DIR_DOWN, mp);
+     scene->addItem(e4);
+
      //create a pacman object and add it to scene.
      Player *pacman = new Player(270, 290, mp, scene);
      scene->addItem(pacman);
