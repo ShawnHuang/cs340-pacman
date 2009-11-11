@@ -38,6 +38,12 @@ QString FSM::getState()
     return s.getName();
 }
 
+int FSM::getStateIndex()
+{
+    State s = statemap.value(currState);
+    return s.getIndex();
+}
+
 bool FSM::hasProperty(QString propertyName)
 {
     State s = statemap.value(currState);

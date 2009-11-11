@@ -12,8 +12,6 @@
 #include <QRectF>
 #include <QKeyEvent>
 
-#define ID_PLAYER 4
-
 class Player: public QGraphicsItem
 {
 private:
@@ -47,6 +45,7 @@ private:
 public:
     Player();
     Player(int ,int, MapLoader*, QGraphicsScene *scene = 0);
+    static const int ID_PLAYER = 4;
     virtual int type() const;
     int getDotType();
     void advance(int phase);

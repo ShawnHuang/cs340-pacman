@@ -7,9 +7,11 @@ Cretaed by : Usha Sanaga
 #define CHARACTER_H
 
 #include <QGraphicsItem>
+#include <QGraphicsScene>
 #include <QPainter>
 #include <QRectF>
 #include <Qt>
+#include <QDebug>
 
 class Character : public QGraphicsItem
 {
@@ -22,7 +24,7 @@ protected:
 
 public:
     Character();
-    Character(int,int,int);
+    Character(int, int, int);
     static const int CHARACTER_WIDTH = 10;
     static const int CHARACTER_HEIGHT = 10;
     static const int X_WIDTH = 3;
@@ -35,14 +37,15 @@ public:
     static const int DIR_RIGHT = 3;
     static const int DIR_LEFT = 4;
 
-    static const int RIGHT = 0;
-    static const int LEFT = 1;
+    static const int FRONT = 0;
+    static const int RIGHT = 1;
+    static const int LEFT = -1;
+
 
     int getX();
     int getY();
 
-    //virtual int getType() const = 0;
-
+    virtual int type() const = 0;
     int getDirection();
     virtual int getType() const = 0;
     void moveForward();

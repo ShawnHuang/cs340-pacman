@@ -45,6 +45,14 @@ void Character::moveForward() {
             break;
     }
 
+    if (xCoor < 1) {
+        xCoor = 56;
+    } else if (xCoor > 56) {
+        xCoor = 1;
+    }
+
+    qDebug() << xCoor;
+
     // update the graphics item position
     setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
   }
