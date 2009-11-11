@@ -36,6 +36,7 @@ class FSM
         void update();//update nextstate
         void addState(State&);//adding state name and corresponding object in the map
         QString getState();//retriving the name of the state
+        int getStateIndex();
         bool inENTRY();
         bool inIN();
         bool inEXIT();
