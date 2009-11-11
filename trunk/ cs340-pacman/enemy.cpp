@@ -30,11 +30,41 @@ int Enemy::type() const
 void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
    painter->setBrush(Qt::Dense7Pattern);
-   painter->setPen (Qt::yellow);
    painter->fillRect(0,0,
                      Character::X_WIDTH*Character::CHARACTER_WIDTH,
                      Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
                      Qt::red);
+
+   painter->setPen (Qt::yellow);
+
+    switch (getDirection()) {
+        case DIR_UP :
+            painter->fillRect(0,0,
+                     Character::X_WIDTH*Character::CHARACTER_WIDTH,
+                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT/5,
+                     Qt::yellow);
+            break;
+        case DIR_DOWN :
+            painter->fillRect(0,Character::Y_HEIGHT*Character::CHARACTER_HEIGHT - Character::Y_HEIGHT*Character::CHARACTER_HEIGHT/5,
+                     Character::X_WIDTH*Character::CHARACTER_WIDTH,
+                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT/5,
+                     Qt::yellow);
+            break;
+        case DIR_RIGHT :
+            painter->fillRect(Character::X_WIDTH*Character::CHARACTER_WIDTH-Character::X_WIDTH*Character::CHARACTER_WIDTH/5,0,
+                     Character::X_WIDTH*Character::CHARACTER_WIDTH/5,
+                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
+                     Qt::yellow);
+            break;
+        case DIR_LEFT :
+            painter->fillRect(0,0,
+                     Character::X_WIDTH*Character::CHARACTER_WIDTH/5,
+                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
+                     Qt::yellow);
+            break;
+    }
+
+
 }
 
 void Enemy::advance(int step) {
@@ -58,17 +88,14 @@ void Enemy::advance(int step) {
                          // appending hard coded values to the options list
                          // TODO: Remove hardcoding if possible
                          if (!isWallPresent(TURN_FRONT)) {
-//                             qDebug("No Front Wall");
                              optionsList.append(0);
                          }
 
                          if (!isWallPresent(TURN_LEFT)) {
-//                             qDebug("No Left Wall");
                              optionsList.append(-1);
                          }
 
                          if (!isWallPresent(TURN_RIGHT)) {
-//                             qDebug("No Right Wall");
                              optionsList.append(1);
                          }
 
@@ -78,14 +105,11 @@ void Enemy::advance(int step) {
                          // all three sides and we might need to turn back
                          // that can be achieved by turning in either left or right
                          if (optionsList.size() == 0) {
-//                            qDebug("All Walls");
                             optionsList.append(1);
                             optionsList.append(-1);
                          }
 
                          selectedOption = optionsList.at(lround((qrand()/rand_max)*(optionsList.size()-1)));
-
-                         qDebug() << "Selected Turn: " << selectedOption;
 
                          if (selectedOption == TURN_FRONT) {
                              moveForward();
@@ -94,8 +118,6 @@ void Enemy::advance(int step) {
                          }
 
                          break;
-//        case FOLLOW_STATE:
-//                         break;
         case DYING_STATE:
                          break;
     }
@@ -113,89 +135,89 @@ bool Enemy::isWallPresent(int direction)
     switch (direction)
     {
         case TURN_FRONT:
-                            switch (this->direction) {
-                                case Character::DIR_UP : y -=1;
-                                    break;
-                                case Character::DIR_DOWN : y += Y_HEIGHT;
-                                    break;
-                                case Character::DIR_RIGHT : x +=X_WIDTH;
-                                    break;
-                                case Character::DIR_LEFT : x -= 1;
-                                    break;
-                                }
-                                
-                                wallCoord.xcoord = x;
-                                wallCoord.ycoord = y;
-
-                                wallPositions.append(wallCoord);
-                                break;
-        case TURN_RIGHT:
-                            switch (this->direction) {
-                                case Character::DIR_UP : x += X_WIDTH;
-                                    wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
-                                    wallCoord1.ycoord = y;
-                                    wallCoord2.ycoord = y + 1;
-                                    wallCoord3.ycoord = y + 2;
-                                    break;
-                                case Character::DIR_DOWN : x -= 1;
-                                    wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
-                                    wallCoord1.ycoord = y;
-                                    wallCoord2.ycoord = y + 1;
-                                    wallCoord3.ycoord = y + 2;
-                                    break;
-                                case Character::DIR_RIGHT : y += Y_HEIGHT;
-                                    wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
-                                    wallCoord1.xcoord = x;
-                                    wallCoord2.xcoord = x+1;
-                                    wallCoord3.xcoord = x+2;
-                                    break;
-                                case Character::DIR_LEFT : y -= 1;
-                                    wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
-                                    wallCoord1.xcoord = x;
-                                    wallCoord2.xcoord = x+1;
-                                    wallCoord3.xcoord = x+2;
-                                    break;
-                                }
-
-                                wallPositions.append(wallCoord1);
-                                wallPositions.append(wallCoord2);
-                                wallPositions.append(wallCoord3);
-
-                                break;
-        case TURN_LEFT:
-                            switch (this->direction) {
-                                case Character::DIR_UP : x -=1;
-                                    wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
-                                    wallCoord1.ycoord = y;
-                                    wallCoord2.ycoord = y + 1;
-                                    wallCoord3.ycoord = y + 2;
-                                    break;
-                                case Character::DIR_DOWN : x += X_WIDTH;
-                                    wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
-                                    wallCoord1.ycoord = y;
-                                    wallCoord2.ycoord = y + 1;
-                                    wallCoord3.ycoord = y + 2;
-                                    break;
-                                case Character::DIR_RIGHT : y -= 1;
-                                    wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
-                                    wallCoord1.xcoord = x;
-                                    wallCoord2.xcoord = x+1;
-                                    wallCoord3.xcoord = x+2;
-                                    break;
-                                case Character::DIR_LEFT : y += Y_HEIGHT;
-                                    wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
-                                    wallCoord1.xcoord = x;
-                                    wallCoord2.xcoord = x+1;
-                                    wallCoord3.xcoord = x+2;
-                                    break;
-                                }
-
-                            wallPositions.append(wallCoord1);
-                            wallPositions.append(wallCoord2);
-                            wallPositions.append(wallCoord3);
-
+                    switch (this->direction) {
+                        case Character::DIR_UP : y -=1;
                             break;
-    }
+                        case Character::DIR_DOWN : y += Y_HEIGHT;
+                            break;
+                        case Character::DIR_RIGHT : x +=X_WIDTH;
+                            break;
+                        case Character::DIR_LEFT : x -= 1;
+                            break;
+                        }
+
+                        wallCoord.xcoord = x;
+                        wallCoord.ycoord = y;
+
+                        wallPositions.append(wallCoord);
+                        break;
+        case TURN_RIGHT:
+                    switch (this->direction) {
+                        case Character::DIR_UP : x += X_WIDTH;
+                            wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
+                            wallCoord1.ycoord = y;
+                            wallCoord2.ycoord = y + 1;
+                            wallCoord3.ycoord = y + 2;
+                            break;
+                        case Character::DIR_DOWN : x -= 1;
+                            wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
+                            wallCoord1.ycoord = y;
+                            wallCoord2.ycoord = y + 1;
+                            wallCoord3.ycoord = y + 2;
+                            break;
+                        case Character::DIR_RIGHT : y += Y_HEIGHT;
+                            wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
+                            wallCoord1.xcoord = x;
+                            wallCoord2.xcoord = x+1;
+                            wallCoord3.xcoord = x+2;
+                            break;
+                        case Character::DIR_LEFT : y -= 1;
+                            wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
+                            wallCoord1.xcoord = x;
+                            wallCoord2.xcoord = x+1;
+                            wallCoord3.xcoord = x+2;
+                            break;
+                        }
+
+                        wallPositions.append(wallCoord1);
+                        wallPositions.append(wallCoord2);
+                        wallPositions.append(wallCoord3);
+
+                        break;
+        case TURN_LEFT:
+                    switch (this->direction) {
+                        case Character::DIR_UP : x -=1;
+                            wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
+                            wallCoord1.ycoord = y;
+                            wallCoord2.ycoord = y + 1;
+                            wallCoord3.ycoord = y + 2;
+                            break;
+                        case Character::DIR_DOWN : x += X_WIDTH;
+                            wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
+                            wallCoord1.ycoord = y;
+                            wallCoord2.ycoord = y + 1;
+                            wallCoord3.ycoord = y + 2;
+                            break;
+                        case Character::DIR_RIGHT : y -= 1;
+                            wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
+                            wallCoord1.xcoord = x;
+                            wallCoord2.xcoord = x+1;
+                            wallCoord3.xcoord = x+2;
+                            break;
+                        case Character::DIR_LEFT : y += Y_HEIGHT;
+                            wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
+                            wallCoord1.xcoord = x;
+                            wallCoord2.xcoord = x+1;
+                            wallCoord3.xcoord = x+2;
+                            break;
+                        }
+
+                    wallPositions.append(wallCoord1);
+                    wallPositions.append(wallCoord2);
+                    wallPositions.append(wallCoord3);
+
+                    break;
+        }
 
      QList<CoordChar>::iterator i;
      for (i = wallPositions.begin(); i != wallPositions.end(); ++i)
@@ -213,7 +235,7 @@ bool Enemy::isWallPresent(int direction)
 void Enemy::removeOddOption(QList<int> *options)
 {
    int vicinity = 3;
-    QList<QGraphicsItem *> list = scene()->items(
+   QList<QGraphicsItem *> list = scene()->items(
                     (xCoor-vicinity)*CHARACTER_WIDTH,
                     (yCoor-vicinity)*CHARACTER_HEIGHT,
                     vicinity*2*CHARACTER_WIDTH,
@@ -223,7 +245,7 @@ void Enemy::removeOddOption(QList<int> *options)
    for (it = list.begin(); it != list.end(); it++ )
    {
        if ((*it)->type() == Player::ID_PLAYER) {
-           qDebug() << "Found Player in Vicinity at " << (*it)->pos();
+//           qDebug() << "Found Player in Vicinity at " << (*it)->pos();
            int playerX = (*it)->x()/CHARACTER_WIDTH;
            int playerY = (*it)->y()/CHARACTER_HEIGHT;
 
@@ -291,22 +313,14 @@ void Enemy::removeOddOption(QList<int> *options)
 void Enemy::setAndAddStates()
 {
     State initState(INIT, INIT_STATE); // creating init state
-    State randomState(PLAY, PLAY_STATE); // creating random play state
-//    State followState(FOLLOW, FOLLOW_STATE); // creating follow play state
-    State dyingState(DYING, DYING_STATE); // creating a dying state
+    State randomState(PLAY, PLAY_STATE); // creating play state
+    State dyingState(DYING, DYING_STATE); // creating dying state
 
     initState.addEventAndNextState("init_timeout", PLAY);
-
-//    randomState.addEventAndNextState("follow_pacman", FOLLOW);
     randomState.addEventAndNextState("super_player", DYING);
-
-//    followState.addEventAndNextState("randomize", RANDOM);
-//    followState.addEventAndNextState("super_player", DYING);
-
     dyingState.addEventAndNextState("dead" , INIT);
 
     fsm.addState(initState);
     fsm.addState(randomState);
-//    fsm.addState(followState);
     fsm.addState(dyingState);
 }
