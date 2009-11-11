@@ -51,8 +51,6 @@ void Character::moveForward() {
         xCoor = 1;
     }
 
-    qDebug() << xCoor;
-
     // update the graphics item position
     setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
   }
@@ -61,29 +59,29 @@ void Character::makeTurn(long turnDir) {
 
     switch (direction) {
         case DIR_UP :
-            if (turnDir == RIGHT) {
+            if (turnDir == TURN_RIGHT) {
                 direction = DIR_RIGHT;
-            } else if (turnDir == LEFT) {
+            } else if (turnDir == TURN_LEFT) {
                     direction = DIR_LEFT;
             }
             break;
         case DIR_DOWN : 
-            if (turnDir == RIGHT) {
+            if (turnDir == TURN_RIGHT) {
                 direction = DIR_LEFT;
-            } else if (turnDir == LEFT){
+            } else if (turnDir == TURN_LEFT){
                     direction = DIR_RIGHT;
                 }
             break;
         case DIR_RIGHT :
-            if (turnDir == RIGHT) {
+            if (turnDir == TURN_RIGHT) {
                 direction = DIR_DOWN;
-            } else if (turnDir == LEFT){
+            } else if (turnDir == TURN_LEFT){
                     direction = DIR_UP;
             }
             break;
-        case DIR_LEFT : if (turnDir == RIGHT) {
+        case DIR_LEFT : if (turnDir == TURN_RIGHT) {
                 direction = DIR_UP;
-            } else if (turnDir == LEFT) {
+            } else if (turnDir == TURN_LEFT) {
                     direction = DIR_DOWN;
             }
             break;

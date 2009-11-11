@@ -37,9 +37,9 @@ public:
     static const int DIR_RIGHT = 3;
     static const int DIR_LEFT = 4;
 
-    static const int FRONT = 0;
-    static const int RIGHT = 1;
-    static const int LEFT = -1;
+    static const int TURN_FRONT = 0;
+    static const int TURN_RIGHT = 1;
+    static const int TURN_LEFT = -1;
 
 
     int getX();
