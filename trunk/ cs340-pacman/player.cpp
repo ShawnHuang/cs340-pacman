@@ -59,6 +59,9 @@ void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget 
    painter->setBrush(Qt::yellow);
    painter->setPen(Qt::yellow);
    painter->drawEllipse(0,0,30,30);
+
+    //sprites *pacman = new sprites();
+    //pacman->show();
 }
 
 QRectF Player::boundingRect() const

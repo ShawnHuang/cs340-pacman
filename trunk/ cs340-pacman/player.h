@@ -11,7 +11,7 @@
 #include <QPainter>
 #include <QRectF>
 #include <QKeyEvent>
-
+#include "sprites.h"
 class Player: public QGraphicsItem
 {
 private:
