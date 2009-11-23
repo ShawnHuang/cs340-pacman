@@ -72,10 +72,9 @@ counter = 0;
 
 void Menu::enterPlayState()
 {//start method
-
     gameObject = new Game(&toplevelScene);
     gameObject->show();
-    gameObject->update();
+   // gameObject->update();
 
     this->hide();
 }//end method

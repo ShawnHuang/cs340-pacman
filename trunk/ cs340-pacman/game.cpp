@@ -32,7 +32,6 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
     MapLoader *mp = new MapLoader;
     mp->fileRead();
 
-
     //If there are no characters in the map, send an error message.
     if ((mp->map.isEmpty())) {
         QErrorMessage *msg = new QErrorMessage();
@@ -82,7 +81,7 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
      e3 = new Enemy(20, 20, Character::DIR_DOWN, mp);
      scene->addItem(e3);
 
-    QString path = QString("./images/pacman/pacman*.png");
+    QString path = QString("../images/pacman/pacman*.png");
     AnimatedSprites *pacmanSprite = new AnimatedSprites(path);
 
      //create a pacman object and add it to scene.
