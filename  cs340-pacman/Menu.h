@@ -7,9 +7,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include "game.h"
-#include "sprites.h"
 #include <QGraphicsItem>
-#include "ghost.h"
 
 class Menu : public QGraphicsView
 {
@@ -26,11 +24,8 @@ class Menu : public QGraphicsView
         QPushButton *quitButton;
         QTimer *timer;
         int counter;
-        sprites *object;
-        ghost *object1;
-        //create a topevel object
-        Game *gameObject;
 
+        Game *gameObject;
 
     public slots:
         void enterPlayState();
