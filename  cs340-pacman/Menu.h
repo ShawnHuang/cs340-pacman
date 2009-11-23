@@ -7,7 +7,6 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include "game.h"
-#include "toplevel.h"
 #include "sprites.h"
 #include <QGraphicsItem>
 #include "ghost.h"
