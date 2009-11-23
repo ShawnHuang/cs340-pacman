@@ -7,10 +7,8 @@
 ******************************************************/
 
 #include <QApplication>
-#include "toplevel.h"
 #include <vector>
 #include "Menu.h"
-#include "toplevel.h"
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPushButton>

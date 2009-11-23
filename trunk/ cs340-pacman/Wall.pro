@@ -9,11 +9,9 @@ HEADERS += wall.h \
     topbar.h \
     bigdot.h \
     game.h \
-    toplevel.h \
     Menu.h \
-    Menu.h \
-    sprites.h \
-    ghost.h
+    animatedsprites.h \
+    loadsound.h
 SOURCES += wall.cpp \
     main.cpp \
     maploader.cpp \
@@ -26,7 +24,5 @@ SOURCES += wall.cpp \
     topbar.cpp \
     bigdot.cpp \
     game.cpp \
-    toplevel.cpp \
     Menu.cpp \
-    sprites.cpp \
-    ghost.cpp
+    animatedsprites.cpp
