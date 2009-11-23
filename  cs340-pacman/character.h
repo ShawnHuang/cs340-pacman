@@ -16,8 +16,8 @@ Cretaed by : Usha Sanaga
 class Character : public QGraphicsItem
 {
 protected:
-    int xCoor;
-    int yCoor;
+    float xCoor;
+    float yCoor;
     int direction;
     int turnDir;
 
@@ -31,7 +31,7 @@ public:
     static const int Y_HEIGHT = 3;
 
     static const int TYPE_PLAYER = 1;
-    static const int TYPE_ENEMY = 2;
+    static const int TYPE_ENEMY = 3;
     static const int DIR_UP = 1;
     static const int DIR_DOWN = 2;
     static const int DIR_RIGHT = 3;

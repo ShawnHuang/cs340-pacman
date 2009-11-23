@@ -22,16 +22,17 @@ counter = 0;
     //timer->start(1000 / 33);
     //create a toplevel object
     //TopLevel object1(&toplevelScene);
-    toplevelObject = new TopLevel(&toplevelScene);
+    //toplevelObject = new TopLevel(&toplevelScene);
+
 
     //set the view window
     this->resize(640,480);
-    this->setBackgroundBrush(QPixmap("C:/Users/Sohaib/Desktop/images/display.gif"));
+    //this->setBackgroundBrush(QPixmap(".\back.jpg"));
 
     //add sprites
 
-    object = new sprites();
-    object1 = new ghost();
+    //object = new sprites();
+    //object1 = new ghost();
 
 
     //create helpbutton
@@ -42,7 +43,7 @@ counter = 0;
     //create playbutton
     playButton = new QPushButton (tr("Play"), this);
     playButton->setFont(QFont("Lucida Handwriting",18,QFont::Bold));
-    QObject:: connect(playButton,SIGNAL(clicked()),this,SLOT(showMap()));
+    QObject:: connect(playButton,SIGNAL(clicked()),this,SLOT(enterPlayState()));
 
     //create quitbutton
     quitButton = new QPushButton (tr("Quit"), this);
@@ -63,20 +64,20 @@ counter = 0;
     quitButton->setGeometry(200,400,200,50);
 
     //show the view
-    this->show();
+    //changeState = false;
+    //this->show();
 
 }//end method
 
 
-void Menu::showMap()
+void Menu::enterPlayState()
 {//start method
 
-    toplevelObject->show();
-    toplevelObject->start(15);
-    //toplevelObject.start(15);
+    gameObject = new Game(&toplevelScene);
+    gameObject->show();
+    gameObject->update();
+
     this->hide();
-
-
 }//end method
 
 void Menu::showHelp()

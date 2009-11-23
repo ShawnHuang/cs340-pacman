@@ -5,6 +5,7 @@
   Modified by :
 ******************************************************/
 #include "fsm.h"
+#include <qDebug>
 
 FSM::FSM()
 {

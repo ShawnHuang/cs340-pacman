@@ -1,8 +1,9 @@
 #include "player.h"
-
+#include "loadsound.h"
 #include <iostream>
 #include <QGraphicsScene>
 #include <QDebug>
+#include <QPixmap>
 
 using namespace std;
 
@@ -11,26 +12,28 @@ Player::Player()
 
 }
 
-Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsItem(0, scene)
-{
-    xCoord = x;
-    yCoord = y;
-
+Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene, QList<QPixmap> spriteList) : QGraphicsItem(0, scene)
+{    
     initXCoord = x;
     initYCoord = y;
 
-    xdir = 1;
-    ydir = 0;
-    xNext = 0;
-    yNext = 0;
-    xPrev = 0;
-    yPrev = 0;
+    //init_timer = new QTimer( this );
+    //connect( init_timer, SIGNAL(timeout()), this, SLOT(setTimeOut()) );
 
-    prevDir = 4;
-    dir = 4;
+    for(int i = 0; i < 4; i++)
+    {
+        pacmanAnim[i] << spriteList[3*i];
+        pacmanAnim[i] << spriteList[3*i+1];
+        pacmanAnim[i] << spriteList[3*i+2];
+    }
+    currentAnim = RIGHT_ANIM;
+    currentFrame = 0;
+    
+    step = 10;
+
+    keySetFlag = false;
+
     this->ml = ml;
-
-    whichDot = 0;
 
     setFlag(ItemIsFocusable);
 
@@ -41,7 +44,35 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
     setFocus();
 
     setAndAddStates();
-    pacmanfsm.setInitialState("INIT");
+    pacmanfsm.setInitialState("PACMAN_INIT");
+
+    eatSound.setLoops(2);
+
+}
+
+void Player::init()
+{
+    xCoord = initXCoord;
+    yCoord = initYCoord;
+
+    enemyCollision = false;
+
+    xdir = step;
+    ydir = 0;
+    xNext = 0;
+    yNext = 0;
+    xPrev = 0;
+    yPrev = 0;
+
+    prevDir = 4;
+    dir = 4;
+    whichDot = 0;
+    isTimeOut = false;
+}
+
+void Player::setTimeOut()
+{
+    isTimeOut = !isTimeOut;;
 }
 
 int Player::type() const
@@ -56,12 +87,7 @@ int Player::getDotType()
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-   painter->setBrush(Qt::yellow);
-   painter->setPen(Qt::yellow);
-   painter->drawEllipse(0,0,30,30);
-
-    //sprites *pacman = new sprites();
-    //pacman->show();
+   painter->drawPixmap(0, 0, pacmanAnim[currentAnim].at(currentFrame%3));
 }
 
 QRectF Player::boundingRect() const
@@ -71,54 +97,62 @@ QRectF Player::boundingRect() const
 
 void Player::setAndAddStates()
 {
-    State initState("INIT");//creating INIT state
-    State playState("PLAY"); // creating play state
-    State dyingState("DYING"); // creating a Dying state
-
-    initState.addEventAndNextState("init_timeout", "PLAY");
+    State initState("PACMAN_INIT", PACMAN_INIT);
+    initState.addEventAndNextState("init_timeout", "PACMAN_PLAY");
     initState.setProperty("steady");
-
-    playState.addEventAndNextState("ghost_hits_pacman","DYING");
-    playState.setProperty("moving");
-
-    dyingState.addEventAndNextState("dying_timeout" , "INIT");
     pacmanfsm.addState(initState);
+
+    State playState("PACMAN_PLAY", PACMAN_PLAY); // creating play state
+    playState.addEventAndNextState("ghost_hits_pacman","PACMAN_DYING");
+    playState.setProperty("moving");
     pacmanfsm.addState(playState);
+
+    State dyingState("PACMAN_DYING", PACMAN_DYING); // creating a Dying state
+    dyingState.addEventAndNextState("dying_timeout" , "PACMAN_INIT");
     pacmanfsm.addState(dyingState);
 }
 
-void Player::advance(int phase)
+void Player::update()
 {
-    if(pacmanfsm.getState() == "INIT")
+    int state = pacmanfsm.getStateIndex();
+    switch(state)
     {
-        this->setPos(xCoord, yCoord);
-        pacmanfsm.handleEvent("init_timeout");
-        QString a = pacmanfsm.getState();
-        //qDebug() << a;
-    }
+        case PACMAN_INIT:
+            init();
+            this->setPos(xCoord, yCoord);
+            pacmanfsm.handleEvent("init_timeout");
+        break;
 
-    if(pacmanfsm.getState() == "PLAY")
-    {
-        bool prevDirCol = checkCollWithPrevDir();
+        case PACMAN_PLAY:
+            bool prevDirCol = checkCollWithPrevDir();
 
-        if(xNext != 0 || yNext != 0)
-        {
-            xdir = xNext;
-            ydir = yNext;
-            dir = nextDir;
-        }
-        checkCollWithNextDir(prevDirCol);
-        eatDots();
-        QString a = pacmanfsm.getState();
-        //qDebug() << a;
+            if(xNext != 0 || yNext != 0)
+            {
+                xdir = xNext;
+                ydir = yNext;
+                dir = nextDir;
+            }
+            checkCollWithNextDir(prevDirCol);
+            colWithOtherItems();
+            if(enemyCollision)
+            {
+                pacmanfsm.handleEvent("ghost_hits_pacman");
+            }
+            xCoord += xdir;
+            yCoord += ydir;
 
-        xCoord += xdir;
-        yCoord += ydir;
+            changeCurrentAnim();
+            enterTunnel();
+            this->setPos(xCoord, yCoord);
+            keySetFlag = false;
+        break;
 
-        enterTunnel();
-        this->setPos(xCoord, yCoord);
+        case PACMAN_DYING:
+            pacmanfsm.handleEvent("dying_timeout");
+        break;
     }
     pacmanfsm.update();
+    currentFrame++;
 }
 
 //tunnel movements
@@ -135,96 +169,70 @@ void Player::enterTunnel()
 }
 
 // Checking Dot/BigDot collision
-void Player::eatDots()
+void Player::colWithOtherItems()
 {
-    QMap<QString, CoordChar>::const_iterator it;
-    switch(dir)
-    {
-        case 1://up
-            key = new QString(QChar(xCoord+10));
-            key->append(QChar('_')).append(QChar(yCoord+5));
-            break;
-        case 2://down
-            key = new QString(QChar(xCoord+10));
-            key->append(QChar('_')).append(QChar(yCoord+25));
-            break;
-        case 3://left
-            key = new QString(QChar(xCoord+5));
-            key->append(QChar('_')).append(QChar(yCoord+10));
-            break;
-        case 4://right
-            key = new QString(QChar(xCoord+25));
-            key->append(QChar('_')).append(QChar(yCoord+10));
-            break;
-    }
-    it = ml->sceneItemsMap.find(*key);//checking for dots
+
     QList<QGraphicsItem *> list;
-    switch(it.value().symbol)
+    list = scene()->items(xCoord+10 , yCoord+10, 10,10);
+    for(int i = 0; i < list.size(); i++)
     {
-        case 46:
-
-            list = scene()->items(it.value().xcoord , it.value().ycoord, 5, 5);
-            for(int i = 0; i < list.size(); i++)
-            {
-                if(list.at(i)->type() == ID_DOT)
-                {
-                    scene()->removeItem(list.at(i));
-                    whichDot = ID_DOT;
-                    break;
-                }
-            }
-            qDebug() << whichDot;
-            ml->sceneItemsMap.remove(*key);
+        switch(list.at(i)->type())
+        {
+        case ID_DOT:
+            scene()->removeItem(list.at(i));
+            if(eatSound.isFinished())
+                eatSound.play();
+            whichDot = ID_DOT;
             break;
 
-        case 79:
-            list = scene()->items(it.value().xcoord , it.value().ycoord,15,15);
-            for(int i = 0; i < list.size(); i++)
-            {
-                if(list.at(i)->type() == ID_BIGDOT)
-                {
-                    scene()->removeItem(list.at(i));
-                    whichDot = ID_BIGDOT;
-                    break;
-                }
-            }
-            qDebug() << whichDot;
-            ml->sceneItemsMap.remove(*key);
+        case ID_BIGDOT:
+            scene()->removeItem(list.at(i));
+            eatSound.play();
+            whichDot = ID_BIGDOT;
+            powerdot = true;
+            break;
+
+        case Enemy::ID_ENEMY:
+            enemyCollision = true;
             break;
         }
+    }
 }
+
 //Handling key press event
 void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
 {
-     Action a = actionmap.value(event->key());
-     xPrev = xdir;   //Storing prev xdir and ydir before getting new keypress values
-     yPrev = ydir;   //Storing prev xdir and ydir before getting new keypress values
-     prevDir = dir;
+    if(!keySetFlag)
+    {
+         Action a = actionmap.value(event->key());
+         xPrev = xdir;   //Storing prev xdir and ydir before getting new keypress values
+         yPrev = ydir;   //Storing prev xdir and ydir before getting new keypress values
+         prevDir = dir;
 
          switch (a)
          {
              case Up:
-                ydir = -1;
+                ydir = -step;
                 xdir = 0;
                 dir = 1;
                 break;
 
              case Down:
-                ydir = 1;
+                ydir = step;
                 xdir = 0;
                 dir = 2;
                 break;
 
              case Left:
-                xdir = -1;
+                xdir = -step;
                 ydir = 0;
                 dir = 3;
                 break;
 
              case Right:
-                xdir = 1;
+                xdir = step;
                 ydir = 0;
-                dir =4;
+                dir = 4;
                 break;
 
              default:
@@ -233,10 +241,12 @@ void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
                 dir = 0;
                 break;
          }
+         keySetFlag = true;
 
          xNext = xdir; // Storing new keypress values in yNext n xNext
          yNext = ydir;
          nextDir = dir;
+         }
 }
 
 //Generating keys for checkin collision with walls
@@ -423,6 +433,7 @@ void Player::checkCollWithNextDir(bool prevDirCol)
                 {
                      xdir = 0 ;
                      ydir = 0 ;
+                     dir = 0;
                 }
             }
             else // no collision
@@ -458,8 +469,26 @@ void Player::checkCollWithNextDir(bool prevDirCol)
     }
 }
 
+bool Player::eatenPowerDot()
+{
+    bool pd = powerdot;
+    powerdot = false;
+    return pd;
+}
 
-
+void Player::changeCurrentAnim()
+{
+    if(dir == 1)
+        currentAnim = UP_ANIM;
+    if(dir == 2)
+        currentAnim = DOWN_ANIM;
+    if(dir == 3)
+        currentAnim = LEFT_ANIM;
+    if(dir == 4)
+        currentAnim = RIGHT_ANIM;
+    if(dir == 0)
+        currentFrame = 0;
+}
 
 
 
