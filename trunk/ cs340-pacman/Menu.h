@@ -1,14 +1,12 @@
 #ifndef MENU_H
 #define MENU_H
 
-
-
-
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QMessageBox>
 #include <QPushButton>
+#include "game.h"
 #include "toplevel.h"
 #include "sprites.h"
 #include <QGraphicsItem>
@@ -19,13 +17,10 @@ class Menu : public QGraphicsView
     Q_OBJECT
 
     public:
-    QGraphicsScene *scene;
-    Menu(QGraphicsScene *scene);
-    //void showHelp(QGraphicsScene *scene);
-
+        QGraphicsScene *scene;
+        Menu(QGraphicsScene *scene);
         QGraphicsScene toplevelScene;;
         QGraphicsScene scene49;
-
 
         QPushButton *playButton;
         QPushButton *helpButton;
@@ -35,9 +30,11 @@ class Menu : public QGraphicsView
         sprites *object;
         ghost *object1;
         //create a topevel object
-        TopLevel *toplevelObject;
+        Game *gameObject;
+
+
     public slots:
-        void showMap();
+        void enterPlayState();
         void showHelp();
     };
 

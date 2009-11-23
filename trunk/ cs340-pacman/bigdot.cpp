@@ -33,7 +33,7 @@ QRectF BigDot::boundingRect() const
 //Drawing a rectangle of dimensions (WIDTH, HEIGHT)
 void BigDot::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-   QColor pencolor(0,0,0,255);
+   QColor pencolor(0,0,0,0);
    painter->setBrush(colorOfBigDot);
    painter->setPen (pencolor);
    painter->drawEllipse(0,0,WIDTH_OF_BIG_DOT,HEIGHT_OF_BIG_DOT);

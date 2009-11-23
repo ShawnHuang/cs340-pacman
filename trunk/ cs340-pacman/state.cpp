@@ -55,7 +55,9 @@ void State::addEventAndNextState(QString eventName, QString stateName)
 
 QString State::getNextStateForEvent(QString eventName)
 {
-    return eventmap.value(eventName);
+
+    QString v = eventmap.value(eventName);
+    return v;
 }
 
 

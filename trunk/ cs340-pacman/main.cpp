@@ -8,18 +8,25 @@
 
 #include <QApplication>
 #include "toplevel.h"
-//#include <windows.h>
 #include <vector>
-
+#include "Menu.h"
+#include "toplevel.h"
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QPushButton>
+#include <QLabel>
+#include <QTimer>
 
 int main(int argc, char *argv[])
-
 {
+
     QApplication app(argc, argv);
     QGraphicsScene *scene = new QGraphicsScene();
-    TopLevel display(scene);
+    Menu display(scene);
+    //TopLevel display(scene);
     display.show();
-    display.start(50);
+    //display.start(50);
 
     return app.exec();
 }
+

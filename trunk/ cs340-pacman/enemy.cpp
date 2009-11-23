@@ -67,10 +67,10 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 
 }
 
-void Enemy::advance(int step) {
+void Enemy::update() {
 
-    if (!step)
-    return;
+//    if (!step)
+//    return;
 
     QList<int> optionsList;
     float rand_max = RAND_MAX + 1.0;

@@ -16,7 +16,6 @@
 #include <QList>
 #include <QString>
 
-
 class Enemy : public Character {
     private:
         MapLoader* ml;
@@ -40,7 +39,7 @@ class Enemy : public Character {
         int getType() const;
         virtual int type() const;
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-        void advance(int);
+        void update();
         FSM fsm;
         void setAndAddStates();
 };
