@@ -46,13 +46,12 @@ public:
     int getY();
 
     virtual int type() const = 0;
-//    void advance(int);
+    void advance(int);
     int getDirection();
     virtual int getType() const = 0;
     void moveForward();
     virtual QRectF boundingRect() const;
     void makeTurn(long);
-    void update();
 
 };
 

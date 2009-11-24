@@ -234,7 +234,7 @@ bool Enemy::isWallPresent(int direction)
 
 void Enemy::removeOddOption(QList<int> *options)
 {
-   int vicinity = 10;
+   int vicinity = 3;
    QList<QGraphicsItem *> list = scene()->items(
                     (xCoor-vicinity)*CHARACTER_WIDTH,
                     (yCoor-vicinity)*CHARACTER_HEIGHT,
