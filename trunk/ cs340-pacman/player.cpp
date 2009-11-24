@@ -494,7 +494,7 @@ void Player::changeCurrentAnim()
 
 void Player::loadAnimations()
 {
-    QString path = QString("./images/pacman/pacman*.png");
+    QString path = QString("../images/pacman/pacman*.png");
     AnimatedSprites *pacmanSprite = new AnimatedSprites(path);
 
     QList<QPixmap> spriteList= pacmanSprite->getSpriteList();
