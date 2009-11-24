@@ -52,11 +52,25 @@ void Character::moveForward() {
     }
 
     // update the graphics item position
+    update();
   }
 
-void Character::advance(int phase)
+void Character::update()
 {
-    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+    switch (direction) {
+        case DIR_UP :
+                setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT + CHARACTER_HEIGHT/2);
+                break;
+        case DIR_DOWN :
+                setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT - CHARACTER_HEIGHT/2);
+                break;
+        case DIR_RIGHT :
+                setPos(this->xCoor*CHARACTER_WIDTH - CHARACTER_WIDTH/2,this->yCoor*CHARACTER_HEIGHT);
+                break;
+        case DIR_LEFT :
+                setPos(this->xCoor*CHARACTER_WIDTH + CHARACTER_WIDTH/2,this->yCoor*CHARACTER_HEIGHT);
+                break;
+    }
 }
 
 void Character::makeTurn(long turnDir) {
