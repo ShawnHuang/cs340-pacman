@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QPixmap>
 
+#include "animatedsprites.h"
+
 using namespace std;
 
 Player::Player()
@@ -12,7 +14,7 @@ Player::Player()
 
 }
 
-Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene, QList<QPixmap> spriteList) : QGraphicsItem(0, scene)
+Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsItem(0, scene)
 {    
     initXCoord = x;
     initYCoord = y;
@@ -20,12 +22,8 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene, QList<QPixmap>
     //init_timer = new QTimer( this );
     //connect( init_timer, SIGNAL(timeout()), this, SLOT(setTimeOut()) );
 
-    for(int i = 0; i < 4; i++)
-    {
-        pacmanAnim[i] << spriteList[3*i];
-        pacmanAnim[i] << spriteList[3*i+1];
-        pacmanAnim[i] << spriteList[3*i+2];
-    }
+    loadAnimations();
+
     currentAnim = RIGHT_ANIM;
     currentFrame = 0;
     
@@ -46,7 +44,7 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene, QList<QPixmap>
     setAndAddStates();
     pacmanfsm.setInitialState("PACMAN_INIT");
 
-    eatSound.setLoops(2);
+//    eatSound.setLoops(2);
 
 }
 
@@ -112,6 +110,11 @@ void Player::setAndAddStates()
     pacmanfsm.addState(dyingState);
 }
 
+void Player::advance(int phase)
+{
+    this->setPos(xCoord, yCoord);
+}
+
 void Player::update()
 {
     int state = pacmanfsm.getStateIndex();
@@ -119,7 +122,7 @@ void Player::update()
     {
         case PACMAN_INIT:
             init();
-            this->setPos(xCoord, yCoord);
+            //this->setPos(xCoord, yCoord);
             pacmanfsm.handleEvent("init_timeout");
         break;
 
@@ -143,7 +146,6 @@ void Player::update()
 
             changeCurrentAnim();
             enterTunnel();
-            this->setPos(xCoord, yCoord);
             keySetFlag = false;
         break;
 
@@ -180,7 +182,7 @@ void Player::colWithOtherItems()
         {
         case ID_DOT:
             scene()->removeItem(list.at(i));
-            if(eatSound.isFinished())
+            //if(eatSound.isFinished())
                 eatSound.play();
             whichDot = ID_DOT;
             break;
@@ -490,7 +492,20 @@ void Player::changeCurrentAnim()
         currentFrame = 0;
 }
 
+void Player::loadAnimations()
+{
+    QString path = QString("./images/pacman/pacman*.png");
+    AnimatedSprites *pacmanSprite = new AnimatedSprites(path);
 
+    QList<QPixmap> spriteList= pacmanSprite->getSpriteList();
+
+    for(int i = 0; i < 4; i++)
+    {
+        pacmanAnim[i] << spriteList[3*i];
+        pacmanAnim[i] << spriteList[3*i+1];
+        pacmanAnim[i] << spriteList[3*i+2];
+    }
+}
 
 
 

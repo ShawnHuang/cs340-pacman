@@ -81,16 +81,13 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
      e3 = new Enemy(20, 20, Character::DIR_DOWN, mp);
      scene->addItem(e3);
 
-    QString path = QString("../images/pacman/pacman*.png");
-    AnimatedSprites *pacmanSprite = new AnimatedSprites(path);
-
      //create a pacman object and add it to scene.
-     pacman = new Player(270, 290, mp, scene, pacmanSprite->getSpriteList());
+     pacman = new Player(270, 290, mp, scene);
 
      scene->addItem(pacman);
-    startTimer( 75 );
-
+     startTimer( 100 );
 }
+
 void Game::setAndAddStates(){
     State gMenu("MENU",GAME_MENU);
     gMenu.addEventAndNextState("menu_timeout","INTRO");
@@ -122,11 +119,6 @@ void Game::setAndAddStates(){
        //, fruits, and whatever else is there
    }
 
- void Game::setInitState()
- {
-    gamefsm.setInitialState("INTRO");
- }
-
  void Game::update(){
       if(gamefsm.getStateIndex() == GAME_INIT){
            //display menu screen with buttons
@@ -154,12 +146,12 @@ void Game::setAndAddStates(){
              //display score and if he/she is winner or loser
             //if any key is pressed, go to INTRO state
        }
-      // gamefsm.update();
+       gamefsm.update();
 
   }
 
 void Game::timerEvent(QTimerEvent *){
-    gamefsm.update();
+    scene->advance();
     update();
     pacman->update();
     e->update();

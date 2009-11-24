@@ -52,8 +52,12 @@ void Character::moveForward() {
     }
 
     // update the graphics item position
-    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
   }
+
+void Character::advance(int phase)
+{
+    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+}
 
 void Character::makeTurn(long turnDir) {
 
@@ -87,7 +91,7 @@ void Character::makeTurn(long turnDir) {
             break;
     }
     // update the graphics item position
-    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+//    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
 }
 
 QRectF Character::boundingRect() const
