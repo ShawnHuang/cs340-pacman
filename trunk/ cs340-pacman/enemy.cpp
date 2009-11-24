@@ -79,7 +79,7 @@ void Enemy::update() {
     switch (fsm.getStateIndex()) {
 
         case INIT_STATE: // set the graphics item position
-                         setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+                         //setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
                          fsm.handleEvent("init_timeout");
                          fsm.update();
                          break;

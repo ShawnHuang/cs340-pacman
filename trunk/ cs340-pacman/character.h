@@ -46,6 +46,7 @@ public:
     int getY();
 
     virtual int type() const = 0;
+    void advance(int);
     int getDirection();
     virtual int getType() const = 0;
     void moveForward();

@@ -66,16 +66,18 @@ private:
     void changeCurrentAnim();
     int step;
     bool isTimeOut;
+    void loadAnimations();
 
 public:
     int whichDot;
 
     Player();
-    Player(int ,int, MapLoader*, QGraphicsScene *scene = 0, QList<QPixmap> spriteList = NULL);
+    Player(int ,int, MapLoader*, QGraphicsScene *scene = 0);
     static const int ID_PLAYER = 4;
     virtual int type() const;
     int getDotType();
     void update();
+    void advance(int);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
     void keyPressEvent(QKeyEvent * event );

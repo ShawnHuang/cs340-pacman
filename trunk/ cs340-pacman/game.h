@@ -63,7 +63,6 @@ public:
     TopBar statBar;
     int isGameOver();       //check if end of game
     virtual void timerEvent( QTimerEvent * );
-    void setInitState();
     void update();
 
 };
