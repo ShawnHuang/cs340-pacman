@@ -118,7 +118,7 @@ void Player::advance(int phase)
 void Player::update()
 {
     int state = pacmanfsm.getStateIndex();
-    bool prevDirCol;
+
     switch(state)
     {
         case PACMAN_INIT:
@@ -128,7 +128,7 @@ void Player::update()
         break;
 
         case PACMAN_PLAY:
-            prevDirCol = checkCollWithPrevDir();
+           bool prevDirCol = checkCollWithPrevDir();
 
             if(xNext != 0 || yNext != 0)
             {
@@ -495,7 +495,7 @@ void Player::changeCurrentAnim()
 
 void Player::loadAnimations()
 {
-    QString path = QString("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/pacman/pacman*.png");
+    QString path = QString("../images/pacman/pacman*.png");
     AnimatedSprites *pacmanSprite = new AnimatedSprites(path);
 
     QList<QPixmap> spriteList= pacmanSprite->getSpriteList();
