@@ -17,7 +17,7 @@ Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character(x, y, dir)
     setAndAddStates();
     fsm.setInitialState(INIT);
 
-    spritesImage = new QPixmap("/home/varun/workspace/pacman/ cs340-pacman/images/sprites.png");
+    spritesImage = new QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/sprites.png");
 }
 
 int Enemy::getType() const {
@@ -208,7 +208,7 @@ bool Enemy::isWallPresent(int direction)
 
 void Enemy::removeOddOption(QList<int> *options)
 {
-   int vicinity = 3;
+   int vicinity = 20;
    QList<QGraphicsItem *> list = scene()->items(
                     (xCoor-vicinity)*CHARACTER_WIDTH,
                     (yCoor-vicinity)*CHARACTER_HEIGHT,
