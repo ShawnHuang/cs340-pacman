@@ -16,6 +16,8 @@ Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character(x, y, dir)
 
     setAndAddStates();
     fsm.setInitialState(INIT);
+
+    spritesImage = new QPixmap("/home/varun/workspace/pacman/ cs340-pacman/images/sprites.png");
 }
 
 int Enemy::getType() const {
@@ -29,63 +31,35 @@ int Enemy::type() const
 
 void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-   painter->setBrush(Qt::Dense7Pattern);
-   painter->fillRect(0,0,
-                     Character::X_WIDTH*Character::CHARACTER_WIDTH,
-                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
-                     Qt::red);
-
-   painter->setPen (Qt::yellow);
-
+    int x = xCoor;
+    int y = yCoor;
     switch (getDirection()) {
         case DIR_UP :
-            painter->fillRect(0,0,
-                     Character::X_WIDTH*Character::CHARACTER_WIDTH,
-                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT/5,
-                     Qt::yellow);
+            painter->drawPixmap(0, 0, *spritesImage, 100, 65, CHARACTER_WIDTH*X_WIDTH, CHARACTER_HEIGHT*Y_HEIGHT);
             break;
         case DIR_DOWN :
-            painter->fillRect(0,Character::Y_HEIGHT*Character::CHARACTER_HEIGHT - Character::Y_HEIGHT*Character::CHARACTER_HEIGHT/5,
-                     Character::X_WIDTH*Character::CHARACTER_WIDTH,
-                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT/5,
-                     Qt::yellow);
+            painter->drawPixmap(0, 0, *spritesImage, 100, 30, CHARACTER_WIDTH*X_WIDTH, CHARACTER_HEIGHT*Y_HEIGHT);
             break;
         case DIR_RIGHT :
-            painter->fillRect(Character::X_WIDTH*Character::CHARACTER_WIDTH-Character::X_WIDTH*Character::CHARACTER_WIDTH/5,0,
-                     Character::X_WIDTH*Character::CHARACTER_WIDTH/5,
-                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
-                     Qt::yellow);
+            painter->drawPixmap(0, 0, *spritesImage, 100, 0, CHARACTER_WIDTH*X_WIDTH, CHARACTER_HEIGHT*Y_HEIGHT);
             break;
         case DIR_LEFT :
-            painter->fillRect(0,0,
-                     Character::X_WIDTH*Character::CHARACTER_WIDTH/5,
-                     Character::Y_HEIGHT*Character::CHARACTER_HEIGHT,
-                     Qt::yellow);
+            painter->drawPixmap(0, 0, *spritesImage, 100, 95, CHARACTER_WIDTH*X_WIDTH, CHARACTER_HEIGHT*Y_HEIGHT);
             break;
     }
-
-
 }
 
 void Enemy::update() {
-
-//    if (!step)
-//    return;
-
     QList<int> optionsList;
     float rand_max = RAND_MAX + 1.0;
     long selectedOption = 2;
 
     switch (fsm.getStateIndex()) {
 
-        case INIT_STATE: // set the graphics item position
-                         //setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
-                         fsm.handleEvent("init_timeout");
+        case INIT_STATE: fsm.handleEvent("init_timeout");
                          fsm.update();
                          break;
-        case PLAY_STATE:
-
-                         // appending hard coded values to the options list
+        case PLAY_STATE: // appending hard coded values to the options list
                          // TODO: Remove hardcoding if possible
                          if (!isWallPresent(TURN_FRONT)) {
                              optionsList.append(0);
@@ -245,7 +219,6 @@ void Enemy::removeOddOption(QList<int> *options)
    for (it = list.begin(); it != list.end(); it++ )
    {
        if ((*it)->type() == Player::ID_PLAYER) {
-//           qDebug() << "Found Player in Vicinity at " << (*it)->pos();
            int playerX = (*it)->x()/CHARACTER_WIDTH;
            int playerY = (*it)->y()/CHARACTER_HEIGHT;
 

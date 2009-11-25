@@ -33,6 +33,8 @@ class Enemy : public Character {
         bool isWallPresent(int);
         void removeOddOption(QList<int> *);
 
+        QPixmap *spritesImage;
+
     public:
         Enemy(int, int, int, MapLoader*);
         static const int ID_ENEMY  = 10;
