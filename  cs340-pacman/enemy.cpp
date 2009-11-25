@@ -18,6 +18,9 @@ Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character(x, y, dir)
     fsm.setInitialState(INIT);
 
     spritesImage = new QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/sprites.png");
+
+    myId = ENEMY_COUNT++;
+    move = true;
 }
 
 int Enemy::getType() const {
@@ -31,20 +34,29 @@ int Enemy::type() const
 
 void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    int x = xCoor;
-    int y = yCoor;
+    int width = CHARACTER_WIDTH*X_WIDTH;
+    int height = CHARACTER_HEIGHT*Y_HEIGHT;
+
+    int x = 100 + (myId*(width+2)*2);
+    x+= (move) ? 0 : (width+2);
+
+    if (move)
+        move = false;
+    else
+        move = true;
+
     switch (getDirection()) {
         case DIR_UP :
-            painter->drawPixmap(0, 0, *spritesImage, 100, 65, CHARACTER_WIDTH*X_WIDTH, CHARACTER_HEIGHT*Y_HEIGHT);
+            painter->drawPixmap(0, 0, *spritesImage, x, 65, width, height);
             break;
         case DIR_DOWN :
-            painter->drawPixmap(0, 0, *spritesImage, 100, 30, CHARACTER_WIDTH*X_WIDTH, CHARACTER_HEIGHT*Y_HEIGHT);
+            painter->drawPixmap(0, 0, *spritesImage, x, 30, width, height);
             break;
         case DIR_RIGHT :
-            painter->drawPixmap(0, 0, *spritesImage, 100, 0, CHARACTER_WIDTH*X_WIDTH, CHARACTER_HEIGHT*Y_HEIGHT);
+            painter->drawPixmap(0, 0, *spritesImage, x, 0, width, height);
             break;
         case DIR_LEFT :
-            painter->drawPixmap(0, 0, *spritesImage, 100, 95, CHARACTER_WIDTH*X_WIDTH, CHARACTER_HEIGHT*Y_HEIGHT);
+            painter->drawPixmap(0, 0, *spritesImage, x, 95, width, height);
             break;
     }
 }
@@ -59,7 +71,9 @@ void Enemy::update() {
         case INIT_STATE: fsm.handleEvent("init_timeout");
                          fsm.update();
                          break;
-        case PLAY_STATE: // appending hard coded values to the options list
+        case PLAY_STATE:
+        case DYING_STATE:
+                         // appending hard coded values to the options list
                          // TODO: Remove hardcoding if possible
                          if (!isWallPresent(TURN_FRONT)) {
                              optionsList.append(0);
@@ -91,8 +105,6 @@ void Enemy::update() {
                              makeTurn(selectedOption);
                          }
 
-                         break;
-        case DYING_STATE:
                          break;
     }
  }
@@ -208,7 +220,7 @@ bool Enemy::isWallPresent(int direction)
 
 void Enemy::removeOddOption(QList<int> *options)
 {
-   int vicinity = 20;
+   int vicinity = 15;
    QList<QGraphicsItem *> list = scene()->items(
                     (xCoor-vicinity)*CHARACTER_WIDTH,
                     (yCoor-vicinity)*CHARACTER_HEIGHT,
@@ -283,6 +295,25 @@ void Enemy::removeOddOption(QList<int> *options)
    }
 }
 
+void Enemy::dyingCheck()
+{
+   QList<QGraphicsItem *> list = scene()->items();
+
+   QList<QGraphicsItem *>::iterator it;
+   for (it = list.begin(); it != list.end(); it++ )
+   {
+       if ((*it)->type() == Player::ID_PLAYER) {
+           if (((Player*) *it)->eatenPowerDot()) {
+               fsm.handleEvent("super_player");
+               fsm.update();
+           } else {
+               fsm.handleEvent("normal_player");
+               fsm.update();
+           }
+       }
+   }
+}
+
 void Enemy::setAndAddStates()
 {
     State initState(INIT, INIT_STATE); // creating init state
@@ -291,7 +322,10 @@ void Enemy::setAndAddStates()
 
     initState.addEventAndNextState("init_timeout", PLAY);
     randomState.addEventAndNextState("super_player", DYING);
+    randomState.addEventAndNextState("normal_player", PLAY);
     dyingState.addEventAndNextState("dead" , INIT);
+    dyingState.addEventAndNextState("normal_player" , PLAY);
+    dyingState.addEventAndNextState("super_player" , DYING);
 
     fsm.addState(initState);
     fsm.addState(randomState);

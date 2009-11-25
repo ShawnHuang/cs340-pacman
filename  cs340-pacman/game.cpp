@@ -14,7 +14,7 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
     //toplevelObject = new TopLevel(scene);
     //toplevelObject->hide();
 
-    scene->setSceneRect(0,-35,570,525);
+    scene->setSceneRect(0,-35,570,515);
     scene->setFocus();
 
 
@@ -69,23 +69,23 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
 
      //create an enemy
 
-     e = new Enemy(1, 4, Character::DIR_DOWN, mp);
+     e = new Enemy(27, 20, Character::DIR_DOWN, mp);
      scene->addItem(e);
 
-     e1 = new Enemy(4, 4, Character::DIR_DOWN, mp);
+     e1 = new Enemy(24, 24, Character::DIR_DOWN, mp);
      scene->addItem(e1);
 
-     e2 = new Enemy(10, 10, Character::DIR_DOWN, mp);
+     e2 = new Enemy(30, 24, Character::DIR_DOWN, mp);
      scene->addItem(e2);
 
-     e3 = new Enemy(20, 20, Character::DIR_DOWN, mp);
+     e3 = new Enemy(21, 24, Character::DIR_DOWN, mp);
      scene->addItem(e3);
 
      //create a pacman object and add it to scene.
-     pacman = new Player(270, 290, mp, scene);
+     pacman = new Player(10, 440, mp, scene);
 
      scene->addItem(pacman);
-     startTimer( 100 );
+     startTimer( 75 );
 }
 
 void Game::setAndAddStates(){
