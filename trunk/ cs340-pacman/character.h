@@ -12,8 +12,10 @@ Cretaed by : Usha Sanaga
 #include <QRectF>
 #include <Qt>
 #include <QDebug>
+#include "loadsound.h"
 
 static int ENEMY_COUNT  = 0;
+static float POSITION_OFFSET = 1;
 
 class Character : public QGraphicsItem
 {

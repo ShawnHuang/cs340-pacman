@@ -35,14 +35,15 @@ int Character::getDirection()
 void Character::moveForward() {
     switch (direction) {
 
-        case DIR_UP : yCoor -= 1;
+        case DIR_UP : yCoor -= 1*POSITION_OFFSET;
             break;
-        case DIR_DOWN : yCoor += 1;
+        case DIR_DOWN : yCoor += 1*POSITION_OFFSET;
             break;
-        case DIR_RIGHT : xCoor += 1;
+        case DIR_RIGHT : xCoor += 1*POSITION_OFFSET;
             break;
-        case DIR_LEFT : xCoor -= 1;
+        case DIR_LEFT : xCoor -= 1*POSITION_OFFSET;
             break;
+
     }
 
     if (xCoor < 1) {
@@ -51,12 +52,15 @@ void Character::moveForward() {
         xCoor = 1;
     }
 
-    // update the graphics item position
+    if (moveSound.isFinished()) {
+        moveSound.setLoops(20);
+        moveSound.play();
+    }
   }
 
 void Character::advance(int phase)
 {
-    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
+    setPos(xCoor*CHARACTER_WIDTH, yCoor*CHARACTER_HEIGHT);
 }
 
 void Character::makeTurn(long turnDir) {
@@ -91,7 +95,6 @@ void Character::makeTurn(long turnDir) {
             break;
     }
     // update the graphics item position
-//    setPos(this->xCoor*CHARACTER_WIDTH,this->yCoor*CHARACTER_HEIGHT);
 }
 
 QRectF Character::boundingRect() const

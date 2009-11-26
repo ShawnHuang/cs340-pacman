@@ -107,35 +107,62 @@ void Enemy::update() {
 
                          break;
     }
+
  }
 
-bool Enemy::isWallPresent(int direction)
+bool Enemy::isWallPresent(int turnDir)
 {
     bool ret = false;
     int x = this->xCoor;
     int y = this->yCoor;
-    
-    QList<CoordChar> wallPositions;
-    CoordChar wallCoord, wallCoord1, wallCoord2, wallCoord3;
 
-    switch (direction)
+//    qDebug() << "Coor: " << xCoor << " " << yCoor;
+
+    QList<CoordChar> wallPositions;
+    CoordChar wallCoord1, wallCoord2, wallCoord3;
+
+    switch (turnDir)
     {
         case TURN_FRONT:
-                    switch (this->direction) {
-                        case Character::DIR_UP : y -=1;
+                        if ((int)(this->xCoor * CHARACTER_WIDTH) % CHARACTER_WIDTH > 5
+                            ) {
+                            x++;
+                        }
+                        if ((int)(this->yCoor * CHARACTER_HEIGHT) % CHARACTER_HEIGHT >= 5
+                            ) {
+                            y++;
+                        }
+                        switch (this->direction) {
+                        case Character::DIR_UP : y -= 1;
+                            wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
+                            wallCoord1.xcoord = x;
+                            wallCoord2.xcoord = x + 1;
+                            wallCoord3.xcoord = x + 2;
                             break;
                         case Character::DIR_DOWN : y += Y_HEIGHT;
+                            wallCoord1.ycoord = wallCoord2.ycoord = wallCoord3.ycoord = y;
+                            wallCoord1.xcoord = x;
+                            wallCoord2.xcoord = x + 1;
+                            wallCoord3.xcoord = x + 2;
                             break;
-                        case Character::DIR_RIGHT : x +=X_WIDTH;
+                        case Character::DIR_RIGHT : x += X_WIDTH;
+                            wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
+                            wallCoord1.ycoord = y;
+                            wallCoord2.ycoord = y+1;
+                            wallCoord3.ycoord = y+2;
                             break;
                         case Character::DIR_LEFT : x -= 1;
+                            wallCoord1.xcoord = wallCoord2.xcoord = wallCoord3.xcoord = x;
+                            wallCoord1.ycoord = y;
+                            wallCoord2.ycoord = y+1;
+                            wallCoord3.ycoord = y+2;
                             break;
                         }
 
-                        wallCoord.xcoord = x;
-                        wallCoord.ycoord = y;
+                        wallPositions.append(wallCoord1);
+                        wallPositions.append(wallCoord2);
+                        wallPositions.append(wallCoord3);
 
-                        wallPositions.append(wallCoord);
                         break;
         case TURN_RIGHT:
                     switch (this->direction) {
@@ -168,7 +195,6 @@ bool Enemy::isWallPresent(int direction)
                         wallPositions.append(wallCoord1);
                         wallPositions.append(wallCoord2);
                         wallPositions.append(wallCoord3);
-
                         break;
         case TURN_LEFT:
                     switch (this->direction) {
@@ -201,7 +227,6 @@ bool Enemy::isWallPresent(int direction)
                     wallPositions.append(wallCoord1);
                     wallPositions.append(wallCoord2);
                     wallPositions.append(wallCoord3);
-
                     break;
         }
 
