@@ -39,6 +39,8 @@ class Enemy : public Character {
         bool move;
 
         void dyingCheck();
+
+
     public:
         Enemy(int, int, int, MapLoader*);
         static const int ID_ENEMY  = 10;
