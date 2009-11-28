@@ -1,5 +1,6 @@
 #include "game.h"
 #include "animatedsprites.h"
+#include "loadsound.h"
 
 Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
 {
@@ -16,8 +17,6 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
 
     scene->setSceneRect(0,-35,570,515);
     scene->setFocus();
-
-
 
     // create the scene elements
     QPalette p;
@@ -38,6 +37,14 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
         msg->setModal(true);
         msg->showMessage("List size zero in map. Please check the file.");
     }
+
+    initTimer = new QTimer( this );
+    connect(initTimer, SIGNAL(timeout()), this, SLOT(initTimeOut()));
+
+    powerdotTimer = new QTimer( this );
+    connect(powerdotTimer, SIGNAL(timeout()), this, SLOT(powerdotTimeOut()));
+
+    isPowerdotTimeOut = true;
 
     Dot *allDots = new Dot[mp->dotmap.size()];//try n catch memory allocation exception
     Wall *wallblock = new Wall[mp->map.size()];
@@ -82,10 +89,20 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
      scene->addItem(e3);
 
      //create a pacman object and add it to scene.
-     pacman = new Player(10, 440, mp, scene);
+     pacman = new Player(270, 360, mp, scene);
+
+     isPlay = false;
+     timerStarted = false;
+     isPacmanDying = false;
 
      scene->addItem(pacman);
-     startTimer( 75 );
+     startTimer( 100 );
+}
+
+void Game::initTimeOut()
+{
+   // qDebug() << "initTimeOut";
+    isPlay = true;
 }
 
 void Game::setAndAddStates(){
@@ -97,6 +114,7 @@ void Game::setAndAddStates(){
     //set property here
 
     State gPlay("PLAY", GAME_PLAY);
+    gPlay.addEventAndNextState("callInit", "INTRO");
     gPlay.addEventAndNextState("game_over", "OUTRO");
     gPlay.addEventAndNextState("press_q", "OUTRO");
     //set property here
@@ -121,17 +139,31 @@ void Game::setAndAddStates(){
 
  void Game::update(){
       if(gamefsm.getStateIndex() == GAME_INIT){
-           //display menu screen with buttons
-           //if play button clicked, then switch to PLAY state
-            //if quit button clicked, exit game
 
-          //toplevelObject->show();
+          if(gamefsm.inENTRY()) // Timmer for init state
+          {
+            qDebug() << "Timer Started";
+            e->show();
+            e1->show();
+            e2->show();
+            e3->show();
+            initTimer->start(4500);
+            start->play();
+            isPlay = false;
 
-          //toplevelObject->start(100);
-           gamefsm.handleEvent("intro_timeout");
+          }
+          //qDebug() << isPlay;
+
+          if(isPlay)
+          {
+                //qDebug() << "---isPlay " << isPlay;
+                initTimer->stop();
+                gamefsm.handleEvent("intro_timeout");
+          }
         }
 
        if(gamefsm.getStateIndex()== GAME_PLAY){
+           //qDebug() << "in play state";
             //display map, character and enemies
             //display topbar and initial all values of topbar
            //check if all dots has been eaten
@@ -141,23 +173,65 @@ void Game::setAndAddStates(){
                              //400 points for 2nd enemy
                              //600 points for 3rd enemy
             //if #oflives remaining is 0, go to OUTRO state
+           if(pacman->isEnemyCollided() && isPowerdotTimeOut)
+           {
+                if(!pacman->eatenPowerDot())
+                {
+                    isPacmanDying = true;
+                    pacman->handleEvent(QString("ghost_hits_pacman"));
+
+                }
+                else
+                {
+                    isPowerdotTimeOut = false;
+                    powerdotTimer->start(5000);
+                }
+           }
+
        }
        if(gamefsm.getStateIndex()==GAME_OUTRO){
              //display score and if he/she is winner or loser
             //if any key is pressed, go to INTRO state
        }
-       gamefsm.update();
+        gamefsm.update();
 
   }
 
+ void Game::powerdotTimeOut()
+{
+    isPowerdotTimeOut = true;
+}
+
 void Game::timerEvent(QTimerEvent *){
     scene->advance();
-    update();
-    pacman->update();
-    e->update();
-    e1->update();
-    e2->update();
-    e3->update();
+    if(!isPacmanDying)
+        update();
+    if(isPlay)
+    {
+        pacman->update();
+        if( !isPacmanDying )
+        {
+            e->update();
+            e1->update();
+            e2->update();
+            e3->update();
+        }
+        else
+        {
+            e->hide();
+            e1->hide();
+            e2->hide();
+            e3->hide();
+            if(pacman->isPacmanInInit())
+            {
+                gamefsm.handleEvent("callInit");
+                isPacmanDying = false;
+            }
+
+        }
+
+    }
+
 
   // this->start();
 }

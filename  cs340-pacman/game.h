@@ -27,6 +27,8 @@
 #define GAME_MENU 3
 class Game : public QGraphicsView
 {
+    Q_OBJECT
+
 protected:
     FSM gamefsm;
     int gameOver; //flag that determines this
@@ -50,13 +52,18 @@ protected:
     //TopLevel *toplevelObject;
     QString currState ;
     bool changeState;
+    bool timerStarted;
+    bool isPlay;
+    bool isPowerdotTimeOut;
+    QTimer *powerdotTimer;
+    bool isPacmanDying;
 
 
 public:
     Game(QGraphicsScene *);
     ~Game();
     QTimer *mainTimer;
-    QTimer *getReadyTimer;
+    QTimer *initTimer;
     void setAndAddStates();
     void incrementStat();
     int remainLives;
@@ -64,6 +71,10 @@ public:
     int isGameOver();       //check if end of game
     virtual void timerEvent( QTimerEvent * );
     void update();
+
+public slots:
+    void initTimeOut();
+    void powerdotTimeOut();
 
 };
 

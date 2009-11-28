@@ -22,10 +22,12 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
     //init_timer = new QTimer( this );
     //connect( init_timer, SIGNAL(timeout()), this, SLOT(setTimeOut()) );
 
-    loadAnimations();
+    //loadAnimations();
 
-    currentAnim = RIGHT_ANIM;
+    //currentAnim = RIGHT_ANIM;
     currentFrame = 0;
+
+    pacmanSprites = new QPixmap("../images/sprites.png");
     
     step = 10;
 
@@ -41,12 +43,28 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
     actionmap.insert(Qt::Key_Left, Left);
     setFocus();
 
+    //dyingTimer = new QTimer( this );
+    //connect(dyingTimer, SIGNAL(timeout()), this, SLOT(dyingTimeOut()));
+
+    init();
     setAndAddStates();
     pacmanfsm.setInitialState("PACMAN_INIT");
+    pacmanInit = true;
+    animSteps = NORMAL_ANIM_STEPS;
 
 //    eatSound.setLoops(2);
 
 }
+
+bool Player::isPacmanInInit()
+{
+    return pacmanInit;
+}
+
+//void Player::dyingTimeOut()
+//{
+//    isDyingTimeOut = true;
+//}
 
 void Player::init()
 {
@@ -62,16 +80,22 @@ void Player::init()
     xPrev = 0;
     yPrev = 0;
 
-    prevDir = 4;
-    dir = 4;
+    prevDir = RIGHT;
+    dir = RIGHT;
+    animDir = dir;
     whichDot = 0;
     isTimeOut = false;
+    slowDownAnim = true;
+    powerdot = false;
+    pacmanInit = true;
+    dyingAnimCount = 0;
+    animSteps = NORMAL_ANIM_STEPS;
 }
 
-void Player::setTimeOut()
-{
-    isTimeOut = !isTimeOut;;
-}
+//void Player::setTimeOut()
+//{
+//    isTimeOut = !isTimeOut;;
+//}
 
 int Player::type() const
 {
@@ -85,12 +109,18 @@ int Player::getDotType()
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-   painter->drawPixmap(0, 0, pacmanAnim[currentAnim].at(currentFrame%3));
+    static int imageSize = 32;
+   //painter->drawPixmap(0, 0, pacmanAnim[currentAnim].at(currentFrame%3));
+
+    qDebug() << "In paint";
+
+    painter->drawPixmap(0, 0, *pacmanSprites, ((imageSize)*(currentFrame%animSteps)+2), ((animDir-1)*imageSize +2), PACMAN_WIDTH,PACMAN_HEIGHT);
+
 }
 
 QRectF Player::boundingRect() const
 {
-    return QRectF(0,0,30,30);
+    return QRectF(0,0,PACMAN_WIDTH,PACMAN_HEIGHT);
 }
 
 void Player::setAndAddStates()
@@ -123,11 +153,12 @@ void Player::update()
     {
         case PACMAN_INIT:
             init();
-            //this->setPos(xCoord, yCoord);
             pacmanfsm.handleEvent("init_timeout");
+
         break;
 
         case PACMAN_PLAY:
+           pacmanInit = false;
            bool prevDirCol = checkCollWithPrevDir();
 
             if(xNext != 0 || yNext != 0)
@@ -135,27 +166,48 @@ void Player::update()
                 xdir = xNext;
                 ydir = yNext;
                 dir = nextDir;
+                animDir = dir;
             }
             checkCollWithNextDir(prevDirCol);
             colWithOtherItems();
-            if(enemyCollision)
-            {
-                pacmanfsm.handleEvent("ghost_hits_pacman");
-            }
+
             xCoord += xdir;
             yCoord += ydir;
 
-            changeCurrentAnim();
+            //changeCurrentAnim();
             enterTunnel();
             keySetFlag = false;
         break;
 
         case PACMAN_DYING:
-            pacmanfsm.handleEvent("dying_timeout");
+            if(pacmanfsm.inENTRY())
+            {
+                currentFrame = -1;
+                slowDownAnim = false;
+            }
+            animDir = 6;
+            qDebug() << "In Dying";
+            animSteps = DYING_ANIM_STEPS;
+            if(slowDownAnim)
+            {
+                currentFrame--;
+                dyingAnimCount++;
+                xCoord++;
+            }
+            else
+                xCoord--;
+            slowDownAnim = !slowDownAnim;
+            if(dyingAnimCount%8 == 0)
+                pacmanfsm.handleEvent("dying_timeout");
         break;
     }
     pacmanfsm.update();
     currentFrame++;
+}
+
+bool Player::isEnemyCollided()
+{
+    return enemyCollision;
 }
 
 //tunnel movements
@@ -175,8 +227,10 @@ void Player::enterTunnel()
 void Player::colWithOtherItems()
 {
 
+    enemyCollision = false;
     QList<QGraphicsItem *> list;
     list = scene()->items(xCoord+10 , yCoord+10, 10,10);
+
     for(int i = 0; i < list.size(); i++)
     {
         switch(list.at(i)->type())
@@ -184,13 +238,13 @@ void Player::colWithOtherItems()
         case ID_DOT:
             scene()->removeItem(list.at(i));
             //if(eatSound.isFinished())
-                eatSound.play();
+                eatSound->play();
             whichDot = ID_DOT;
             break;
 
         case ID_BIGDOT:
             scene()->removeItem(list.at(i));
-            eatSound.play();
+            eatSound->play();
             whichDot = ID_BIGDOT;
             powerdot = true;
             break;
@@ -211,31 +265,32 @@ void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
          xPrev = xdir;   //Storing prev xdir and ydir before getting new keypress values
          yPrev = ydir;   //Storing prev xdir and ydir before getting new keypress values
          prevDir = dir;
+         animDir = dir;
 
          switch (a)
          {
              case Up:
                 ydir = -step;
                 xdir = 0;
-                dir = 1;
+                dir = UP   ;
                 break;
 
              case Down:
                 ydir = step;
                 xdir = 0;
-                dir = 2;
+                dir = DOWN;
                 break;
 
              case Left:
                 xdir = -step;
                 ydir = 0;
-                dir = 3;
+                dir = LEFT;
                 break;
 
              case Right:
                 xdir = step;
                 ydir = 0;
-                dir = 4;
+                dir = RIGHT;
                 break;
 
              default:
@@ -249,128 +304,10 @@ void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
          xNext = xdir; // Storing new keypress values in yNext n xNext
          yNext = ydir;
          nextDir = dir;
+         animDir = dir;
          }
 }
 
-//Generating keys for checkin collision with walls
-int Player::keyGeneration(int dir)//Generates key
-{
-    int xt = 0;
-    int yt = 0;
-    int mode = 0;
-    switch(dir)//keys generation
-    {
-        case 1 : //UP
-            if(xCoord%10 == 0)
-            {
-                key = new QString(QChar(xCoord));
-                key->append(QChar('_')).append(QChar(yCoord-10));
-                key1 = new QString(QChar(xCoord+10));
-                key1->append(QChar('_')).append(QChar(yCoord-10));
-                key2 = new QString(QChar(xCoord+20));
-                key2->append(QChar('_')).append(QChar(yCoord-10));
-                mode =0;
-            }
-            else
-            {
-                xt = xCoord/10;
-                xt = xt*10;
-                key = new QString(QChar(xt));
-                key->append(QChar('_')).append(QChar(yCoord-10));
-                key1 = new QString(QChar(xt+10));
-                key1->append(QChar('_')).append(QChar(yCoord-10));
-                key2 = new QString(QChar(xt+20));
-                key2->append(QChar('_')).append(QChar(yCoord-10));
-                key3 = new QString(QChar(xt+30));
-                key3->append(QChar('_')).append(QChar(yCoord-10));
-                mode = 1;
-            }
-            break;
-
-         case 2: //down
-             if(xCoord%10 == 0)
-             {
-                key = new QString(QChar(xCoord));
-                key->append(QChar('_')).append(QChar(yCoord+30));
-                key1 = new QString(QChar(xCoord+10));
-                key1->append(QChar('_')).append(QChar(yCoord+30));
-                key2 = new QString(QChar(xCoord+20));
-                key2->append(QChar('_')).append(QChar(yCoord+30));
-                mode = 0;
-             }
-             else
-             {
-                xt = xCoord/10;
-                xt = xt*10;
-                key = new QString(QChar(xt));
-                key->append(QChar('_')).append(QChar(yCoord+30));
-                key1 = new QString(QChar(xt+10));
-                key1->append(QChar('_')).append(QChar(yCoord+30));
-                key2 = new QString(QChar(xt+20));
-                key2->append(QChar('_')).append(QChar(yCoord+30));
-                key3 = new QString(QChar(xt+30));
-                key3->append(QChar('_')).append(QChar(yCoord+30));
-                mode = 1;
-             }
-             break;
-
-         case 3: //left
-             if(yCoord%10 == 0)
-             {
-                key = new QString(QChar(xCoord-10));
-                key->append(QChar('_')).append(QChar(yCoord));
-                key1 = new QString(QChar(xCoord-10));
-                key1->append(QChar('_')).append(QChar(yCoord+10));
-                key2 = new QString(QChar(xCoord-10));
-                key2->append(QChar('_')).append(QChar(yCoord+20));
-                mode = 0;
-             }
-             else
-             {
-                yt = yCoord/10;
-                yt = yt*10;
-                key = new QString(QChar(xCoord-10));
-                key->append(QChar('_')).append(QChar(yt));
-                key1 = new QString(QChar(xCoord-10));
-                key1->append(QChar('_')).append(QChar(yt+10));
-                key2 = new QString(QChar(xCoord-10));
-                key2->append(QChar('_')).append(QChar(yt+20));
-                key3 = new QString(QChar(xCoord-10));
-                key3->append(QChar('_')).append(QChar(yt+30));
-                mode = 1;
-             }
-             break;
-
-         case 4 : //right
-
-             if(yCoord%10 == 0)
-             {
-                key = new QString(QChar(xCoord+30));
-                key->append(QChar('_')).append(QChar(yCoord));
-                key1 = new QString(QChar(xCoord+30));
-                key1->append(QChar('_')).append(QChar(yCoord+10));
-                key2 = new QString(QChar(xCoord+30));
-                key2->append(QChar('_')).append(QChar(yCoord+20));
-                mode = 0;
-              }
-             else
-             {
-                yt = yCoord/10;
-                yt = yt*10;
-                key = new QString(QChar(xCoord+30));
-                key->append(QChar('_')).append(QChar(yt));
-                key1 = new QString(QChar(xCoord+30));
-                key1->append(QChar('_')).append(QChar(yt+10));
-                key2 = new QString(QChar(xCoord+30));
-                key2->append(QChar('_')).append(QChar(yt+20));
-                key3 = new QString(QChar(xCoord+30));
-                key3->append(QChar('_')).append(QChar(yt+30));
-                mode = 1;
-             }
-             break;
-    }
-    return mode;
-}
 
 //Checking collision in prev dir
 bool Player::checkCollWithPrevDir()
@@ -431,11 +368,13 @@ void Player::checkCollWithNextDir(bool prevDirCol)
                      xdir = xPrev ;
                      ydir = yPrev ;
                      dir = prevDir;
+                     animDir = dir;
                 }
                 else//if collision is detected for no keypress, thn stop
                 {
                      xdir = 0 ;
                      ydir = 0 ;
+                     animDir = dir;
                      dir = 0;
                 }
             }
@@ -456,6 +395,7 @@ void Player::checkCollWithNextDir(bool prevDirCol)
                      xdir = xPrev ;
                      ydir = yPrev ;
                      dir = prevDir;
+                     animDir = dir;
                 }
                 else//if collision is detected for 1st keypress, thn stop
                 {
@@ -474,6 +414,7 @@ void Player::checkCollWithNextDir(bool prevDirCol)
 
 bool Player::eatenPowerDot()
 {
+    qDebug() << "POWERDOT : " << powerdot;
     bool pd = powerdot;
     powerdot = false;
     return pd;
@@ -481,16 +422,16 @@ bool Player::eatenPowerDot()
 
 void Player::changeCurrentAnim()
 {
-    if(dir == 1)
-        currentAnim = UP_ANIM;
-    if(dir == 2)
-        currentAnim = DOWN_ANIM;
-    if(dir == 3)
-        currentAnim = LEFT_ANIM;
-    if(dir == 4)
-        currentAnim = RIGHT_ANIM;
-    if(dir == 0)
-        currentFrame = 0;
+//    if(dir == 1)
+//        currentAnim = UP_ANIM;
+//    if(dir == 2)
+//        currentAnim = DOWN_ANIM;
+//    if(dir == 3)
+//        currentAnim = LEFT_ANIM;
+//    if(dir == 4)
+//        currentAnim = RIGHT_ANIM;
+//    if(dir == 0)
+//        currentFrame = 0;
 }
 
 void Player::loadAnimations()
@@ -508,5 +449,127 @@ void Player::loadAnimations()
     }
 }
 
+//Generating keys for checkin collision with walls
+int Player::keyGeneration(int dir)//Generates key
+{
+    int xt = 0;
+    int yt = 0;
+    int mode = 0;
+    switch(dir)//keys generation
+    {
+        case UP : //UP
+            if(xCoord%10 == 0)
+            {
+                key = new QString(QChar(xCoord));
+                key->append(QChar('_')).append(QChar(yCoord-10));
+                key1 = new QString(QChar(xCoord+10));
+                key1->append(QChar('_')).append(QChar(yCoord-10));
+                key2 = new QString(QChar(xCoord+20));
+                key2->append(QChar('_')).append(QChar(yCoord-10));
+                mode =0;
+            }
+            else
+            {
+                xt = xCoord/10;
+                xt = xt*10;
+                key = new QString(QChar(xt));
+                key->append(QChar('_')).append(QChar(yCoord-10));
+                key1 = new QString(QChar(xt+10));
+                key1->append(QChar('_')).append(QChar(yCoord-10));
+                key2 = new QString(QChar(xt+20));
+                key2->append(QChar('_')).append(QChar(yCoord-10));
+                key3 = new QString(QChar(xt+30));
+                key3->append(QChar('_')).append(QChar(yCoord-10));
+                mode = 1;
+            }
+            break;
 
+         case DOWN: //down
+             if(xCoord%10 == 0)
+             {
+                key = new QString(QChar(xCoord));
+                key->append(QChar('_')).append(QChar(yCoord+30));
+                key1 = new QString(QChar(xCoord+10));
+                key1->append(QChar('_')).append(QChar(yCoord+30));
+                key2 = new QString(QChar(xCoord+20));
+                key2->append(QChar('_')).append(QChar(yCoord+30));
+                mode = 0;
+             }
+             else
+             {
+                xt = xCoord/10;
+                xt = xt*10;
+                key = new QString(QChar(xt));
+                key->append(QChar('_')).append(QChar(yCoord+30));
+                key1 = new QString(QChar(xt+10));
+                key1->append(QChar('_')).append(QChar(yCoord+30));
+                key2 = new QString(QChar(xt+20));
+                key2->append(QChar('_')).append(QChar(yCoord+30));
+                key3 = new QString(QChar(xt+30));
+                key3->append(QChar('_')).append(QChar(yCoord+30));
+                mode = 1;
+             }
+             break;
 
+         case LEFT: //left
+             if(yCoord%10 == 0)
+             {
+                key = new QString(QChar(xCoord-10));
+                key->append(QChar('_')).append(QChar(yCoord));
+                key1 = new QString(QChar(xCoord-10));
+                key1->append(QChar('_')).append(QChar(yCoord+10));
+                key2 = new QString(QChar(xCoord-10));
+                key2->append(QChar('_')).append(QChar(yCoord+20));
+                mode = 0;
+             }
+             else
+             {
+                yt = yCoord/10;
+                yt = yt*10;
+                key = new QString(QChar(xCoord-10));
+                key->append(QChar('_')).append(QChar(yt));
+                key1 = new QString(QChar(xCoord-10));
+                key1->append(QChar('_')).append(QChar(yt+10));
+                key2 = new QString(QChar(xCoord-10));
+                key2->append(QChar('_')).append(QChar(yt+20));
+                key3 = new QString(QChar(xCoord-10));
+                key3->append(QChar('_')).append(QChar(yt+30));
+                mode = 1;
+             }
+             break;
+
+         case RIGHT : //right
+
+             if(yCoord%10 == 0)
+             {
+                key = new QString(QChar(xCoord+30));
+                key->append(QChar('_')).append(QChar(yCoord));
+                key1 = new QString(QChar(xCoord+30));
+                key1->append(QChar('_')).append(QChar(yCoord+10));
+                key2 = new QString(QChar(xCoord+30));
+                key2->append(QChar('_')).append(QChar(yCoord+20));
+                mode = 0;
+              }
+             else
+             {
+                yt = yCoord/10;
+                yt = yt*10;
+                key = new QString(QChar(xCoord+30));
+                key->append(QChar('_')).append(QChar(yt));
+                key1 = new QString(QChar(xCoord+30));
+                key1->append(QChar('_')).append(QChar(yt+10));
+                key2 = new QString(QChar(xCoord+30));
+                key2->append(QChar('_')).append(QChar(yt+20));
+                key3 = new QString(QChar(xCoord+30));
+                key3->append(QChar('_')).append(QChar(yt+30));
+                mode = 1;
+             }
+             break;
+    }
+    return mode;
+}
+
+void Player::handleEvent(QString event)
+{
+    pacmanfsm.handleEvent(event);
+}

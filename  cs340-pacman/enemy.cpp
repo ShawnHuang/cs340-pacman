@@ -17,7 +17,7 @@ Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character(x, y, dir)
     setAndAddStates();
     fsm.setInitialState(INIT);
 
-    spritesImage = new QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/sprites.png");
+    spritesImage = new QPixmap("../images/sprites.png");
 
     myId = ENEMY_COUNT++;
     move = true;
