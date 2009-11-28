@@ -46,10 +46,10 @@ void Character::moveForward() {
 
     }
 
-    if (xCoor < 1) {
-        xCoor = 56;
-    } else if (xCoor > 56) {
-        xCoor = 1;
+    if (xCoor < POSITION_OFFSET) {
+        xCoor = 56-POSITION_OFFSET;
+    } else if (xCoor > 56-POSITION_OFFSET) {
+        xCoor = POSITION_OFFSET;
     }
 
     if (moveSound.isFinished()) {

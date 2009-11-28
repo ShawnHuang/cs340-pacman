@@ -82,7 +82,7 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
      e1 = new Enemy(24, 24, Character::DIR_DOWN, mp);
      scene->addItem(e1);
 
-     e2 = new Enemy(30, 24, Character::DIR_DOWN, mp);
+     e2 = new Enemy(29, 24, Character::DIR_DOWN, mp);
      scene->addItem(e2);
 
      e3 = new Enemy(21, 24, Character::DIR_DOWN, mp);
