@@ -33,7 +33,7 @@ void MapLoader::fileRead() //reads the text file, looks for '+' char, stores its
          QString line = in.readLine();
          for (int i = 0; i < line.size(); ++i)
          {
-            QString *key;
+            QString key = QString::number(xcoord).append(QChar('_')).append(QString::number(ycoord));
             QString *playerKey;
             switch(line.at(i).toAscii())
             {
@@ -42,9 +42,7 @@ void MapLoader::fileRead() //reads the text file, looks for '+' char, stores its
                         cc.xcoord = xcoord;
                         cc.ycoord = ycoord;
                         cc.symbol = '+';
-                        key = new QString(QChar(xcoord+48));
-                        key->append(QChar('_')).append(QChar(ycoord+48));
-                        map.insert(*key, cc);
+                        map.insert(key, cc);
 
                         //Map for player movement
                         cc.xcoord = xcoord*10;
@@ -58,9 +56,7 @@ void MapLoader::fileRead() //reads the text file, looks for '+' char, stores its
                         cc.xcoord = xcoord;
                         cc.ycoord = ycoord;
                         cc.symbol = '.';
-                        key = new QString(QChar(xcoord+48));
-                        key->append(QChar('_')).append(QChar(ycoord+48));
-                        dotmap.insert(*key, cc);
+                        dotmap.insert(key, cc);
 
                         //Map for player movement
                         cc.xcoord = xcoord*10;
@@ -74,9 +70,7 @@ void MapLoader::fileRead() //reads the text file, looks for '+' char, stores its
                         cc.xcoord = xcoord;
                         cc.ycoord = ycoord;
                         cc.symbol = 'O';
-                        key = new QString(QChar(xcoord+48));
-                        key->append(QChar('_')).append(QChar(ycoord+48));
-                        powerdotmap.insert(*key, cc);
+                        powerdotmap.insert(key, cc);
 
                         //Map for player movement
                         cc.xcoord = xcoord*10;

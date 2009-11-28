@@ -15,6 +15,9 @@
 #include "fsm.h"
 #include <QList>
 #include <QString>
+#include <QTime>
+
+static QTime SUPER_PLAYER_TIME;
 
 class Enemy : public Character {
     private:
@@ -24,11 +27,15 @@ class Enemy : public Character {
         static const int PLAY_STATE = 1;
         static const int FOLLOW_STATE = 2;
         static const int DYING_STATE = 3;
+        static const int ZOMBIE_STATE = 4;
+        static const int DYING_STATE_LIMIT = 1500;
+        static const int ZOMBIE_STATE_LIMIT = 500;
 
         QString INIT; //= "INIT";
         QString PLAY; //= "RANDOM_PLAY";
         QString FOLLOW; //= "FOLLOW_PLAYER";
         QString DYING; //= "DYING";
+        QString ZOMBIE; //= "ZOMBIE";
 
         bool isWallPresent(int);
         void removeOddOption(QList<int> *);
@@ -39,7 +46,6 @@ class Enemy : public Character {
         bool move;
 
         void dyingCheck();
-
 
     public:
         Enemy(int, int, int, MapLoader*);

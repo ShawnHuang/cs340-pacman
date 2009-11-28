@@ -15,13 +15,13 @@ Cretaed by : Usha Sanaga
 #include "loadsound.h"
 
 static int ENEMY_COUNT  = 0;
-static float POSITION_OFFSET = 1;
+static double POSITION_OFFSET = 0.5;
 
 class Character : public QGraphicsItem
 {
 protected:
-    float xCoor;
-    float yCoor;
+    double xCoor;
+    double yCoor;
     int direction;
     int turnDir;
 

@@ -52,6 +52,8 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
     pacmanInit = true;
     animSteps = NORMAL_ANIM_STEPS;
 
+    powerdot = false;
+
 //    eatSound.setLoops(2);
 
 }
