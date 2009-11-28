@@ -1,5 +1,4 @@
 #include <QDir>
-
 #include "animatedsprites.h"
 
 AnimatedSprites::AnimatedSprites(QString path)

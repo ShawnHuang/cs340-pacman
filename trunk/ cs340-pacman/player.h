@@ -16,15 +16,21 @@
 #include <QTimerEvent>
 #include <QSound>
 
+#define PACMAN_HEIGHT 30
+#define PACMAN_WIDTH 30
+
 #define PACMAN_INIT 0
 #define PACMAN_READY 1
 #define PACMAN_PLAY 2
 #define PACMAN_DYING 3
 
-#define RIGHT_ANIM 0
-#define DOWN_ANIM 1
-#define UP_ANIM 2
-#define LEFT_ANIM 3
+#define RIGHT 1
+#define DOWN 2
+#define UP 3
+#define LEFT 4
+
+#define DYING_ANIM_STEPS 7
+#define NORMAL_ANIM_STEPS 3
 
 class Player: public QGraphicsItem
 {
@@ -39,6 +45,7 @@ private:
     int yPrev;
     int xNext;
     int yNext;
+    int animDir;
 
     FSM pacmanfsm;
     void setAndAddStates();
@@ -67,6 +74,14 @@ private:
     int step;
     bool isTimeOut;
     void loadAnimations();
+    bool slowDownAnim;
+    bool pacmanInit;
+    int animSteps;
+    int dyingAnimCount;
+
+    QPainter *localPainter;
+
+    QPixmap *pacmanSprites;
 
 public:
     int whichDot;
@@ -86,13 +101,15 @@ public:
     bool checkCollWithPrevDir();
     void checkCollWithNextDir(bool);
     bool eatenPowerDot();
-    QTimer *init_timer;
+    bool isEnemyCollided();
+    void handleEvent(QString);
+    bool isPacmanInInit();
+
+//    QTimer *dyingTimer;
+//    QTimer *init_timer;
 
     enum Action {Up = 1, Down, Left, Right};
     QMap< int, Action > actionmap;
-
-public slots:
-     void setTimeOut();
 
 };
 

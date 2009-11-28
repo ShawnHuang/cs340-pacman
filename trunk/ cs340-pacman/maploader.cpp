@@ -1,3 +1,4 @@
+
 /*****************************************************
   File Name: maploader.cpp
   Description: Reads the text file and stores the coordinated of the char'+' in a list

@@ -17,10 +17,14 @@ FSM::~FSM()
 
 void FSM::update()
 {
+    //qDebug() << "in FSM::update - stateStatus: " << stateStatus;
     if(stateStatus == ENTRY)
         stateStatus = IN;
-    else if(stateStatus = EXIT)
+    else if(stateStatus == EXIT)
     {
+//        qDebug() << "in FSM::update - currState: " << currState;
+//        qDebug() << "in FSM::update - newState: " << newState;
+//        qDebug() << "in FSM::update - prevState: " << prevState;
         prevState = currState;
         currState = newState;
         stateStatus = ENTRY;
@@ -53,8 +57,11 @@ bool FSM::hasProperty(QString propertyName)
 
 void FSM::handleEvent(QString eventName)
 {
+    //qDebug() << "in FSM::HandleEvent - eventName: " << eventName;
+    //qDebug() << "in FSM::HandleEvent - currState: " << currState;
     State s = statemap.value(currState);
     newState = s.getNextStateForEvent(eventName);
+    //qDebug() << "in FSM::HandleEvent - newState: " << newState;
     stateStatus = EXIT;
 }
 
