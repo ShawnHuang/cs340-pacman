@@ -78,14 +78,13 @@ private:
     bool pacmanInit;
     int animSteps;
     int dyingAnimCount;
+    int eatenDot;
 
     QPainter *localPainter;
 
     QPixmap *pacmanSprites;
 
 public:
-    int whichDot;
-
     Player();
     Player(int ,int, MapLoader*, QGraphicsScene *scene = 0);
     static const int ID_PLAYER = 4;
@@ -104,6 +103,7 @@ public:
     bool isEnemyCollided();
     void handleEvent(QString);
     bool isPacmanInInit();
+    int getDotScore();
 
 //    QTimer *dyingTimer;
 //    QTimer *init_timer;

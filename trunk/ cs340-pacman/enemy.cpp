@@ -74,8 +74,6 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
         move = false;
     else
         move = true;
-
-
 }
 
 void Enemy::update() {
@@ -126,7 +124,6 @@ void Enemy::update() {
                          } else {
                              makeTurn(selectedOption);
                          }
-
                          break;
     }
 

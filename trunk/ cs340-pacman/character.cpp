@@ -52,10 +52,10 @@ void Character::moveForward() {
         xCoor = POSITION_OFFSET;
     }
 
-    if (moveSound.isFinished()) {
-        moveSound.setLoops(20);
-        moveSound.play();
-    }
+//    if (moveSound.isFinished()) {
+//        moveSound.setLoops(20);
+//        moveSound.play();
+//    }
   }
 
 void Character::advance(int phase)
