@@ -184,7 +184,7 @@ void Game::setAndAddStates(){
                 else
                 {
                     isPowerdotTimeOut = false;
-                    powerdotTimer->start(5000);
+                    powerdotTimer->start(15000);
                 }
            }
 

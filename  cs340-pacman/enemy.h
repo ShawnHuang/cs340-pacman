@@ -28,8 +28,8 @@ class Enemy : public Character {
         static const int FOLLOW_STATE = 2;
         static const int DYING_STATE = 3;
         static const int ZOMBIE_STATE = 4;
-        static const int DYING_STATE_LIMIT = 1500;
-        static const int ZOMBIE_STATE_LIMIT = 500;
+        static const int DYING_STATE_LIMIT = 10000;
+        static const int ZOMBIE_STATE_LIMIT = 3000;
 
         QString INIT; //= "INIT";
         QString PLAY; //= "RANDOM_PLAY";
