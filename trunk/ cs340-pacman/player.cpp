@@ -16,7 +16,7 @@ Player::Player()
 
 Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsItem(0, scene)
 {    
-    pacmanSprites = new QPixmap("../images/sprites.png");
+    pacmanSprites = new QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/sprites.png");
     initXCoord = x;
     initYCoord = y;
     currentFrame = 0;
@@ -123,6 +123,7 @@ void Player::advance(int phase)
 void Player::update()
 {
     int state = pacmanfsm.getStateIndex();
+    bool prevDirCol;
 
     switch(state)
     {
@@ -134,7 +135,7 @@ void Player::update()
 
         case PACMAN_PLAY:
            pacmanInit = false;
-           bool prevDirCol = checkCollWithPrevDir();
+           prevDirCol = checkCollWithPrevDir();
 
             if(xNext != 0 || yNext != 0)
             {
@@ -215,7 +216,7 @@ void Player::colWithOtherItems()
             //if(eatSound.isFinished())
                 eatSound->play();
             eatenDot += 10;
-            Topbar::updateScore(eatenDot);
+            TopBar::updateScore(eatenDot);
             qDebug() << "eating dot" << eatenDot;
             break;
 
@@ -223,7 +224,7 @@ void Player::colWithOtherItems()
             scene()->removeItem(list.at(i));
             eatSound->play();
             eatenDot += 50;
-            Topbar::updateScore(eatenDot);
+            TopBar::updateScore(eatenDot);
             qDebug() << "eating big dot" << eatenDot;
             powerdot = true;
             break;
