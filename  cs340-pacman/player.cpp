@@ -16,23 +16,12 @@ Player::Player()
 
 Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsItem(0, scene)
 {    
+    pacmanSprites = new QPixmap("../images/sprites.png");
     initXCoord = x;
     initYCoord = y;
-
-    //init_timer = new QTimer( this );
-    //connect( init_timer, SIGNAL(timeout()), this, SLOT(setTimeOut()) );
-
-    //loadAnimations();
-
-    //currentAnim = RIGHT_ANIM;
     currentFrame = 0;
-
-    pacmanSprites = new QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/sprites.png");
-    
     step = 10;
-
     keySetFlag = false;
-
     this->ml = ml;
 
     setFlag(ItemIsFocusable);
@@ -53,20 +42,12 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
     animSteps = NORMAL_ANIM_STEPS;
 
     powerdot = false;
-
-//    eatSound.setLoops(2);
-
 }
 
 bool Player::isPacmanInInit()
 {
     return pacmanInit;
 }
-
-//void Player::dyingTimeOut()
-//{
-//    isDyingTimeOut = true;
-//}
 
 void Player::init()
 {
@@ -85,39 +66,31 @@ void Player::init()
     prevDir = RIGHT;
     dir = RIGHT;
     animDir = dir;
-    whichDot = 0;
     isTimeOut = false;
     slowDownAnim = true;
     powerdot = false;
     pacmanInit = true;
     dyingAnimCount = 0;
     animSteps = NORMAL_ANIM_STEPS;
+    eatenDot = 0;
 }
-
-//void Player::setTimeOut()
-//{
-//    isTimeOut = !isTimeOut;;
-//}
 
 int Player::type() const
 {
     return ID_PLAYER;
 }
 
-int Player::getDotType()
+int Player::getDotScore()
 {
-    return whichDot;
+    return eatenDot;
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     static int imageSize = 32;
-   //painter->drawPixmap(0, 0, pacmanAnim[currentAnim].at(currentFrame%3));
-
-    qDebug() << "In paint";
+    //qDebug() << "In paint";
 
     painter->drawPixmap(0, 0, *pacmanSprites, ((imageSize)*(currentFrame%animSteps)+2), ((animDir-1)*imageSize +2), PACMAN_WIDTH,PACMAN_HEIGHT);
-
 }
 
 QRectF Player::boundingRect() const
@@ -150,7 +123,6 @@ void Player::advance(int phase)
 void Player::update()
 {
     int state = pacmanfsm.getStateIndex();
-    bool prevDirCol;
 
     switch(state)
     {
@@ -162,7 +134,7 @@ void Player::update()
 
         case PACMAN_PLAY:
            pacmanInit = false;
-           prevDirCol = checkCollWithPrevDir();
+           bool prevDirCol = checkCollWithPrevDir();
 
             if(xNext != 0 || yNext != 0)
             {
@@ -186,10 +158,10 @@ void Player::update()
             if(pacmanfsm.inENTRY())
             {
                 currentFrame = -1;
-                slowDownAnim = false;
+                slowDownAnim = true;
             }
             animDir = 6;
-            qDebug() << "In Dying";
+            //qDebug() << "In Dying";
             animSteps = DYING_ANIM_STEPS;
             if(slowDownAnim)
             {
@@ -200,6 +172,7 @@ void Player::update()
             else
                 xCoord--;
             slowDownAnim = !slowDownAnim;
+            dying->play();
             if(dyingAnimCount%8 == 0)
                 pacmanfsm.handleEvent("dying_timeout");
         break;
@@ -229,7 +202,6 @@ void Player::enterTunnel()
 // Checking Dot/BigDot collision
 void Player::colWithOtherItems()
 {
-
     enemyCollision = false;
     QList<QGraphicsItem *> list;
     list = scene()->items(xCoord+10 , yCoord+10, 10,10);
@@ -242,13 +214,17 @@ void Player::colWithOtherItems()
             scene()->removeItem(list.at(i));
             //if(eatSound.isFinished())
                 eatSound->play();
-            whichDot = ID_DOT;
+            eatenDot += 10;
+            Topbar::updateScore(eatenDot);
+            qDebug() << "eating dot" << eatenDot;
             break;
 
         case ID_BIGDOT:
             scene()->removeItem(list.at(i));
             eatSound->play();
-            whichDot = ID_BIGDOT;
+            eatenDot += 50;
+            Topbar::updateScore(eatenDot);
+            qDebug() << "eating big dot" << eatenDot;
             powerdot = true;
             break;
 
@@ -310,7 +286,6 @@ void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
          animDir = dir;
          }
 }
-
 
 //Checking collision in prev dir
 bool Player::checkCollWithPrevDir()
@@ -417,39 +392,10 @@ void Player::checkCollWithNextDir(bool prevDirCol)
 
 bool Player::eatenPowerDot()
 {
-    qDebug() << "POWERDOT : " << powerdot;
+    //qDebug() << "POWERDOT : " << powerdot;
     bool pd = powerdot;
     powerdot = false;
     return pd;
-}
-
-void Player::changeCurrentAnim()
-{
-//    if(dir == 1)
-//        currentAnim = UP_ANIM;
-//    if(dir == 2)
-//        currentAnim = DOWN_ANIM;
-//    if(dir == 3)
-//        currentAnim = LEFT_ANIM;
-//    if(dir == 4)
-//        currentAnim = RIGHT_ANIM;
-//    if(dir == 0)
-//        currentFrame = 0;
-}
-
-void Player::loadAnimations()
-{
-    QString path = QString("../images/pacman/pacman*.png");
-    AnimatedSprites *pacmanSprite = new AnimatedSprites(path);
-
-    QList<QPixmap> spriteList= pacmanSprite->getSpriteList();
-
-    for(int i = 0; i < 4; i++)
-    {
-        pacmanAnim[i] << spriteList[3*i];
-        pacmanAnim[i] << spriteList[3*i+1];
-        pacmanAnim[i] << spriteList[3*i+2];
-    }
 }
 
 //Generating keys for checkin collision with walls

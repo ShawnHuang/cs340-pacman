@@ -7,6 +7,7 @@
 #include "dot.h"
 #include "bigdot.h"
 #include "enemy.h"
+#include "TopBar.h"
 
 #include <QGraphicsItem>
 #include <QPainter>
