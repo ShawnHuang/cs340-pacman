@@ -11,13 +11,15 @@ Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character(x, y, dir)
     INIT = "INIT";
     PLAY = "PLAY";
     DYING = "DYING";
+    ZOMBIE = "ZOMBIE";
+    DEAD = "DEAD";
 
     this->ml = ml;
 
     setAndAddStates();
     fsm.setInitialState(INIT);
 
-    spritesImage = new QPixmap("../images/sprites.png");
+    spritesImage = new QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/sprites.png");
 
     myId = ENEMY_COUNT++;
     move = true;
@@ -68,6 +70,24 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
                 x+= (move) ? 0 : (width+2);
                 painter->drawPixmap(0, 0, *spritesImage, x, 30, width, height);
             break;
+       case DEAD_STATE:
+                x = 96 + (4*(width+2)*2);
+//                x+= (move) ? 0 : (width+2);
+            switch (getDirection()) {
+                case DIR_UP :
+                    painter->drawPixmap(0, 0, *spritesImage, x, 65, width, height);
+                    break;
+                case DIR_DOWN :
+                    painter->drawPixmap(0, 0, *spritesImage, x, 30, width, height);
+                    break;
+                case DIR_RIGHT :
+                    painter->drawPixmap(0, 0, *spritesImage, x, 0, width, height);
+                    break;
+                case DIR_LEFT :
+                    painter->drawPixmap(0, 0, *spritesImage, x, 95, width, height);
+                    break;
+            break;
+        }
     }
 
     if (move)
@@ -125,6 +145,13 @@ void Enemy::update() {
                              makeTurn(selectedOption);
                          }
                          break;
+         case DEAD_STATE:
+                         xCoor = 29;
+                         yCoor = 24;
+                         if(deadTime.elapsed() >= DEAD_TIMEOUT) {
+                             fsm.handleEvent("dead_timeout");
+                             fsm.update();
+                         }
     }
 
  }
@@ -465,6 +492,23 @@ void Enemy::dyingCheck()
                fsm.handleEvent("normal_player");
                fsm.update();
            }
+
+           int playerX = (*it)->x()/CHARACTER_WIDTH;
+           int playerY = (*it)->y()/CHARACTER_HEIGHT;
+
+           if (fabs(playerX - xCoor) <= 1
+               && fabs(playerY - yCoor) <= 1
+               && (fsm.getStateIndex() == DYING_STATE
+               || fsm.getStateIndex() == ZOMBIE_STATE)) {
+
+//               qDebug() << "I'm DEAD!!";
+               fsm.handleEvent("enemy_killed");
+               fsm.update();
+
+               deadTime = QTime::currentTime();
+               deadTime.start();
+           }
+
        }
    }
 }
@@ -475,6 +519,7 @@ void Enemy::setAndAddStates()
     State playState(PLAY, PLAY_STATE); // creating play state
     State dyingState(DYING, DYING_STATE); // creating dying state
     State zombieState(ZOMBIE, ZOMBIE_STATE);
+    State deadState(DEAD, DEAD_STATE);
 
     initState.addEventAndNextState("init_timeout", PLAY);
 
@@ -486,14 +531,23 @@ void Enemy::setAndAddStates()
     dyingState.addEventAndNextState("normal_player" , PLAY);
     dyingState.addEventAndNextState("super_player" , DYING);
     dyingState.addEventAndNextState("average_player", ZOMBIE);
+    dyingState.addEventAndNextState("enemy_killed", DEAD);
 
     zombieState.addEventAndNextState("dead" , INIT);
     zombieState.addEventAndNextState("normal_player" , PLAY);
     zombieState.addEventAndNextState("super_player" , DYING);
     zombieState.addEventAndNextState("average_player", ZOMBIE);
+    zombieState.addEventAndNextState("enemy_killed", DEAD);
+
+    deadState.addEventAndNextState("dead_timeout", PLAY);
+    deadState.addEventAndNextState("normal_player" , DEAD);
+    deadState.addEventAndNextState("super_player" , DEAD);
+    deadState.addEventAndNextState("average_player", DEAD);
+    deadState.addEventAndNextState("enemy_killed", DEAD);
 
     fsm.addState(initState);
     fsm.addState(playState);
     fsm.addState(dyingState);
     fsm.addState(zombieState);
+    fsm.addState(deadState);
 }

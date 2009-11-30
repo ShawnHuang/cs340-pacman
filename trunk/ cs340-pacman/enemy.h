@@ -28,14 +28,17 @@ class Enemy : public Character {
         static const int FOLLOW_STATE = 2;
         static const int DYING_STATE = 3;
         static const int ZOMBIE_STATE = 4;
+        static const int DEAD_STATE = 5;
         static const int DYING_STATE_LIMIT = 10000;
         static const int ZOMBIE_STATE_LIMIT = 3000;
+        static const int DEAD_TIMEOUT = 3000;
 
         QString INIT; //= "INIT";
         QString PLAY; //= "RANDOM_PLAY";
         QString FOLLOW; //= "FOLLOW_PLAYER";
         QString DYING; //= "DYING";
         QString ZOMBIE; //= "ZOMBIE";
+        QString DEAD; //= "DEAD";
 
         bool isWallPresent(int);
         void removeOddOption(QList<int> *);
@@ -46,6 +49,7 @@ class Enemy : public Character {
         bool move;
 
         void dyingCheck();
+        QTime deadTime;
 
     public:
         Enemy(int, int, int, MapLoader*);
