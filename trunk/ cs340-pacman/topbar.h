@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QLCDNumber>
 
+static QLCDNumber *score;
 
 class TopBar : public QWidget
 {
@@ -17,6 +18,8 @@ class TopBar : public QWidget
 public:
     TopBar( QWidget *parent=0);
     //virtual ~TopBar();
+
+    static void updateScore(int);
 
 private:
     QGraphicsScene scene;
@@ -27,7 +30,6 @@ private:
     QLabel scoreLabel;
     QLabel levelLabel;
     QPushButton quitButton;
-    QLCDNumber *score;
     QLCDNumber *life;
     QLCDNumber *level;
 
