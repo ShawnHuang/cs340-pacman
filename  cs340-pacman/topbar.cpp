@@ -42,4 +42,8 @@ TopBar::TopBar(QWidget *parent) : QWidget(parent)
     setLayout(hb);
  }
 
+void TopBar::updateScore(int newScore) {
+    score->display(newScore);
+}
+
 

@@ -1,7 +1,7 @@
 /*****************************
   Fiel Name : enemy.cpp
   Created By : Usha Sanaga
-  Description : Created a garphical representation of enemy
+  Description : Created a graphical representation of enemy
   ****************************/
 
 #include "enemy.h"
