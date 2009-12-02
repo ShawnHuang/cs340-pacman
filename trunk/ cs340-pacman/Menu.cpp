@@ -27,7 +27,7 @@ counter = 0;
 
     //set the view window
     this->resize(640,480);
-    this->setBackgroundBrush(QPixmap("../images/display.gif"));
+    this->setBackgroundBrush(QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/display.gif"));
 
     //add sprites
 

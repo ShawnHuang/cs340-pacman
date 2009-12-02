@@ -96,7 +96,7 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
      isPacmanDying = false;
 
      scene->addItem(pacman);
-     startTimer( 100 );
+     startTimer( 75);
 }
 
 void Game::initTimeOut()
@@ -224,8 +224,8 @@ void Game::timerEvent(QTimerEvent *){
             e3->hide();
             if(pacman->isPacmanInInit())
             {
-                gamefsm.handleEvent("callInit");
-                isPacmanDying = false;
+              gamefsm.handleEvent("callInit");
+              isPacmanDying = false;
             }
 
         }

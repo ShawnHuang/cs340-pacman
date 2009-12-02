@@ -227,10 +227,12 @@ void Player::colWithOtherItems()
             TopBar::updateScore(eatenDot);
             qDebug() << "eating big dot" << eatenDot;
             powerdot = true;
+            Enemy::superPlayer();
             break;
 
         case Enemy::ID_ENEMY:
             enemyCollision = true;
+            ((Enemy*) list.at(i))->killed();
             break;
         }
     }

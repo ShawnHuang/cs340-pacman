@@ -14,6 +14,9 @@ Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character(x, y, dir)
     ZOMBIE = "ZOMBIE";
     DEAD = "DEAD";
 
+    initX = x;
+    initY = y;
+
     this->ml = ml;
 
     setAndAddStates();
@@ -24,6 +27,10 @@ Enemy::Enemy(int x,int y, int dir, MapLoader *ml) : Character(x, y, dir)
     myId = ENEMY_COUNT++;
     move = true;
     SUPER_PLAYER_TIME = QTime();
+
+    if (!GO_INIT.contains(myId)) {
+        GO_INIT.append(myId);
+    }
 }
 
 int Enemy::getType() const {
@@ -101,10 +108,20 @@ void Enemy::update() {
     float rand_max = RAND_MAX + 1.0;
     long selectedOption = 2;
 
+   if (GO_INIT.contains(myId) && fsm.getStateIndex() != INIT_STATE) {
+        fsm.handleEvent("init");
+        fsm.update();
+    }
+
+
     switch (fsm.getStateIndex()) {
 
-        case INIT_STATE: fsm.handleEvent("init_timeout");
+        case INIT_STATE:
+                         xCoor = initX;
+                         yCoor = initY;
+                         fsm.handleEvent("init_timeout");
                          fsm.update();
+                         GO_INIT.removeOne(myId);
                          break;
         case PLAY_STATE:
         case DYING_STATE:
@@ -146,8 +163,8 @@ void Enemy::update() {
                          }
                          break;
          case DEAD_STATE:
-                         xCoor = 29;
-                         yCoor = 24;
+                         xCoor = initX;
+                         yCoor = initY;
                          if(deadTime.elapsed() >= DEAD_TIMEOUT) {
                              fsm.handleEvent("dead_timeout");
                              fsm.update();
@@ -394,7 +411,7 @@ bool Enemy::isWallPresent(int turnDir)
 
 void Enemy::removeOddOption(QList<int> *options)
 {
-   int vicinity = 5;
+   int vicinity = 15;
    QList<QGraphicsItem *> list = scene()->items(
                     (xCoor-vicinity)*CHARACTER_WIDTH,
                     (yCoor-vicinity)*CHARACTER_HEIGHT,
@@ -471,46 +488,22 @@ void Enemy::removeOddOption(QList<int> *options)
 
 void Enemy::dyingCheck()
 {
-   QList<QGraphicsItem *> list = scene()->items();
-
-   QList<QGraphicsItem *>::iterator it;
-   for (it = list.begin(); it != list.end(); it++ )
-   {
-       if ((*it)->type() == Player::ID_PLAYER) {
-           if (((Player*) *it)->eatenPowerDot()) {
-               SUPER_PLAYER_TIME = QTime::currentTime();
-               SUPER_PLAYER_TIME.start();
-               fsm.handleEvent("super_player");
-               fsm.update();
-           } else if(SUPER_PLAYER_TIME.isValid() && SUPER_PLAYER_TIME.elapsed() < DYING_STATE_LIMIT) {
-               fsm.handleEvent("super_player");
-               fsm.update();
-           } else if(SUPER_PLAYER_TIME.isValid() && (SUPER_PLAYER_TIME.elapsed() - DYING_STATE_LIMIT) < ZOMBIE_STATE_LIMIT ) {
-               fsm.handleEvent("average_player");
-               fsm.update();
-           } else {
-               fsm.handleEvent("normal_player");
-               fsm.update();
-           }
-
-           int playerX = (*it)->x()/CHARACTER_WIDTH;
-           int playerY = (*it)->y()/CHARACTER_HEIGHT;
-
-           if (fabs(playerX - xCoor) <= 1
-               && fabs(playerY - yCoor) <= 1
-               && (fsm.getStateIndex() == DYING_STATE
-               || fsm.getStateIndex() == ZOMBIE_STATE)) {
-
-//               qDebug() << "I'm DEAD!!";
-               fsm.handleEvent("enemy_killed");
-               fsm.update();
-
-               deadTime = QTime::currentTime();
-               deadTime.start();
-           }
-
-       }
+   if(SUPER_PLAYER_TIME.isValid() && SUPER_PLAYER_TIME.elapsed() < DYING_STATE_LIMIT) {
+       fsm.handleEvent("super_player");
+       fsm.update();
+   } else if(SUPER_PLAYER_TIME.isValid() && (SUPER_PLAYER_TIME.elapsed() - DYING_STATE_LIMIT) < ZOMBIE_STATE_LIMIT ) {
+       fsm.handleEvent("average_player");
+       fsm.update();
+   } else {
+       fsm.handleEvent("normal_player");
+       fsm.update();
    }
+}
+
+void Enemy::superPlayer()
+{
+    SUPER_PLAYER_TIME = QTime::currentTime();
+    SUPER_PLAYER_TIME.start();
 }
 
 void Enemy::setAndAddStates()
@@ -526,28 +519,48 @@ void Enemy::setAndAddStates()
     playState.addEventAndNextState("super_player", DYING);
     playState.addEventAndNextState("normal_player", PLAY);
     playState.addEventAndNextState("average_player", ZOMBIE);
+    playState.addEventAndNextState("init", INIT);
 
     dyingState.addEventAndNextState("dead" , INIT);
     dyingState.addEventAndNextState("normal_player" , PLAY);
     dyingState.addEventAndNextState("super_player" , DYING);
     dyingState.addEventAndNextState("average_player", ZOMBIE);
     dyingState.addEventAndNextState("enemy_killed", DEAD);
+    dyingState.addEventAndNextState("init" , INIT);
 
     zombieState.addEventAndNextState("dead" , INIT);
     zombieState.addEventAndNextState("normal_player" , PLAY);
     zombieState.addEventAndNextState("super_player" , DYING);
     zombieState.addEventAndNextState("average_player", ZOMBIE);
     zombieState.addEventAndNextState("enemy_killed", DEAD);
+    zombieState.addEventAndNextState("init" , INIT);
 
     deadState.addEventAndNextState("dead_timeout", PLAY);
     deadState.addEventAndNextState("normal_player" , DEAD);
     deadState.addEventAndNextState("super_player" , DEAD);
     deadState.addEventAndNextState("average_player", DEAD);
     deadState.addEventAndNextState("enemy_killed", DEAD);
+    deadState.addEventAndNextState("init", INIT);
 
     fsm.addState(initState);
     fsm.addState(playState);
     fsm.addState(dyingState);
     fsm.addState(zombieState);
     fsm.addState(deadState);
+}
+
+void Enemy::killed() {
+   if ((fsm.getStateIndex() == DYING_STATE || fsm.getStateIndex() == ZOMBIE_STATE)) {
+
+        fsm.handleEvent("enemy_killed");
+        fsm.update();
+
+        deadTime = QTime::currentTime();
+        deadTime.start();
+    } else {
+       GO_INIT.append(0);
+       GO_INIT.append(1);
+       GO_INIT.append(2);
+       GO_INIT.append(3);
+    }
 }

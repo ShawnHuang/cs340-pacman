@@ -18,6 +18,7 @@
 #include <QTime>
 
 static QTime SUPER_PLAYER_TIME;
+static QList<int> GO_INIT;
 
 class Enemy : public Character {
     private:
@@ -29,9 +30,12 @@ class Enemy : public Character {
         static const int DYING_STATE = 3;
         static const int ZOMBIE_STATE = 4;
         static const int DEAD_STATE = 5;
-        static const int DYING_STATE_LIMIT = 10000;
-        static const int ZOMBIE_STATE_LIMIT = 3000;
-        static const int DEAD_TIMEOUT = 3000;
+        static const int DYING_STATE_LIMIT = 4000;
+        static const int ZOMBIE_STATE_LIMIT = 1000;
+        static const int DEAD_TIMEOUT = 5000;
+
+        int initX;
+        int initY;
 
         QString INIT; //= "INIT";
         QString PLAY; //= "RANDOM_PLAY";
@@ -50,6 +54,7 @@ class Enemy : public Character {
 
         void dyingCheck();
         QTime deadTime;
+        bool doneInit;
 
     public:
         Enemy(int, int, int, MapLoader*);
@@ -60,6 +65,8 @@ class Enemy : public Character {
         void update();
         FSM fsm;
         void setAndAddStates();
+        void killed();
+        static void superPlayer();
 };
 
 #endif // ENEMY_H
