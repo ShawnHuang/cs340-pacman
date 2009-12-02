@@ -5,15 +5,15 @@
 
 // PACMAN SOUNDS
 
-//static QSound eatSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/sounds/chomp.wav");
-//static QSound eatFruit("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/sounds/eatfruit.wav");
-//static QSound eatGhost("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/sounds/eatghost.wav");
-//static QSound dying("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/sounds/pacmandying.wav");
+//static QSound eatSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/chomp.wav");
+//static QSound eatFruit("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/eatfruit.wav");
+//static QSound eatGhost("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/eatghost.wav");
+//static QSound dying("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/pacmandying.wav");
 
-static QSound *eatSound = new QSound("../sounds/chomp.wav");
-static QSound *eatFruit = new QSound("../sounds/eatfruit.wav");
-static QSound *eatGhost = new QSound("../sounds/eatghost.wav");
-static QSound *dying = new QSound("../sounds/pacmandying.wav");
+static QSound *eatSound = new QSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/chomp.wav");
+static QSound *eatFruit = new QSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/eatfruit.wav");
+static QSound *eatGhost = new QSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/eatghost.wav");
+static QSound *dying = new QSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/pacmandying.wav");
 
 // GAME SOUNDS
 //static QSound extraLife("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/sounds/extrapac.wav");
@@ -28,8 +28,8 @@ static QSound *intro = new QSound("../sounds/intro.wav");
 static QSound *start = new QSound("../sounds/start.wav");
 
 //ENEMY SOUNDS
-static QSound moveSound("../sounds/sirensoft.wav");
-static QSound blueSound("../sounds/ghostblue.wav");
-static QSound returnSound("../sounds/returnghost.wav");
+static QSound moveSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/sirensoft.wav");
+static QSound blueSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/ghostblue.wav");
+static QSound returnSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/returnghost.wav");
 
 #endif // LOADSOUND_H
