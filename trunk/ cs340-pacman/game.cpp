@@ -27,9 +27,56 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
     stat->setGeometry(0,-35,570,30);
     scene->addWidget(stat);
 
+    initMap(0);
+
+     //create an enemy
+     e = new Enemy(27, 20, Character::DIR_DOWN, mp);
+     scene->addItem(e);
+
+     e1 = new Enemy(24, 24, Character::DIR_DOWN, mp);
+     scene->addItem(e1);
+
+     e2 = new Enemy(29, 24, Character::DIR_DOWN, mp);
+     scene->addItem(e2);
+
+     e3 = new Enemy(21, 24, Character::DIR_DOWN, mp);
+     scene->addItem(e3);
+
+     //create a pacman object and add it to scene.
+     pacman = new Player(270, 360, mp, scene);
+
+     isPlay = false;
+     timerStarted = false;
+     isPacmanDying = false;
+
+     scene->addItem(pacman);
+     startTimer( 75);
+}
+
+void Game::clearScene()
+{
+    QList<QGraphicsItem*> items = scene->items();
+    QList<QGraphicsItem *>::iterator it;
+
+    for (it = items.begin(); it != items.end(); it++ )
+    {
+        switch((*it)->type()) {
+            case ID_WALL:
+            case ID_DOT:
+            case ID_BIGDOT:
+                scene->removeItem(*it);
+                break;
+        }
+    }
+}
+
+void Game::initMap(int level) {
+    QString filename("/Users/usha/Documents/workspace/pacman/ cs340-pacman/debug/level");
+    filename.append(QString::number(level)).append(".txt");
+
     //Maploader entry point
-    MapLoader *mp = new MapLoader;
-    mp->fileRead();
+    mp = new MapLoader;
+    mp->fileRead(filename);
 
     //If there are no characters in the map, send an error message.
     if ((mp->map.isEmpty())) {
@@ -73,30 +120,6 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
          scene->addItem(&wallblock[i]);
          i++;
     }
-
-     //create an enemy
-
-     e = new Enemy(27, 20, Character::DIR_DOWN, mp);
-     scene->addItem(e);
-
-     e1 = new Enemy(24, 24, Character::DIR_DOWN, mp);
-     scene->addItem(e1);
-
-     e2 = new Enemy(29, 24, Character::DIR_DOWN, mp);
-     scene->addItem(e2);
-
-     e3 = new Enemy(21, 24, Character::DIR_DOWN, mp);
-     scene->addItem(e3);
-
-     //create a pacman object and add it to scene.
-     pacman = new Player(270, 360, mp, scene);
-
-     isPlay = false;
-     timerStarted = false;
-     isPacmanDying = false;
-
-     scene->addItem(pacman);
-     startTimer( 75);
 }
 
 void Game::initTimeOut()
@@ -150,7 +173,6 @@ void Game::setAndAddStates(){
             initTimer->start(4500);
             start->play();
             isPlay = false;
-
           }
           //qDebug() << isPlay;
 
@@ -184,7 +206,7 @@ void Game::setAndAddStates(){
                 else
                 {
                     isPowerdotTimeOut = false;
-                    powerdotTimer->start(15000);
+                    powerdotTimer->start(5000);
                 }
            }
 

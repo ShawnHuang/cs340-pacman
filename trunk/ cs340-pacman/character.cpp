@@ -1,7 +1,7 @@
 /**************************
 File Name : Character.cpp
 Created By : Usha Sanaga
-Description : Abstarct Class from which the player and the enemy classes derived
+Description : Abstarct Class from which the enemy classes derived
 ***************************/
 
 #include "character.h"
@@ -32,6 +32,8 @@ int Character::getDirection()
     return direction;
 }
 
+// Movement in the forward direction when there is no wall infront of it.
+
 void Character::moveForward() {
     switch (direction) {
 
@@ -46,22 +48,28 @@ void Character::moveForward() {
 
     }
 
+    //Tunnel movements
+
     if (xCoor < POSITION_OFFSET) {
         xCoor = 56-POSITION_OFFSET;
     } else if (xCoor > 56-POSITION_OFFSET) {
         xCoor = POSITION_OFFSET;
     }
 
-//    if (moveSound.isFinished()) {
-//        moveSound.setLoops(20);
-//        moveSound.play();
-//    }
+    //Adding sound to Enemy
+
+    if (moveSound.isFinished()) {
+        moveSound.setLoops(20);
+        moveSound.play();
+    }
   }
 
 void Character::advance(int phase)
 {
     setPos(xCoor*CHARACTER_WIDTH, yCoor*CHARACTER_HEIGHT);
 }
+
+//Making the random turn when enemy has multiple options to move
 
 void Character::makeTurn(long turnDir) {
 

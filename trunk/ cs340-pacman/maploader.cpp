@@ -19,10 +19,10 @@ MapLoader::~MapLoader() //destructor
 {
 }
 
-void MapLoader::fileRead() //reads the text file, looks for '+' char, stores its co ordinates in a list.
+void MapLoader::fileRead(QString filename) //reads the text file, looks for '+' char, stores its co ordinates in a list.
 {
 
-     QFile file("/Users/usha/Documents/workspace/pacman/ cs340-pacman/debug/in(with dots).txt"); // Qfile file = new QFile("in.txt");
+     QFile file(filename); // Qfile file = new QFile("in.txt");
      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
          return;
 
