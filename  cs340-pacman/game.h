@@ -40,6 +40,7 @@ protected:
     //Timer timer;
     Player pac;
     void setScore(TopBar* stats);
+    MapLoader* mp;
     Player *pacman;
     Enemy *e;
     Enemy *e1;
@@ -58,6 +59,9 @@ protected:
     QTimer *powerdotTimer;
     bool isPacmanDying;
 
+private:
+    void initMap(int);
+    void clearScene();
 
 public:
     Game(QGraphicsScene *);

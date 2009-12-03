@@ -51,6 +51,7 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
     x+= (move) ? 0 : (width+2);
 
     switch (fsm.getStateIndex()) {
+        case INIT_STATE:
         case PLAY_STATE:
             switch (getDirection()) {
                 case DIR_UP :
@@ -411,7 +412,7 @@ bool Enemy::isWallPresent(int turnDir)
 
 void Enemy::removeOddOption(QList<int> *options)
 {
-   int vicinity = 15;
+   int vicinity = 10;
    QList<QGraphicsItem *> list = scene()->items(
                     (xCoor-vicinity)*CHARACTER_WIDTH,
                     (yCoor-vicinity)*CHARACTER_HEIGHT,

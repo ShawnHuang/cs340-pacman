@@ -23,7 +23,7 @@ class MapLoader : public QFile //Maploader class
 public:
     MapLoader();
     ~MapLoader();
-    void fileRead();
+    void fileRead(QString);
 
     QMap<QString, CoordChar> map;
     QMap<QString, CoordChar> dotmap;
