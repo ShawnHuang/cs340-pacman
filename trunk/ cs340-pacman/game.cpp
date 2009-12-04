@@ -18,6 +18,9 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
     scene->setSceneRect(0,-35,570,515);
     scene->setFocus();
 
+    level = 0;
+    totalScore = 0;
+
     // create the scene elements
     QPalette p;
     p.setColor(QPalette::Background,Qt::yellow);
@@ -27,30 +30,11 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
     stat->setGeometry(0,-35,570,30);
     scene->addWidget(stat);
 
-    initMap(0);
+    initMap(level);
 
-     //create an enemy
-     e = new Enemy(27, 20, Character::DIR_DOWN, mp);
-     scene->addItem(e);
+    startTimer( 75);
 
-     e1 = new Enemy(24, 24, Character::DIR_DOWN, mp);
-     scene->addItem(e1);
 
-     e2 = new Enemy(29, 24, Character::DIR_DOWN, mp);
-     scene->addItem(e2);
-
-     e3 = new Enemy(21, 24, Character::DIR_DOWN, mp);
-     scene->addItem(e3);
-
-     //create a pacman object and add it to scene.
-     pacman = new Player(270, 360, mp, scene);
-
-     isPlay = false;
-     timerStarted = false;
-     isPacmanDying = false;
-
-     scene->addItem(pacman);
-     startTimer( 75);
 }
 
 void Game::clearScene()
@@ -64,6 +48,8 @@ void Game::clearScene()
             case ID_WALL:
             case ID_DOT:
             case ID_BIGDOT:
+            case Enemy::ID_ENEMY:
+            case Player::ID_PLAYER:
                 scene->removeItem(*it);
                 break;
         }
@@ -97,6 +83,8 @@ void Game::initMap(int level) {
     Wall *wallblock = new Wall[mp->map.size()];
     BigDot *powerDots = new BigDot[mp->powerdotmap.size()];
 
+    totalScore = mp->dotmap.size() * 10 + mp->powerdotmap.size() * 50;
+
     int i =0;
     for(QMap<QString, CoordChar>::const_iterator it = mp->powerdotmap.constBegin(); it != mp->powerdotmap.constEnd(); it++)
     {
@@ -120,11 +108,40 @@ void Game::initMap(int level) {
          scene->addItem(&wallblock[i]);
          i++;
     }
+
+     //create an enemy
+     Enemy::resetEnemyCount();
+     e = new Enemy(27, 20, Character::DIR_UP, mp);
+     scene->addItem(e);
+
+     e1 = new Enemy(24, 24, Character::DIR_UP, mp);
+     scene->addItem(e1);
+
+     e2 = new Enemy(29, 24, Character::DIR_UP, mp);
+     scene->addItem(e2);
+
+     e3 = new Enemy(21, 24, Character::DIR_UP, mp);
+     scene->addItem(e3);
+
+     //create a pacman object and add it to scene.
+     pacman = new Player(270, 360, mp, scene);
+
+     isPlay = false;
+     timerStarted = false;
+     isPacmanDying = false;
+
+     scene->addItem(pacman);
 }
 
 void Game::initTimeOut()
 {
    // qDebug() << "initTimeOut";
+
+    // can remove frame here
+
+
+
+
     isPlay = true;
 }
 
@@ -225,6 +242,21 @@ void Game::setAndAddStates(){
 }
 
 void Game::timerEvent(QTimerEvent *){
+    // check score
+    // if score indicates all dots are finished then reload everything
+    if (pacman->getDotScore() == totalScore) {
+        clearScene();
+        initMap(++level);
+
+        qDebug() << "Current State" << gamefsm.getStateIndex();
+
+        QMessageBox::information(this->nativeParentWidget(), "Congratualtions!!",
+                                 "Congratulations, you have finished this level!!", QMessageBox::Ok);
+        gamefsm.handleEvent("callInit");
+        gamefsm.update();
+        update();
+    }
+
     scene->advance();
     if(!isPacmanDying)
         update();

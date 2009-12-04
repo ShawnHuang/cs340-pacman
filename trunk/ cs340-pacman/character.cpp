@@ -1,7 +1,7 @@
 /**************************
 File Name : Character.cpp
-Created By : Usha Sanaga
-Description : Abstarct Class from which the enemy classes derived
+Created and Modified By : Usha Sanaga
+Description : Abstarct Class from which the enemy class derived
 ***************************/
 
 #include "character.h"
@@ -32,7 +32,7 @@ int Character::getDirection()
     return direction;
 }
 
-// Movement in the forward direction when there is no wall infront of it.
+// Movement in the forward direction when there is no wall infront of the Enemy.
 
 void Character::moveForward() {
     switch (direction) {
@@ -56,12 +56,6 @@ void Character::moveForward() {
         xCoor = POSITION_OFFSET;
     }
 
-    //Adding sound to Enemy
-
-    if (moveSound.isFinished()) {
-        moveSound.setLoops(20);
-        moveSound.play();
-    }
   }
 
 void Character::advance(int phase)
@@ -69,7 +63,7 @@ void Character::advance(int phase)
     setPos(xCoor*CHARACTER_WIDTH, yCoor*CHARACTER_HEIGHT);
 }
 
-//Making the random turn when enemy has multiple options to move
+//Making the random turn when enemy has multiple options to move(in different directions)
 
 void Character::makeTurn(long turnDir) {
 
@@ -102,8 +96,9 @@ void Character::makeTurn(long turnDir) {
             }
             break;
     }
-    // update the graphics item position
 }
+
+// update the graphics item position
 
 QRectF Character::boundingRect() const
 {

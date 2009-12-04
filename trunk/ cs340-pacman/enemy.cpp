@@ -1,8 +1,7 @@
 /*****************************
   Fiel Name : enemy.cpp
-  Created By : Usha Sanaga
-  Description : Created a graphical representation of enemy
-  ****************************/
+  Created and Modified By : Usha Sanaga
+ *****************************/
 
 #include "enemy.h"
 
@@ -42,6 +41,8 @@ int Enemy::type() const
     return ID_ENEMY;
 }
 
+// Obtaining different cloured images and updating the different images in different states
+
 void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     int width = CHARACTER_WIDTH*X_WIDTH;
@@ -68,19 +69,22 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
                     break;
             }
             break;
+
        case DYING_STATE:
                 x = 96 + (5*(width+2)*2);
                 x+= (move) ? 0 : (width+2);
                 painter->drawPixmap(0, 0, *spritesImage, x, 0, width, height);
             break;
+
        case ZOMBIE_STATE:
                 x = 96 + (5*(width+2)*2);
                 x+= (move) ? 0 : (width+2);
                 painter->drawPixmap(0, 0, *spritesImage, x, 30, width, height);
             break;
+
        case DEAD_STATE:
                 x = 96 + (4*(width+2)*2);
-//                x+= (move) ? 0 : (width+2);
+
             switch (getDirection()) {
                 case DIR_UP :
                     painter->drawPixmap(0, 0, *spritesImage, x, 65, width, height);
@@ -103,6 +107,8 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
     else
         move = true;
 }
+
+// Accesses difefrent states of Enemy
 
 void Enemy::update() {
     QList<int> optionsList;
@@ -130,7 +136,7 @@ void Enemy::update() {
                          dyingCheck();
 
                          // appending hard coded values to the options list
-                         // TODO: Remove hardcoding if possible
+
                          if (!isWallPresent(TURN_FRONT)) {
                              optionsList.append(0);
                          }
@@ -171,8 +177,39 @@ void Enemy::update() {
                              fsm.update();
                          }
     }
+    playSound();
 
  }
+
+// Playing different Sounds at different states of Enemy
+
+void Enemy::playSound() {
+    switch (fsm.getStateIndex()) {
+        case INIT_STATE:
+        case PLAY_STATE:
+            if (moveSound.isFinished()) {
+                moveSound.setLoops(20);
+                moveSound.play();
+            }
+            break;
+        case DYING_STATE:
+            if (blueSound.isFinished()) {
+                blueSound.setLoops(2);
+                blueSound.play();
+            }
+            break;
+        case ZOMBIE_STATE:
+            if (whiteSound.isFinished()) {
+                whiteSound.setLoops(2);
+                whiteSound.play();
+            }
+            break;
+        case DEAD_STATE:
+            deadSound.play();
+            break;
+    }
+
+}
 
 bool Enemy::isWallPresent(int turnDir)
 {
@@ -187,8 +224,7 @@ bool Enemy::isWallPresent(int turnDir)
         ret = true;
     }
 
-//    qDebug() << "Coor: " << xCoor << " " << yCoor;
-//    qDebug() << "x: " << x << " y: " << y;
+    //Checking for wall Coordinates at front,right,and left positions of enemy in different directions
 
     QList<CoordChar> wallPositions;
     CoordChar wallCoord1, wallCoord2, wallCoord3, wallCoord4;
@@ -410,6 +446,8 @@ bool Enemy::isWallPresent(int turnDir)
      return ret;
 }
 
+//At every instance eliminating the odd options to reach the player position
+
 void Enemy::removeOddOption(QList<int> *options)
 {
    int vicinity = 10;
@@ -509,11 +547,15 @@ void Enemy::superPlayer()
 
 void Enemy::setAndAddStates()
 {
-    State initState(INIT, INIT_STATE); // creating init state
-    State playState(PLAY, PLAY_STATE); // creating play state
-    State dyingState(DYING, DYING_STATE); // creating dying state
+    // Creating States
+
+    State initState(INIT, INIT_STATE);
+    State playState(PLAY, PLAY_STATE);
+    State dyingState(DYING, DYING_STATE);
     State zombieState(ZOMBIE, ZOMBIE_STATE);
     State deadState(DEAD, DEAD_STATE);
+
+    //Adding events and next state when that event takes place
 
     initState.addEventAndNextState("init_timeout", PLAY);
 
@@ -543,11 +585,18 @@ void Enemy::setAndAddStates()
     deadState.addEventAndNextState("enemy_killed", DEAD);
     deadState.addEventAndNextState("init", INIT);
 
+    //Adding all the States to enemy fsm
+
     fsm.addState(initState);
     fsm.addState(playState);
     fsm.addState(dyingState);
     fsm.addState(zombieState);
     fsm.addState(deadState);
+}
+
+void Enemy::resetEnemyCount()
+{
+    ENEMY_COUNT = 0;
 }
 
 void Enemy::killed() {
