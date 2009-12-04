@@ -12,6 +12,7 @@
 
 static QLCDNumber *score;
 static QLCDNumber *level;
+static QLCDNumber *life;
 
 class TopBar : public QWidget
 {
@@ -22,7 +23,7 @@ public:
 
     static void updateScore(int);
     static void updateLevel(int);
-
+    static void updateLives(int);
 private:
     QGraphicsScene scene;
     QGraphicsView view;
@@ -32,7 +33,6 @@ private:
     QLabel scoreLabel;
     QLabel levelLabel;
     QPushButton quitButton;
-    QLCDNumber *life;
 
 };
 

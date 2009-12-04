@@ -43,6 +43,8 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
 
     powerdot = false;
     eatenDot = 0;
+    lives = 4;
+    TopBar::updateLives(0);
 }
 
 bool Player::isPacmanInInit()
@@ -73,7 +75,7 @@ void Player::init()
     pacmanInit = true;
     dyingAnimCount = 0;
     animSteps = NORMAL_ANIM_STEPS;
-//    eatenDot = 0;
+    TopBar::updateLives(--lives);
 }
 
 int Player::type() const
