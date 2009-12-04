@@ -2,12 +2,20 @@
 #include "animatedsprites.h"
 #include "loadsound.h"
 
+#include <QPainter>
+
 Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
 {
-    setRenderHint(QPainter::Antialiasing);
+    //setRenderHint(QPainter::Antialiasing);
     setBackgroundBrush(QColor(0,0,0,255));
     setCacheMode(QGraphicsView::CacheBackground);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+    setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+
+    setOptimizationFlags(QGraphicsView::DontClipPainter
+                              | QGraphicsView::DontSavePainterState
+                              | QGraphicsView::DontAdjustForAntialiasing);
     setWindowTitle(QT_TRANSLATE_NOOP(QGraphicsView, "Pac-Man"));
 
     setAndAddStates();
@@ -32,10 +40,12 @@ Game::Game(QGraphicsScene *s) :  QGraphicsView(s)
 
     initMap(level);
 
-    startTimer( 75);
-
-
+    startTimer( 50 );
 }
+
+Game::~Game()
+   {
+   }
 
 void Game::clearScene()
 {
@@ -56,10 +66,27 @@ void Game::clearScene()
     }
 }
 
-void Game::initMap(int level) {
-    TopBar::updateLevel(level);
+void Game::gameOverClearScene()
+{
+    QList<QGraphicsItem*> items = scene->items();
+    QList<QGraphicsItem *>::iterator it;
 
-    QString filename("/Users/usha/Documents/workspace/pacman/ cs340-pacman/debug/level");
+    for (it = items.begin(); it != items.end(); it++ )
+    {
+        switch((*it)->type()) {
+            case Enemy::ID_ENEMY:
+            case Player::ID_PLAYER:
+                scene->removeItem(*it);
+                break;
+        }
+    }
+    scene->update(0, 0, 600, 600);
+}
+
+void Game::initMap(int level) {
+
+    TopBar::updateLevel(level);
+    QString filename("level");
     filename.append(QString::number(level)).append(".txt");
 
     //Maploader entry point
@@ -111,18 +138,17 @@ void Game::initMap(int level) {
          i++;
     }
 
-     //create an enemy
-     Enemy::resetEnemyCount();
-     e = new Enemy(27, 20, Character::DIR_UP, mp);
+    Enemy::resetEnemyCount();
+    e = new Enemy(27, 20, Character::DIR_DOWN, mp);
      scene->addItem(e);
 
-     e1 = new Enemy(24, 24, Character::DIR_UP, mp);
+     e1 = new Enemy(24, 24, Character::DIR_DOWN, mp);
      scene->addItem(e1);
 
-     e2 = new Enemy(29, 24, Character::DIR_UP, mp);
+     e2 = new Enemy(29, 24, Character::DIR_DOWN, mp);
      scene->addItem(e2);
 
-     e3 = new Enemy(21, 24, Character::DIR_UP, mp);
+     e3 = new Enemy(21, 24, Character::DIR_DOWN, mp);
      scene->addItem(e3);
 
      //create a pacman object and add it to scene.
@@ -131,27 +157,31 @@ void Game::initMap(int level) {
      isPlay = false;
      timerStarted = false;
      isPacmanDying = false;
+     isGameOver = false;
 
      scene->addItem(pacman);
+
+     lives = NUMBER_OF_LIVES;
+     getReadySprite = new QGraphicsPixmapItem( QPixmap("../images/getready.png"), 0, scene);
+     getReadySprite->setPos(220, 280);
+     getReadySprite->hide();
+     gameOverSprite = new QGraphicsPixmapItem( QPixmap("../images/gameover.png"), 0, scene);
+     gameOverSprite->setPos(220, 200);
+     gameOverSprite->hide();
 }
 
 void Game::initTimeOut()
 {
-   // qDebug() << "initTimeOut";
-
-    // can remove frame here
-
-
-
-
     isPlay = true;
 }
 
-void Game::setAndAddStates(){
+void Game::setAndAddStates()
+{
     State gMenu("MENU",GAME_MENU);
     gMenu.addEventAndNextState("menu_timeout","INTRO");
 
     State gIntro("INTRO",GAME_INIT);
+    gIntro.addEventAndNextState("game_over", "OUTRO");
     gIntro.addEventAndNextState("intro_timeout","PLAY");
     //set property here
 
@@ -171,70 +201,71 @@ void Game::setAndAddStates(){
     gamefsm.addState(gOutro);
 
     gamefsm.setInitialState("INTRO");
-
 }
-//-------------------------------------
- Game::~Game(){
-       //delete all pieces on board, including pacman, enemy
-       //, fruits, and whatever else is there
-   }
 
- void Game::update(){
-      if(gamefsm.getStateIndex() == GAME_INIT){
+ void Game::update()
+ {
+     switch(gamefsm.getStateIndex())
+     {
+        case (GAME_INIT):
+                      if(gamefsm.inENTRY())
+                      {
+                        pacman->show();
+                        e->show();
+                        e1->show();
+                        e2->show();
+                        e3->show();
+                        initTimer->start(4500);
+                        start->play();
+                        isPlay = false;
+                        getReadySprite->show();
+                      }
 
-          if(gamefsm.inENTRY()) // Timmer for init state
-          {
-            qDebug() << "Timer Started";
-            e->show();
-            e1->show();
-            e2->show();
-            e3->show();
-            initTimer->start(4500);
-            start->play();
-            isPlay = false;
-          }
-          //qDebug() << isPlay;
+                      if(isPlay && !isGameOver)
+                      {
+                            initTimer->stop();
+                            gamefsm.handleEvent("intro_timeout");
+                            getReadySprite->hide();
+                      }
+         break;
 
-          if(isPlay)
-          {
-                //qDebug() << "---isPlay " << isPlay;
-                initTimer->stop();
-                gamefsm.handleEvent("intro_timeout");
-          }
-        }
+         case(GAME_PLAY):
+                 if(pacman->eatenPowerDot())
+                   {
+                       blueSound.play();
+                       isPowerdotTimeOut = false;
+                       powerdotTimer->start(10000);
+                   }
 
-       if(gamefsm.getStateIndex()== GAME_PLAY){
-           //qDebug() << "in play state";
-            //display map, character and enemies
-            //display topbar and initial all values of topbar
-           //check if all dots has been eaten
-            //advance to next level if necessary
-            //increment statbar including lives, score, and current level
-            //if enemy kill->200 points for 1st enemy
-                             //400 points for 2nd enemy
-                             //600 points for 3rd enemy
-            //if #oflives remaining is 0, go to OUTRO state
-           if(pacman->isEnemyCollided() && isPowerdotTimeOut)
-           {
-                if(!pacman->eatenPowerDot())
-                {
-                    isPacmanDying = true;
-                    pacman->handleEvent(QString("ghost_hits_pacman"));
+                   if(pacman->isEnemyCollided())
+                   {
+                       if(isPowerdotTimeOut)
+                       {
+                            isPacmanDying = true;
+                            lives--;
+                            pacman->handleEvent(QString("ghost_hits_pacman"));
+                       }
+                       else
+                       {
+                           eatGhost->play();
+                       }
+                   }
+                   TopBar::updateLives(lives);
+                   TopBar::updateScore(pacman->getDotScore());
+                   TopBar::updateLevel(level);
+        break;
+        
+        case(GAME_OUTRO):
 
-                }
-                else
-                {
-                    isPowerdotTimeOut = false;
-                    powerdotTimer->start(5000);
-                }
-           }
-
-       }
-       if(gamefsm.getStateIndex()==GAME_OUTRO){
-             //display score and if he/she is winner or loser
-            //if any key is pressed, go to INTRO state
-       }
-        gamefsm.update();
+                   if(gamefsm.inENTRY())
+                   {
+                        gameOverClearScene();
+                        gameOverSound->play();
+                   }                   
+                   gameOverSprite->show();
+                   isGameOver = true;
+      }
+  gamefsm.update();
 
   }
 
@@ -243,25 +274,29 @@ void Game::setAndAddStates(){
     isPowerdotTimeOut = true;
 }
 
-void Game::timerEvent(QTimerEvent *){
-    // check score
-    // if score indicates all dots are finished then reload everything
-    if (pacman->getDotScore() == totalScore) {
-        clearScene();
+void Game::timerEvent(QTimerEvent *)
+{
+    if(!isGameOver)
+    {
 
-        initMap(++level);
-        QMessageBox::information(this->nativeParentWidget(), "Congratualtions!!",
-                                 "Congratulations, you have finished this level!!", QMessageBox::Ok);
+        if (pacman->getDotScore() == totalScore) {
+            clearScene();
 
-        gamefsm.handleEvent("callInit");
-        gamefsm.update();
-        update();
+            initMap(++level);
+            QMessageBox::information(this->nativeParentWidget(), "Congratualtions!!",
+                                     "Congratulations, you have finished this level!!", QMessageBox::Ok);
+
+            gamefsm.handleEvent("callInit");
+            //pacman->handleEvent("reset");
+            gamefsm.update();
+            update();
+        }
     }
 
     scene->advance();
     if(!isPacmanDying)
         update();
-    if(isPlay)
+    if(isPlay && !isGameOver)
     {
         pacman->update();
         if( !isPacmanDying )
@@ -279,71 +314,17 @@ void Game::timerEvent(QTimerEvent *){
             e3->hide();
             if(pacman->isPacmanInInit())
             {
-              gamefsm.handleEvent("callInit");
-              isPacmanDying = false;
+                if(lives == 0)
+                {
+                    pacman->hide();
+                    gamefsm.handleEvent("game_over");
+                }
+                else
+                    gamefsm.handleEvent("callInit");
+                isPacmanDying = false;
             }
-
         }
-
-    }
-
-
-  // this->start();
-}
-
-
-   /*
-   this->setAndAddStates();
-   if(this->currState == "INITPLAY"){
-       //three second pause before game begins
-       //Update points
-            }
-   if(this->currState == "PLAY"){
-        /
     }
 }
-*/
-
-/*
-void Game::dotHit( int size )
-{
-    switch ( size )
-    {
-        case 0:
-            score += 10;
-             break;
-
-        case 1:
-            score += 20;
-            break;
-
-        default:
-            score += 10;
-      }
-    scoreLCD->display( score );
-}
-
-void Game::allDotsRemoved()
-{
 
 
-    if ( level < MAX_LEVELS ){
-        level++;
-        levelLCD->display( level+1 )
-
-    }
-    else
-        cout<<"Congradulations, You have won the Game!;
-
-*/
-
-/*
-   void Game::init(TopLevel* gameScreen, TopBar* statBar){
-       gamefsm.setInitialState("ready");
-       statBar->initStat();
-        gameScreen= new TopLevel;
-        lives = NUMBER_OF_LIVES;
-   }
-*/
-/*
-  */

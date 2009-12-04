@@ -15,7 +15,8 @@ Cretaed and Modified by : Usha Sanaga
 #include "loadsound.h"
 
 static int ENEMY_COUNT  = 0;
-static double POSITION_OFFSET = 1;
+
+static double POSITION_OFFSET = .5;
 
 class Character : public QGraphicsItem
 {

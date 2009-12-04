@@ -30,7 +30,7 @@ class Enemy : public Character {
         static const int DYING_STATE = 3;
         static const int ZOMBIE_STATE = 4;
         static const int DEAD_STATE = 5;
-        static const int DYING_STATE_LIMIT = 4000;
+        static const int DYING_STATE_LIMIT = 9000;
         static const int ZOMBIE_STATE_LIMIT = 1000;
         static const int DEAD_TIMEOUT = 5000;
 

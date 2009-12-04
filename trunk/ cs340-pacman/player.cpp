@@ -16,11 +16,11 @@ Player::Player()
 
 Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsItem(0, scene)
 {    
-    pacmanSprites = new QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/sprites.png");
+    pacmanSprites = new QPixmap("../images/sprites.png");
     initXCoord = x;
     initYCoord = y;
-    currentFrame = 0;
-    step = 10;
+
+    step = STEPS;
     keySetFlag = false;
     this->ml = ml;
 
@@ -42,10 +42,13 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
     animSteps = NORMAL_ANIM_STEPS;
 
     powerdot = false;
+    imageSize = IMAGE_SIZE;
     eatenDot = 0;
     lives = 4;
     TopBar::updateLives(0);
 }
+
+int Player::eatenDot = 0;
 
 bool Player::isPacmanInInit()
 {
@@ -75,7 +78,7 @@ void Player::init()
     pacmanInit = true;
     dyingAnimCount = 0;
     animSteps = NORMAL_ANIM_STEPS;
-    TopBar::updateLives(--lives);
+    currentFrame = 0;
 }
 
 int Player::type() const
@@ -90,9 +93,6 @@ int Player::getDotScore()
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    static int imageSize = 32;
-    //qDebug() << "In paint";
-
     painter->drawPixmap(0, 0, *pacmanSprites, ((imageSize)*(currentFrame%animSteps)+2), ((animDir-1)*imageSize +2), PACMAN_WIDTH,PACMAN_HEIGHT);
 }
 
@@ -105,11 +105,13 @@ void Player::setAndAddStates()
 {
     State initState("PACMAN_INIT", PACMAN_INIT);
     initState.addEventAndNextState("init_timeout", "PACMAN_PLAY");
+    initState.addEventAndNextState("reset", "PACMAN_INIT");
     initState.setProperty("steady");
     pacmanfsm.addState(initState);
 
     State playState("PACMAN_PLAY", PACMAN_PLAY); // creating play state
     playState.addEventAndNextState("ghost_hits_pacman","PACMAN_DYING");
+    playState.addEventAndNextState("reset", "PACMAN_INIT");
     playState.setProperty("moving");
     pacmanfsm.addState(playState);
 
@@ -131,8 +133,10 @@ void Player::update()
     switch(state)
     {
         case PACMAN_INIT:
-            init();
-            pacmanfsm.handleEvent("init_timeout");
+            if(pacmanfsm.inENTRY())
+                init();
+            else
+                pacmanfsm.handleEvent("init_timeout");
 
         break;
 
@@ -152,8 +156,6 @@ void Player::update()
 
             xCoord += xdir;
             yCoord += ydir;
-
-            //changeCurrentAnim();
             enterTunnel();
             keySetFlag = false;
         break;
@@ -161,24 +163,32 @@ void Player::update()
         case PACMAN_DYING:
             if(pacmanfsm.inENTRY())
             {
-                currentFrame = -1;
-                slowDownAnim = true;
+                dyingFrame = -1;
+                slowDownAnim = 0;
+                dying->play();
+                locFrame = 1;
             }
+
             animDir = 6;
-            //qDebug() << "In Dying";
             animSteps = DYING_ANIM_STEPS;
-            if(slowDownAnim)
+            if(slowDownAnim == 0)
             {
-                currentFrame--;
+                dyingFrame++;
+                currentFrame = dyingFrame-1;
                 dyingAnimCount++;
-                xCoord++;
+                if(dyingFrame < 7)
+                {
+                    scene()->update(xCoord,yCoord,PACMAN_WIDTH,PACMAN_HEIGHT);
+                }
             }
-            else
-                xCoord--;
-            slowDownAnim = !slowDownAnim;
-            dying->play();
-            if(dyingAnimCount%8 == 0)
+
+            slowDownAnim = locFrame%3;
+            locFrame++;
+            
+            if(dyingAnimCount%16 == 0)
+            {
                 pacmanfsm.handleEvent("dying_timeout");
+            }
         break;
     }
     pacmanfsm.update();
@@ -216,19 +226,14 @@ void Player::colWithOtherItems()
         {
         case ID_DOT:
             scene()->removeItem(list.at(i));
-            //if(eatSound.isFinished())
                 eatSound->play();
             eatenDot += 10;
-            TopBar::updateScore(eatenDot);
-            qDebug() << "eating dot" << eatenDot;
             break;
 
         case ID_BIGDOT:
             scene()->removeItem(list.at(i));
             eatSound->play();
             eatenDot += 50;
-            TopBar::updateScore(eatenDot);
-            qDebug() << "eating big dot" << eatenDot;
             powerdot = true;
             Enemy::superPlayer();
             break;
@@ -250,7 +255,7 @@ void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
          xPrev = xdir;   //Storing prev xdir and ydir before getting new keypress values
          yPrev = ydir;   //Storing prev xdir and ydir before getting new keypress values
          prevDir = dir;
-         animDir = dir;
+         //animDir = dir;
 
          switch (a)
          {
@@ -279,9 +284,9 @@ void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
                 break;
 
              default:
-                xdir = 0;
-                ydir = 0;
-                dir = 0;
+                xdir = xPrev;
+                ydir = yPrev;
+                dir = prevDir;
                 break;
          }
          keySetFlag = true;
@@ -289,7 +294,7 @@ void Player::keyPressEvent(QKeyEvent *event)//Handles key press event
          xNext = xdir; // Storing new keypress values in yNext n xNext
          yNext = ydir;
          nextDir = dir;
-         animDir = dir;
+         //animDir = dir;
          }
 }
 
@@ -353,19 +358,24 @@ void Player::checkCollWithNextDir(bool prevDirCol)
                      ydir = yPrev ;
                      dir = prevDir;
                      animDir = dir;
+                     //qDebug() << "A bug 1?";
                 }
                 else//if collision is detected for no keypress, thn stop
                 {
                      xdir = 0 ;
                      ydir = 0 ;
+                     //animDir = dir;
+                     dir = prevDir;
                      animDir = dir;
-                     dir = 0;
+                     currentFrame = 0;
+                     //qDebug() << "A bug 2 ?" << "animDir: " << animDir << "dir: " << dir;
                 }
             }
             else // no collision
             {
                 xNext = 0;
-                yNext =0;
+                yNext = 0;
+                prevDir = dir;
             }
             break;
 
@@ -385,12 +395,17 @@ void Player::checkCollWithNextDir(bool prevDirCol)
                 {
                      xdir = 0 ;
                      ydir = 0 ;
+                     //animDir = dir;
+                     dir = prevDir;
+                     animDir = dir;
+                     currentFrame = 0;
                 }
             }
             else
             {
                 xNext = 0;
-                yNext =0;
+                yNext = 0;
+                prevDir = dir;
             }
             break;
     }
@@ -528,3 +543,4 @@ void Player::handleEvent(QString event)
 {
     pacmanfsm.handleEvent(event);
 }
+

@@ -12,30 +12,11 @@ Course: CS 340
 
 Menu :: Menu(QGraphicsScene *scene) : QGraphicsView(scene)
 
-{//start method
-
+{
 counter = 0;
-    //timer = new QTimer;
-    //QObject::connect(timer, SIGNAL(timeout()), this, SLOT(showHelp()));
-
-    // Set the timer to trigger ever 1/3 of a second.
-    //timer->start(1000 / 33);
-    //create a toplevel object
-    //TopLevel object1(&toplevelScene);
-    //toplevelObject = new TopLevel(&toplevelScene);
-
-
-    //set the view window
     this->resize(640,480);
-    this->setBackgroundBrush(QPixmap("/Users/usha/Documents/workspace/pacman/ cs340-pacman/images/display.gif"));
+    this->setBackgroundBrush(QPixmap("../images/display.gif"));
 
-    //add sprites
-
-    //object = new sprites();
-    //object1 = new ghost();
-
-
-    //create helpbutton
     helpButton = new QPushButton (tr("Help"), this);
     helpButton->setFont(QFont("Lucida Handwriting",18,QFont::Bold));
     QObject:: connect(helpButton,SIGNAL(clicked()),this,SLOT(showHelp()));
@@ -59,32 +40,23 @@ counter = 0;
     scene->addWidget(quitButton);
 
     //set the Geometry of the widgets
-    playButton->setGeometry(200,300,200,50);
-    helpButton->setGeometry(200,350,200,50);
-    quitButton->setGeometry(200,400,200,50);
-
-    //show the view
-    //changeState = false;
-    //this->show();
-
-}//end method
-
+    playButton->setGeometry(225,300,200,50);
+    helpButton->setGeometry(225,350,200,50);
+    quitButton->setGeometry(225,400,200,50);
+    intro->play();
+}
 
 void Menu::enterPlayState()
-{//start method
+{
     gameObject = new Game(&toplevelScene);
     gameObject->show();
-   // gameObject->update();
-
     this->hide();
-}//end method
+}
 
 void Menu::showHelp()
-{//start help
-
+{
     QMessageBox trybox;
-    trybox.setText("Help Instructions will be shown here");
+    trybox.setText("Use the arrow keys to manuover Pacman around the maze\n complete the level by eating all the dots. Avoid the ghost,\n if they catch you you will lose a life. Eat the power dot(big dots),\n and the monsters will temporarily turn blue, meaning that\n you can now eat them.");
     trybox.exec();
-
-}//end help
+}
 

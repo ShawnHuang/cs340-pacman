@@ -20,12 +20,16 @@
 #include "state.h"
 #include "fsm.h"
 
+ #include <QGraphicsPixmapItem>
 #include  <QTimerEvent>
 
 #define GAME_INIT 0
 #define GAME_PLAY 1
 #define GAME_OUTRO 2
 #define GAME_MENU 3
+
+#define NUMBER_OF_LIVES 3
+
 class Game : public QGraphicsView
 {
     Q_OBJECT
@@ -57,12 +61,18 @@ protected:
     bool timerStarted;
     bool isPlay;
     bool isPowerdotTimeOut;
+    bool isGameOver;
     QTimer *powerdotTimer;
     bool isPacmanDying;
+
+    QGraphicsPixmapItem *getReadySprite;
+    QGraphicsPixmapItem *gameOverSprite;
     int totalScore;
+
 
 private:
     void clearScene();
+    void gameOverClearScene();
 
 public:
     Game(QGraphicsScene *);
@@ -73,7 +83,7 @@ public:
     void incrementStat();
     int remainLives;
     TopBar statBar;
-    int isGameOver();       //check if end of game
+    //int isGameOver();       //check if end of game
     virtual void timerEvent( QTimerEvent * );
     void update();
     void initMap(int);
@@ -83,8 +93,4 @@ public slots:
     void powerdotTimeOut();
 
 };
-
-
-
-
 #endif // GAME_H

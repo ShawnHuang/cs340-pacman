@@ -11,8 +11,9 @@
 #include <QLCDNumber>
 
 static QLCDNumber *score;
-static QLCDNumber *level;
 static QLCDNumber *life;
+static QLCDNumber *level;
+
 
 class TopBar : public QWidget
 {
@@ -33,11 +34,7 @@ private:
     QLabel scoreLabel;
     QLabel levelLabel;
     QPushButton quitButton;
-
 };
-
-
-
 #endif
 
 

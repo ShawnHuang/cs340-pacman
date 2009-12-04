@@ -13,7 +13,6 @@
 
 TopBar::TopBar(QWidget *parent) : QWidget(parent)
 {
-
     QHBoxLayout *hb = new QHBoxLayout;
     levelLabel.setText("Level: ");
     level = new QLCDNumber();
@@ -22,7 +21,7 @@ TopBar::TopBar(QWidget *parent) : QWidget(parent)
     level->setFixedWidth( 100 );
     hb->addWidget(&levelLabel);
     hb->addWidget(level);
-//--------------------------------------------------
+
     lifeLabel.setText("Lives: ");
     life = new QLCDNumber();
     life->setFrameStyle( QFrame::NoFrame );
@@ -30,7 +29,7 @@ TopBar::TopBar(QWidget *parent) : QWidget(parent)
     life->setFixedWidth( 150);
     hb->addWidget(&lifeLabel);
     hb->addWidget(life);
-//--------------------------------------------------
+
     scoreLabel.setText("Score: ");
     score = new QLCDNumber();
     score->setFrameStyle( QFrame::NoFrame );
@@ -42,14 +41,19 @@ TopBar::TopBar(QWidget *parent) : QWidget(parent)
     setLayout(hb);
  }
 
-void TopBar::updateScore(int newScore) {
+void TopBar::updateScore(int newScore)
+{
     score->display(newScore);
 }
 
-void TopBar::updateLevel(int newLevel) {
-    level->display(newLevel);
+void TopBar::updateLevel(int newLevel)
+{
+    level->display(newLevel+1);
 }
 
-void TopBar::updateLives(int newLives) {
+
+void TopBar::updateLives(int newLives)
+{
     life->display(newLives);
 }
+
