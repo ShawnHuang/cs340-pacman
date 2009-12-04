@@ -57,6 +57,8 @@ void Game::clearScene()
 }
 
 void Game::initMap(int level) {
+    TopBar::updateLevel(level);
+
     QString filename("/Users/usha/Documents/workspace/pacman/ cs340-pacman/debug/level");
     filename.append(QString::number(level)).append(".txt");
 
@@ -246,12 +248,11 @@ void Game::timerEvent(QTimerEvent *){
     // if score indicates all dots are finished then reload everything
     if (pacman->getDotScore() == totalScore) {
         clearScene();
+
         initMap(++level);
-
-        qDebug() << "Current State" << gamefsm.getStateIndex();
-
         QMessageBox::information(this->nativeParentWidget(), "Congratualtions!!",
                                  "Congratulations, you have finished this level!!", QMessageBox::Ok);
+
         gamefsm.handleEvent("callInit");
         gamefsm.update();
         update();

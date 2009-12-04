@@ -46,4 +46,7 @@ void TopBar::updateScore(int newScore) {
     score->display(newScore);
 }
 
+void TopBar::updateLevel(int newLevel) {
+    level->display(newLevel);
+}
 

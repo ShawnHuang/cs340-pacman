@@ -11,6 +11,7 @@
 #include <QLCDNumber>
 
 static QLCDNumber *score;
+static QLCDNumber *level;
 
 class TopBar : public QWidget
 {
@@ -20,6 +21,7 @@ public:
     //virtual ~TopBar();
 
     static void updateScore(int);
+    static void updateLevel(int);
 
 private:
     QGraphicsScene scene;
@@ -31,7 +33,6 @@ private:
     QLabel levelLabel;
     QPushButton quitButton;
     QLCDNumber *life;
-    QLCDNumber *level;
 
 };
 
