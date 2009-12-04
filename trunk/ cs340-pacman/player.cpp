@@ -5,8 +5,6 @@
 #include <QDebug>
 #include <QPixmap>
 
-#include "animatedsprites.h"
-
 using namespace std;
 
 Player::Player()

@@ -1,5 +1,4 @@
 #include "game.h"
-#include "animatedsprites.h"
 #include "loadsound.h"
 
 #include <QPainter>
