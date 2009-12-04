@@ -75,7 +75,7 @@ void Character::makeTurn(long turnDir) {
                     direction = DIR_LEFT;
             }
             break;
-        case DIR_DOWN : 
+        case DIR_DOWN :
             if (turnDir == TURN_RIGHT) {
                 direction = DIR_LEFT;
             } else if (turnDir == TURN_LEFT){

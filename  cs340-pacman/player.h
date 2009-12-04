@@ -20,6 +20,8 @@
 #define PACMAN_HEIGHT 30
 #define PACMAN_WIDTH 30
 
+#define IMAGE_SIZE 32
+
 #define PACMAN_INIT 0
 #define PACMAN_READY 1
 #define PACMAN_PLAY 2
@@ -29,6 +31,8 @@
 #define DOWN 2
 #define UP 3
 #define LEFT 4
+
+#define STEPS 5
 
 #define DYING_ANIM_STEPS 7
 #define NORMAL_ANIM_STEPS 3
@@ -61,6 +65,7 @@ private:
     int currentAnim;
     int currentFrame;
     bool keySetFlag;
+    int imageSize;
 
     QString *key;
     QString *key1;
@@ -75,11 +80,13 @@ private:
     int step;
     bool isTimeOut;
     void loadAnimations();
-    bool slowDownAnim;
+    int slowDownAnim;
+    int dyingFrame;
+    int locFrame;
     bool pacmanInit;
     int animSteps;
     int dyingAnimCount;
-    int eatenDot;
+    static int eatenDot;
     int lives;
 
     QPainter *localPainter;
@@ -106,9 +113,6 @@ public:
     void handleEvent(QString);
     bool isPacmanInInit();
     int getDotScore();
-
-//    QTimer *dyingTimer;
-//    QTimer *init_timer;
 
     enum Action {Up = 1, Down, Left, Right};
     QMap< int, Action > actionmap;

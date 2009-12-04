@@ -10,7 +10,6 @@ HEADERS += wall.h \
     bigdot.h \
     game.h \
     Menu.h \
-    animatedsprites.h \
     loadsound.h
 SOURCES += wall.cpp \
     main.cpp \
@@ -25,4 +24,3 @@ SOURCES += wall.cpp \
     bigdot.cpp \
     game.cpp \
     Menu.cpp \
-    animatedsprites.cpp

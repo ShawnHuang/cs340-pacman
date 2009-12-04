@@ -17,14 +17,11 @@
 
 int main(int argc, char *argv[])
 {
-
     QApplication app(argc, argv);
     QGraphicsScene *scene = new QGraphicsScene();
     Menu display(scene);
-    //TopLevel display(scene);
     display.show();
-    //display.start(50);
-
+    QObject:: connect(display.quitButton,SIGNAL(clicked()),&app,SLOT(quit()));
     return app.exec();
 }
 
