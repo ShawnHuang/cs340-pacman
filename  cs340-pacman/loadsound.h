@@ -30,6 +30,7 @@ static QSound *start = new QSound("../sounds/start.wav");
 //ENEMY SOUNDS
 static QSound moveSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/sirensoft.wav");
 static QSound blueSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/ghostblue.wav");
-static QSound returnSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/returnghost.wav");
+static QSound whiteSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/returnghost.wav");
+static QSound deadSound("/Users/usha/Documents/workspace/pacman/ cs340-pacman/sounds/eatghost.wav");
 
 #endif // LOADSOUND_H

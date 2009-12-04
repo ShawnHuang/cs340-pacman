@@ -15,6 +15,7 @@
 #include "topbar.h"
 #include "dot.h"
 #include "bigdot.h"
+#include <QMessageBox>
 
 #include "state.h"
 #include "fsm.h"
@@ -58,9 +59,9 @@ protected:
     bool isPowerdotTimeOut;
     QTimer *powerdotTimer;
     bool isPacmanDying;
+    int totalScore;
 
 private:
-    void initMap(int);
     void clearScene();
 
 public:
@@ -75,6 +76,7 @@ public:
     int isGameOver();       //check if end of game
     virtual void timerEvent( QTimerEvent * );
     void update();
+    void initMap(int);
 
 public slots:
     void initTimeOut();

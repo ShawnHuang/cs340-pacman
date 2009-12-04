@@ -1,6 +1,6 @@
 /********************************
 File Name : Character.h
-Cretaed by : Usha Sanaga
+Cretaed and Modified by : Usha Sanaga
 *********************************/
 
 #ifndef CHARACTER_H
@@ -15,7 +15,7 @@ Cretaed by : Usha Sanaga
 #include "loadsound.h"
 
 static int ENEMY_COUNT  = 0;
-static double POSITION_OFFSET = 0.5;
+static double POSITION_OFFSET = 1;
 
 class Character : public QGraphicsItem
 {
@@ -55,7 +55,6 @@ public:
     void moveForward();
     virtual QRectF boundingRect() const;
     void makeTurn(long);
-
 };
 
 

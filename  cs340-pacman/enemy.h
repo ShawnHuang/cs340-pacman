@@ -1,6 +1,6 @@
 /***************************
   File Name : enemy.h
-  Cretaed By : Usha Sanaga
+  Cretaed and Modified By : Usha Sanaga
   **************************/
 
 
@@ -53,6 +53,7 @@ class Enemy : public Character {
         bool move;
 
         void dyingCheck();
+        void playSound();
         QTime deadTime;
         bool doneInit;
 
@@ -67,6 +68,7 @@ class Enemy : public Character {
         void setAndAddStates();
         void killed();
         static void superPlayer();
+       static void resetEnemyCount();
 };
 
 #endif // ENEMY_H
