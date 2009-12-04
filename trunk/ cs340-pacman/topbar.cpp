@@ -50,3 +50,6 @@ void TopBar::updateLevel(int newLevel) {
     level->display(newLevel);
 }
 
+void TopBar::updateLives(int newLives) {
+    life->display(newLives);
+}

@@ -80,6 +80,7 @@ private:
     int animSteps;
     int dyingAnimCount;
     int eatenDot;
+    int lives;
 
     QPainter *localPainter;
 
