@@ -1,3 +1,7 @@
+// Modifications:
+// Riddhi Kapasi : Handled pacmans collision with enemy and powerdot status
+// Riddhi Kapasi: Added "Get Ready" and "Game Over" sprites
+
 #include "game.h"
 #include "loadsound.h"
 
@@ -99,9 +103,11 @@ void Game::initMap(int level) {
         msg->showMessage("List size zero in map. Please check the file.");
     }
 
+    // init state timer
     initTimer = new QTimer( this );
     connect(initTimer, SIGNAL(timeout()), this, SLOT(initTimeOut()));
 
+    // powerdot timer
     powerdotTimer = new QTimer( this );
     connect(powerdotTimer, SIGNAL(timeout()), this, SLOT(powerdotTimeOut()));
 
@@ -161,6 +167,8 @@ void Game::initMap(int level) {
      scene->addItem(pacman);
 
      lives = NUMBER_OF_LIVES;
+
+     // Sprite for "Get Ready" and "Game Over"
      getReadySprite = new QGraphicsPixmapItem( QPixmap("../images/getready.png"), 0, scene);
      getReadySprite->setPos(220, 280);
      getReadySprite->hide();
@@ -233,7 +241,7 @@ void Game::setAndAddStates()
                    {
                        blueSound.play();
                        isPowerdotTimeOut = false;
-                       powerdotTimer->start(10000);
+                       powerdotTimer->start(7000);
                    }
 
                    if(pacman->isEnemyCollided())
@@ -278,7 +286,7 @@ void Game::timerEvent(QTimerEvent *)
     if(!isGameOver)
     {
 
-        if (pacman->getDotScore() == totalScore) {
+        if (pacman->getDotCount() == mp->dotmap.size()) {
             clearScene();
 
             initMap(++level);
