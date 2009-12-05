@@ -187,14 +187,13 @@ void Enemy::playSound() {
     switch (fsm.getStateIndex()) {
         case PLAY_STATE:
             if (moveSound.isFinished()) {
-                moveSound.setLoops(2);
+//                moveSound.setLoops(2);
                 moveSound.play();
             }
             break;
         case DYING_STATE:
                 moveSound.stop();
             if (blueSound.isFinished()) {
-                blueSound.setLoops(2);
                 blueSound.play();
             }
             break;
@@ -202,7 +201,7 @@ void Enemy::playSound() {
             moveSound.stop();
             blueSound.stop();
             if (whiteSound.isFinished()) {
-                whiteSound.setLoops(2);
+//                whiteSound.setLoops(2);
                 whiteSound.play();
             }
             break;
