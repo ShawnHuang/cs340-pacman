@@ -12,6 +12,7 @@ Player::Player()
 
 }
 
+// Player constructor.
 Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsItem(0, scene)
 {    
     pacmanSprites = new QPixmap("../images/sprites.png");
@@ -29,6 +30,7 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
     actionmap.insert(Qt::Key_Right, Right);
     actionmap.insert(Qt::Key_Left, Left);
     setFocus();
+    dotCount = 0;
 
     //dyingTimer = new QTimer( this );
     //connect(dyingTimer, SIGNAL(timeout()), this, SLOT(dyingTimeOut()));
@@ -53,6 +55,7 @@ bool Player::isPacmanInInit()
     return pacmanInit;
 }
 
+// Player's init function. Gets called every time player enters the init state
 void Player::init()
 {
     xCoord = initXCoord;
@@ -77,6 +80,7 @@ void Player::init()
     dyingAnimCount = 0;
     animSteps = NORMAL_ANIM_STEPS;
     currentFrame = 0;
+
 }
 
 int Player::type() const
@@ -89,6 +93,7 @@ int Player::getDotScore()
     return eatenDot;
 }
 
+// Paints the pacmans pixmap of LEFT / RIGHT / UP / DOWN / DYING animation depending upon current diretion
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->drawPixmap(0, 0, *pacmanSprites, ((imageSize)*(currentFrame%animSteps)+2), ((animDir-1)*imageSize +2), PACMAN_WIDTH,PACMAN_HEIGHT);
@@ -99,6 +104,7 @@ QRectF Player::boundingRect() const
     return QRectF(0,0,PACMAN_WIDTH,PACMAN_HEIGHT);
 }
 
+// Create new states and add to the pacman fsm
 void Player::setAndAddStates()
 {
     State initState("PACMAN_INIT", PACMAN_INIT);
@@ -118,11 +124,13 @@ void Player::setAndAddStates()
     pacmanfsm.addState(dyingState);
 }
 
+// Moves the pacman by the step value
 void Player::advance(int phase)
 {
     this->setPos(xCoord, yCoord);
 }
 
+// Main logic of the pacman. Handles the state logics
 void Player::update()
 {
     int state = pacmanfsm.getStateIndex();
@@ -169,6 +177,7 @@ void Player::update()
 
             animDir = 6;
             animSteps = DYING_ANIM_STEPS;
+            // slowDownAnim slows down the animation by some number of frames
             if(slowDownAnim == 0)
             {
                 dyingFrame++;
@@ -211,7 +220,7 @@ void Player::enterTunnel()
     }
 }
 
-// Checking Dot/BigDot collision
+// Checking Dot/BigDot collision and updates the score
 void Player::colWithOtherItems()
 {
     enemyCollision = false;
@@ -226,6 +235,7 @@ void Player::colWithOtherItems()
             scene()->removeItem(list.at(i));
                 eatSound->play();
             eatenDot += 10;
+            dotCount++;
             break;
 
         case ID_BIGDOT:
@@ -537,8 +547,13 @@ int Player::keyGeneration(int dir)//Generates key
     return mode;
 }
 
+// Handles the event for the particular state
 void Player::handleEvent(QString event)
 {
     pacmanfsm.handleEvent(event);
 }
 
+int Player::getDotCount()
+{
+    return dotCount;
+}

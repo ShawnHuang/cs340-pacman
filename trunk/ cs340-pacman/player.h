@@ -88,6 +88,7 @@ private:
     int dyingAnimCount;
     static int eatenDot;
     int lives;
+    int dotCount;
 
     QPainter *localPainter;
 
@@ -113,6 +114,7 @@ public:
     void handleEvent(QString);
     bool isPacmanInInit();
     int getDotScore();
+    int getDotCount();
 
     enum Action {Up = 1, Down, Left, Right};
     QMap< int, Action > actionmap;
