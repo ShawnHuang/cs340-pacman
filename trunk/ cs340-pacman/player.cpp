@@ -41,7 +41,7 @@ Player::Player(int x,int y, MapLoader* ml, QGraphicsScene *scene) : QGraphicsIte
 
     powerdot = false;
     imageSize = IMAGE_SIZE;
-    eatenDot = 0;
+    //eatenDot = 0;
     lives = 4;
     TopBar::updateLives(0);
 }
