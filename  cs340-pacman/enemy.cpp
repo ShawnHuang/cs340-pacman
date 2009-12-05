@@ -178,34 +178,41 @@ void Enemy::update() {
                          }
     }
 
-    //playSound();
+    playSound();
  }
 
 // Playing different Sounds at different states of Enemy
 
 void Enemy::playSound() {
     switch (fsm.getStateIndex()) {
-        case INIT_STATE:
         case PLAY_STATE:
             if (moveSound.isFinished()) {
-                moveSound.setLoops(20);
+                moveSound.setLoops(2);
                 moveSound.play();
             }
             break;
         case DYING_STATE:
+                moveSound.stop();
             if (blueSound.isFinished()) {
                 blueSound.setLoops(2);
                 blueSound.play();
             }
             break;
         case ZOMBIE_STATE:
+            moveSound.stop();
+            blueSound.stop();
             if (whiteSound.isFinished()) {
                 whiteSound.setLoops(2);
                 whiteSound.play();
             }
             break;
         case DEAD_STATE:
-            deadSound.play();
+            moveSound.stop();
+            blueSound.stop();
+            whiteSound.stop();
+            if (deadSound.isFinished()) {
+                deadSound.play();
+            }
             break;
     }
 
@@ -561,7 +568,6 @@ void Enemy::setAndAddStates()
 
     playState.addEventAndNextState("super_player", DYING);
     playState.addEventAndNextState("normal_player", PLAY);
-    playState.addEventAndNextState("average_player", ZOMBIE);
     playState.addEventAndNextState("init", INIT);
 
     dyingState.addEventAndNextState("dead" , INIT);
